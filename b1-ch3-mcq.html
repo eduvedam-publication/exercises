@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multiple Choice Questions</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#dff6ff,#fff,#e8f5e9);padding:18px;color:#333}
+.quiz-box{width:min(100%,1000px);margin:0 auto;background:#fff;border:5px solid #00b8f0;border-radius:28px;padding:26px;box-shadow:0 12px 35px rgba(0,0,0,.12)}
+.heading{color:#00a6d6;font-size:28px;font-weight:700;margin-bottom:20px}
+.question-box{background:#f9fcff;border:2px solid #c9efff;border-radius:20px;padding:18px 20px;margin-bottom:15px}
+.question{font-size:20px;line-height:1.45;font-weight:600;margin-bottom:13px}
+.options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px}
+.option-btn{width:100%;background:#fff;border:2px solid #ff4fa0;border-radius:16px;padding:11px 16px;text-align:left;font-size:16px;cursor:pointer;transition:.2s}
+.option-btn:hover{background:#fff0f7;transform:translateY(-1px)}
+.option-btn.correct{background:#d4f8d4;border-color:#2e7d32;color:#1b5e20;font-weight:700}
+.option-btn.wrong{background:#ffd9dd;border-color:#c62828;color:#b71c1c;font-weight:700}
+.option-btn:disabled{cursor:default}
+.result{width:100%;clear:both;text-align:center;margin:20px 0 14px;font-size:25px;font-weight:700;color:#0047ab}
+.buttons{text-align:center}
+.reset-btn{border:0;border-radius:32px;padding:12px 30px;font-size:16px;font-weight:700;color:#fff;background:linear-gradient(135deg,#ff9800,#ff6f00);cursor:pointer}
+@media(max-width:650px){
+body{padding:8px}.quiz-box{padding:16px 12px;border-radius:20px}.heading{font-size:21px}
+.question-box{padding:14px;margin-bottom:12px}.question{font-size:17px}.options{grid-template-columns:1fr}
+.option-btn{font-size:15px;padding:10px 12px}.result{font-size:21px}.reset-btn{width:100%}
+}
+</style>
+</head>
+<body>
+<div class="quiz-box">
+<div class="heading">Multiple choice questions.</div>
+<div id="quiz"></div>
+<div class="result" id="result">Score: 0 / 4</div>
+<div class="buttons"><button class="reset-btn" onclick="resetQuiz()">Reset Quiz</button></div>
+</div>
+<script>
+const questions=[
+ {question:"1. Who teaches us at school?",options:["i. Teacher","ii. Doctor","iii. Shopkeeper"],answer:"i. Teacher"},
+ {question:"2. A teacher teaches us to ________.",options:["i. Cook food","ii. Drive a car","iii. Read and write"],answer:"iii. Read and write"},
+ {question:"3. We should go to school ________.",options:["i. Late","ii. On time","iii. At time"],answer:"ii. On time"},
+ {question:"4. A teacher tells us ________ stories.",options:["i. scary","ii. interesting","iii. funny only"],answer:"ii. interesting"}
+];
+let score=0;
+function loadQuiz(){
+ const quiz=document.getElementById("quiz"); quiz.innerHTML="";
+ questions.forEach(q=>{
+  const box=document.createElement("div"); box.className="question-box";
+  const qt=document.createElement("div"); qt.className="question"; qt.textContent=q.question;
+  const opts=document.createElement("div"); opts.className="options";
+  q.options.forEach(opt=>{
+   const b=document.createElement("button"); b.className="option-btn"; b.textContent=opt;
+   b.onclick=()=>checkAnswer(b,opt,q.answer,opts); opts.appendChild(b);
+  });
+  box.append(qt,opts); quiz.appendChild(box);
+ });
+}
+function checkAnswer(button,selected,correct,container){
+ const buttons=container.querySelectorAll(".option-btn");
+ buttons.forEach(btn=>{btn.disabled=true;if(btn.textContent===correct)btn.classList.add("correct")});
+ if(selected===correct)score++;else button.classList.add("wrong");
+ document.getElementById("result").textContent=`Score: ${score} / ${questions.length}`;
+}
+function resetQuiz(){score=0;document.getElementById("result").textContent=`Score: 0 / ${questions.length}`;loadQuiz()}
+loadQuiz();
+</script>
+</body>
+</html>

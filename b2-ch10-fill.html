@@ -1,0 +1,20 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Fill in the blanks by using the help box.</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#dff6ff,#fff,#e8f5e9);padding:18px;color:#333}
+.quiz{width:min(100%,1000px);margin:auto;background:#fff;border:5px solid #00b8f0;border-radius:28px;padding:26px;box-shadow:0 12px 35px rgba(0,0,0,.12)}
+h1{font-size:27px;color:#00a6d6;margin-bottom:20px}
+.card{background:#f9fcff;border:2px solid #c9efff;border-radius:20px;padding:17px 20px;margin-bottom:14px}
+.q{font-size:20px;font-weight:600;line-height:1.5;margin-bottom:12px}
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px}
+.opt{background:#fff;border:2px solid #ff4fa0;border-radius:16px;padding:11px 16px;text-align:left;font-size:16px;cursor:pointer}
+.opt.correct{background:#d4f8d4;border-color:#2e7d32;color:#1b5e20;font-weight:700}.opt.wrong{background:#ffd9dd;border-color:#c62828;color:#b71c1c;font-weight:700}
+.score{text-align:center;margin:18px 0;font-size:24px;font-weight:700;color:#0047ab}
+.actions{text-align:center}.reset,.check{border:0;border-radius:30px;padding:12px 28px;margin:5px;background:linear-gradient(135deg,#ff9800,#ff6f00);color:#fff;font-weight:700;cursor:pointer}
+@media(max-width:650px){body{padding:8px}.quiz{padding:15px 11px}h1{font-size:21px}.q{font-size:16px}.opts{grid-template-columns:1fr}.opt{font-size:15px}.reset,.check{width:100%;margin:5px 0}}
+.help{display:flex;justify-content:center;gap:25px;flex-wrap:wrap;background:linear-gradient(135deg,#fff,#d8f36b,#fff);padding:12px;border-radius:14px;margin-bottom:18px;font-size:19px}.q input{width:190px;border:0;border-bottom:3px solid #888;background:transparent;font-size:18px;text-align:center;outline:none}.q input.correct{border-color:#2e7d32;color:#1b5e20}.q input.wrong{border-color:#c62828;color:#b71c1c}</style></head><body><div class="quiz"><h1>Fill in the blanks by using the help box.</h1><div class="help"><b>punctual</b><b>homework</b><b>all</b><b>birthday</b></div>
+<div class="card q">1. I am going with my friends for a <input id="q1"> party.</div>
+<div class="card q">2. A child who is punctual is liked by <input id="q2">.</div>
+<div class="card q">3. Always finish your <input id="q3"> within the given time.</div>
+<div class="card q">4. I am always <input id="q4">.</div>
+<div class="actions"><button class="check" onclick="check()">Check Answers</button><button class="reset" onclick="reset()">Reset</button></div><div class="score" id="score">Score: 0 / 4</div></div><script>const ans={q1:'birthday',q2:'all',q3:'homework',q4:'punctual'};function check(){let s=0;Object.entries(ans).forEach(([id,a])=>{let x=document.getElementById(id);x.classList.remove('correct','wrong');if(x.value.trim().toLowerCase()===a){x.classList.add('correct');s++}else x.classList.add('wrong')});document.getElementById('score').textContent='Score: '+s+' / 4'}function reset(){Object.keys(ans).forEach(id=>{let x=document.getElementById(id);x.value='';x.classList.remove('correct','wrong')});document.getElementById('score').textContent='Score: 0 / 4'}</script></body></html>

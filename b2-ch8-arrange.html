@@ -1,0 +1,19 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Arrange the statements in the correct order. Write the numbers from 1 to 4 in the given boxes.</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#dff6ff,#fff,#e8f5e9);padding:18px;color:#333}
+.quiz{width:min(100%,1000px);margin:auto;background:#fff;border:5px solid #00b8f0;border-radius:28px;padding:26px;box-shadow:0 12px 35px rgba(0,0,0,.12)}
+h1{font-size:27px;color:#00a6d6;margin-bottom:20px}
+.card{background:#f9fcff;border:2px solid #c9efff;border-radius:20px;padding:17px 20px;margin-bottom:14px}
+.q{font-size:20px;font-weight:600;line-height:1.5;margin-bottom:12px}
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px}
+.opt{background:#fff;border:2px solid #ff4fa0;border-radius:16px;padding:11px 16px;text-align:left;font-size:16px;cursor:pointer}
+.opt.correct{background:#d4f8d4;border-color:#2e7d32;color:#1b5e20;font-weight:700}.opt.wrong{background:#ffd9dd;border-color:#c62828;color:#b71c1c;font-weight:700}
+.score{text-align:center;margin:18px 0;font-size:24px;font-weight:700;color:#0047ab}
+.actions{text-align:center}.reset,.check{border:0;border-radius:30px;padding:12px 28px;margin:5px;background:linear-gradient(135deg,#ff9800,#ff6f00);color:#fff;font-weight:700;cursor:pointer}
+@media(max-width:650px){body{padding:8px}.quiz{padding:15px 11px}h1{font-size:21px}.q{font-size:16px}.opts{grid-template-columns:1fr}.opt{font-size:15px}.reset,.check{width:100%;margin:5px 0}}
+.orderrow{display:flex;align-items:center;justify-content:space-between;gap:15px;font-size:19px}.orderrow input{width:58px;height:46px;border:2px solid #ff4fa0;border-radius:10px;text-align:center;font-size:20px}.correct{background:#d4f8d4!important;border-color:#2e7d32!important}.wrong{background:#ffd9dd!important;border-color:#c62828!important}</style></head><body><div class="quiz"><h1>Arrange the statements in the correct order. Write the numbers from 1 to 4 in the given boxes.</h1><div class="card"><div class="orderrow"><span>1. The mosquito asked the ant for help.</span><input id="q1" type="number" min="1" max="4"></div></div>
+<div class="card"><div class="orderrow"><span>2. The ant collected food during summer.</span><input id="q2" type="number" min="1" max="4"></div></div>
+<div class="card"><div class="orderrow"><span>3. Winter arrived.</span><input id="q3" type="number" min="1" max="4"></div></div>
+<div class="card"><div class="orderrow"><span>4. The mosquito had nothing to eat.</span><input id="q4" type="number" min="1" max="4"></div></div>
+<div class="actions"><button class="check" onclick="check()">Check Answers</button><button class="reset" onclick="reset()">Reset</button></div><div class="score" id="score">Score: 0 / 4</div></div><script>const ans={q1:'4',q2:'1',q3:'2',q4:'3'};function check(){let s=0;Object.entries(ans).forEach(([id,a])=>{let x=document.getElementById(id);x.classList.remove('correct','wrong');if(x.value===a){x.classList.add('correct');s++}else x.classList.add('wrong')});document.getElementById('score').textContent='Score: '+s+' / 4'}function reset(){Object.keys(ans).forEach(id=>{let x=document.getElementById(id);x.value='';x.classList.remove('correct','wrong')});document.getElementById('score').textContent='Score: 0 / 4'}</script></body></html>

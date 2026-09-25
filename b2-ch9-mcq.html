@@ -1,0 +1,19 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Multiple choice questions (MCQs):</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#dff6ff,#fff,#e8f5e9);padding:18px;color:#333}
+.quiz{width:min(100%,1000px);margin:auto;background:#fff;border:5px solid #00b8f0;border-radius:28px;padding:26px;box-shadow:0 12px 35px rgba(0,0,0,.12)}
+h1{font-size:27px;color:#00a6d6;margin-bottom:20px}
+.card{background:#f9fcff;border:2px solid #c9efff;border-radius:20px;padding:17px 20px;margin-bottom:14px}
+.q{font-size:20px;font-weight:600;line-height:1.5;margin-bottom:12px}
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px}
+.opt{background:#fff;border:2px solid #ff4fa0;border-radius:16px;padding:11px 16px;text-align:left;font-size:16px;cursor:pointer}
+.opt.correct{background:#d4f8d4;border-color:#2e7d32;color:#1b5e20;font-weight:700}.opt.wrong{background:#ffd9dd;border-color:#c62828;color:#b71c1c;font-weight:700}
+.score{text-align:center;margin:18px 0;font-size:24px;font-weight:700;color:#0047ab}
+.actions{text-align:center}.reset,.check{border:0;border-radius:30px;padding:12px 28px;margin:5px;background:linear-gradient(135deg,#ff9800,#ff6f00);color:#fff;font-weight:700;cursor:pointer}
+@media(max-width:650px){body{padding:8px}.quiz{padding:15px 11px}h1{font-size:21px}.q{font-size:16px}.opts{grid-template-columns:1fr}.opt{font-size:15px}.reset,.check{width:100%;margin:5px 0}}
+</style></head><body><div class="quiz"><h1>Multiple choice questions (MCQs):</h1><div id="quiz"></div><div class="score" id="score">Score: 0 / 4</div><div class="actions"><button class="reset" onclick="load()">Reset Quiz</button></div></div><script>const qs=[{'q': '1. Who was teaching archery?', 'o': ['i. Arjun', 'ii. Guru Dronacharya', 'iii. Bhima'], 'a': 'ii. Guru Dronacharya'}, {'q': '2. What did Arjun see?', 'o': ['i. The tree', 'ii. The leaves', 'iii. The eye of the bird'], 'a': 'iii. The eye of the bird'}, {'q': '3. Who was successful in taking the aim?', 'o': ['i. Yudhishthir', 'ii. Arjun', 'iii. Duryodhan'], 'a': 'ii. Arjun'}, {'q': '4. What is the moral of the story?', 'o': ['i. Be lazy', 'ii. Stay focused', 'iii. Fight with others'], 'a': 'ii. Stay focused'}]; let score=0;
+function load(){score=0;document.getElementById('score').textContent='Score: 0 / '+qs.length;let root=document.getElementById('quiz');root.innerHTML='';
+qs.forEach(x=>{let c=document.createElement('div');c.className='card';let q=document.createElement('div');q.className='q';q.textContent=x.q;let os=document.createElement('div');os.className='opts';
+x.o.forEach(v=>{let b=document.createElement('button');b.className='opt';b.textContent=v;b.onclick=()=>{if(os.dataset.done)return;os.dataset.done='1';os.querySelectorAll('.opt').forEach(z=>{z.disabled=true;if(z.textContent===x.a)z.classList.add('correct')});if(v===x.a)score++;else b.classList.add('wrong');document.getElementById('score').textContent='Score: '+score+' / '+qs.length;};os.appendChild(b)});
+c.append(q,os);root.appendChild(c)})}load();</script></body></html>

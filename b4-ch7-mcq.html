@@ -1,0 +1,22 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Multiple choice questions.</title><style>
+*{box-sizing:border-box}body{margin:0;padding:14px;font-family:Arial,Helvetica,sans-serif;background:#eaf8ff;color:#292929}
+.wrap{max-width:1000px;margin:auto;background:#fff;border:5px solid #08b6e8;border-radius:25px;padding:22px}
+h1{margin:0 0 18px;color:#ff0878;font-size:25px}
+.card{background:#f9fcff;border:2px solid #c9efff;border-radius:18px;padding:15px 18px;margin:11px 0}
+.q{font-size:18px;font-weight:600;line-height:1.45;margin-bottom:9px}
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px 13px}
+.opt{padding:10px 13px;border:2px solid #ff4fa0;border-radius:14px;background:#fff;text-align:left;font-size:16px;cursor:pointer}
+.correct{background:#d8f6d8!important;border-color:#27843a!important;color:#176325!important}
+.wrong{background:#ffdadd!important;border-color:#c62828!important;color:#a81616!important}
+.score{text-align:center;color:#064bad;font-size:22px;font-weight:bold;margin:15px}
+.actions{text-align:center}.btn{padding:11px 24px;margin:4px;border:0;border-radius:24px;background:#ff7b00;color:white;font-weight:bold;cursor:pointer}
+.row{display:flex;align-items:center;gap:12px;font-size:17px;line-height:1.5}.grow{flex:1}
+input.ans{padding:8px;border:2px solid #ff4fa0;border-radius:8px;font-size:16px;max-width:180px}
+.match-select{padding:8px;border:2px solid #ff4fa0;border-radius:9px;font-size:16px;background:white}
+@media(max-width:650px){.wrap{padding:12px}.opts{grid-template-columns:1fr}h1{font-size:20px}.q,.row{font-size:15px}.btn{width:100%}input.ans{max-width:130px}}
+</style></head><body><div class="wrap"><h1>Multiple choice questions.</h1><div id="quiz"></div><div id="score" class="score">Score: 0 / 5</div><div class="actions"><button class="btn" onclick="load()">Reset</button></div></div><script>const Q=[{"q": "1. Why did Natwarlal usually travel by air?", "o": ["i. It was cheaper", "ii. He travelled regularly for business", "iii. He liked trains"], "a": "ii. He travelled regularly for business"}, {"q": "2. Why did the young man sit on Natwarlal's berth?", "o": ["i. He was tired", "ii. He was carrying a small baby", "iii. He missed his seat"], "a": "ii. He was carrying a small baby"}, {"q": "3. What happened when Natwarlal travelled without a reservation?", "o": ["i. He found an empty berth", "ii. No one offered him a seat", "iii. He travelled by bus"], "a": "ii. No one offered him a seat"}, {"q": "4. What did Natwarlal realise at the end of the story?", "o": ["i. Money is everything", "ii. We should be considerate towards others", "iii. Travelling by train is difficult"], "a": "ii. We should be considerate towards others"}, {"q": "5. What is the main message of the lesson?", "o": ["i. Be kind and helpful", "ii. Travel only by air", "iii. Never help strangers"], "a": "i. Be kind and helpful"}];let sc=0;
+function load(){sc=0;quiz.innerHTML='';score.textContent='Score: 0 / '+Q.length;
+Q.forEach(z=>{let c=document.createElement('div');c.className='card';let q=document.createElement('div');q.className='q';q.textContent=z.q;
+let os=document.createElement('div');os.className='opts';z.o.forEach(v=>{let b=document.createElement('button');b.className='opt';b.textContent=v;
+b.onclick=()=>{if(os.dataset.done)return;os.dataset.done='1';os.querySelectorAll('button').forEach(k=>{k.disabled=true;if(k.textContent===z.a)k.classList.add('correct')});if(v===z.a)sc++;else b.classList.add('wrong');score.textContent='Score: '+sc+' / '+Q.length};os.append(b)});c.append(q,os);quiz.append(c)})}load();</script></body></html>

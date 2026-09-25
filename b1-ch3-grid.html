@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Find the Words</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+ min-height:100vh;font-family:Arial,Helvetica,sans-serif;
+ background:linear-gradient(135deg,#dff6ff,#fff,#e8f5e9);
+ display:flex;justify-content:center;align-items:center;padding:18px;color:#333
+}
+.quiz-box{
+ width:min(100%,900px);background:#fff;border:5px solid #00b8f0;border-radius:28px;
+ padding:28px;box-shadow:0 12px 35px rgba(0,0,0,.12)
+}
+.heading{font-size:27px;font-weight:700;color:#00a6d6;margin-bottom:22px;line-height:1.4}
+.question-box{
+ background:#f9fcff;border:2px solid #c9efff;border-radius:20px;
+ padding:15px 20px;margin-bottom:13px
+}
+.question{display:flex;align-items:center;gap:12px;font-size:20px;font-weight:600}
+.number{min-width:28px}
+.blank-input{
+ flex:1;border:none;border-bottom:3px solid #888;background:transparent;
+ font-size:20px;font-weight:700;color:#d81b60;outline:none;padding:7px 5px
+}
+.blank-input:focus{border-color:#00b8f0}
+.blank-input.correct{border-color:#2e7d32;color:#1b5e20}
+.blank-input.wrong{border-color:#c62828;color:#b71c1c}
+.buttons{text-align:center;margin-top:20px}
+button{
+ border:0;border-radius:32px;padding:12px 28px;margin:6px;font-size:16px;
+ font-weight:700;color:#fff;background:linear-gradient(135deg,#ff9800,#ff6f00);cursor:pointer
+}
+.result{text-align:center;margin-top:16px;font-size:24px;font-weight:700;color:#0047ab}
+.word-grid{
+ width:min(100%,360px);margin:0 auto 22px;border-collapse:collapse;
+ table-layout:fixed;background:#fff
+}
+.word-grid td{
+ border:2px solid #5740d8;width:14.28%;height:44px;text-align:center;
+ vertical-align:middle;font-size:25px;font-weight:500;color:#171717
+}
+@media(max-width:650px){
+ body{padding:8px;align-items:flex-start}.quiz-box{padding:16px 12px;border-radius:20px}
+ .heading{font-size:21px}.word-grid{max-width:290px}.word-grid td{height:36px;font-size:20px}.question-box{padding:12px 14px}
+ .question{font-size:17px}.blank-input{font-size:17px}
+ button{width:100%;margin:6px 0}.result{font-size:21px}
+}
+</style>
+</head>
+<body>
+<div class="quiz-box">
+ <div class="heading">Find the words in the grid box then write them.</div>
+
+ <table class="word-grid" aria-label="Word search grid">
+  <tr><td>T</td><td>E</td><td>A</td><td>C</td><td>H</td><td>E</td><td>R</td></tr>
+  <tr><td>A</td><td>B</td><td>O</td><td>O</td><td>K</td><td>X</td><td>Y</td></tr>
+  <tr><td>G</td><td>R</td><td>E</td><td>A</td><td>D</td><td>P</td><td>L</td></tr>
+  <tr><td>S</td><td>C</td><td>H</td><td>O</td><td>O</td><td>L</td><td>M</td></tr>
+  <tr><td>B</td><td>A</td><td>G</td><td>T</td><td>R</td><td>Z</td><td>E</td></tr>
+  <tr><td>R</td><td>P</td><td>E</td><td>N</td><td>C</td><td>I</td><td>L</td></tr>
+ </table>
+
+
+ <div class="question-box"><div class="question"><span class="number">1.</span><input id="q1" class="blank-input" type="text" autocomplete="off"></div></div>
+ <div class="question-box"><div class="question"><span class="number">2.</span><input id="q2" class="blank-input" type="text" autocomplete="off"></div></div>
+ <div class="question-box"><div class="question"><span class="number">3.</span><input id="q3" class="blank-input" type="text" autocomplete="off"></div></div>
+ <div class="question-box"><div class="question"><span class="number">4.</span><input id="q4" class="blank-input" type="text" autocomplete="off"></div></div>
+ <div class="question-box"><div class="question"><span class="number">5.</span><input id="q5" class="blank-input" type="text" autocomplete="off"></div></div>
+ <div class="question-box"><div class="question"><span class="number">6.</span><input id="q6" class="blank-input" type="text" autocomplete="off"></div></div>
+
+ <div class="buttons">
+  <button onclick="checkAnswers()">Check Answers</button>
+  <button onclick="resetQuiz()">Reset</button>
+ </div>
+ <div class="result" id="result">Score: 0 / 6</div>
+</div>
+
+<script>
+const answers={
+ q1:"teacher",
+ q2:"book",
+ q3:"read",
+ q4:"school",
+ q5:"pencil",
+ q6:"bag"
+};
+
+function checkAnswers(){
+ let score=0;
+ Object.entries(answers).forEach(([id,answer])=>{
+   const input=document.getElementById(id);
+   const value=input.value.trim().toLowerCase();
+   input.classList.remove("correct","wrong");
+   if(value===answer){input.classList.add("correct");score++}
+   else input.classList.add("wrong");
+ });
+ document.getElementById("result").textContent=`Score: ${score} / 6`;
+}
+function resetQuiz(){
+ Object.keys(answers).forEach(id=>{
+   const input=document.getElementById(id);
+   input.value="";
+   input.classList.remove("correct","wrong");
+ });
+ document.getElementById("result").textContent="Score: 0 / 6";
+}
+</script>
+</body>
+</html>

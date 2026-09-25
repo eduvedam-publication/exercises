@@ -1,0 +1,30 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Fill in the Blanks</title><style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#dff6ff,#fff,#e8f5e9);display:flex;justify-content:center;align-items:center;padding:18px;color:#333}
+.quiz-box{width:min(100%,950px);background:#fff;border:5px solid #00b8f0;border-radius:28px;padding:28px;box-shadow:0 12px 35px rgba(0,0,0,.12)}
+.heading{font-size:27px;font-weight:700;color:#00a6d6;margin-bottom:20px}
+.question-box{background:#f9fcff;border:2px solid #c9efff;border-radius:20px;padding:17px 20px;margin-bottom:14px}
+.result{text-align:center;margin:20px 0 14px;font-size:24px;font-weight:700;color:#0047ab}
+.buttons{text-align:center}
+.reset,.action{border:0;border-radius:32px;padding:12px 28px;margin:5px;font-size:16px;font-weight:700;color:#fff;background:linear-gradient(135deg,#ff9800,#ff6f00);cursor:pointer}
+
+.help-box{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;background:linear-gradient(135deg,#fff,#d8f36b,#fff);padding:12px 18px;border-radius:16px;margin-bottom:22px}
+.help-word{font-size:19px;font-weight:700;padding:5px 13px}.question{font-size:20px;line-height:1.8}
+.blank{width:180px;border:none;border-bottom:3px solid #888;background:transparent;font-size:19px;font-weight:700;color:#d81b60;text-align:center;outline:none;padding:4px;margin:0 5px}
+.blank.correct{border-color:#2e7d32;color:#1b5e20}.blank.wrong{border-color:#c62828;color:#b71c1c}
+@media(max-width:650px){body{padding:8px;align-items:flex-start}.quiz-box{padding:16px 12px}.heading{font-size:21px}.help-word{font-size:15px}.question{font-size:16px}.blank{width:130px;font-size:16px}.action,.reset{width:100%;margin:5px 0}}
+</style></head><body><div class="quiz-box">
+<div class="heading">Fill in the blanks by using the help box.</div>
+<div class="help-box"><span class="help-word">teaches</span><span class="help-word">truth</span><span class="help-word">bless</span><span class="help-word">love</span><span class="help-word">guides</span><span class="help-word">happiness</span></div>
+<div class="question-box"><div class="question">1. God wants us to stand beside the <input id="q1" class="blank">.</div></div>
+<div class="question-box"><div class="question">2. God <input id="q2" class="blank"> this world.</div></div>
+<div class="question-box"><div class="question">3. God <input id="q3" class="blank"> us to <input id="q4" class="blank"> others.</div></div>
+<div class="question-box"><div class="question">4. God <input id="q5" class="blank"> us and gives us <input id="q6" class="blank">.</div></div>
+<div class="buttons"><button class="action" onclick="checkAnswers()">Check Answers</button><button class="reset" onclick="resetQuiz()">Reset</button></div>
+<div class="result" id="result">Score: 0 / 6</div></div>
+<script>
+const answers={q1:"truth",q2:"bless",q3:"teaches",q4:"love",q5:"guides",q6:"happiness"};
+function checkAnswers(){let score=0;Object.entries(answers).forEach(([id,a])=>{const x=document.getElementById(id);x.classList.remove("correct","wrong");if(x.value.trim().toLowerCase()===a){x.classList.add("correct");score++}else x.classList.add("wrong")});document.getElementById("result").textContent=`Score: ${score} / 6`;}
+function resetQuiz(){Object.keys(answers).forEach(id=>{const x=document.getElementById(id);x.value="";x.classList.remove("correct","wrong")});document.getElementById("result").textContent="Score: 0 / 6";}
+</script></body></html>

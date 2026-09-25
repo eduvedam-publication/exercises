@@ -1,0 +1,19 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fill in the blanks.</title><style>
+*{box-sizing:border-box}body{margin:0;padding:14px;font-family:Arial,Helvetica,sans-serif;background:#eaf8ff;color:#292929}
+.wrap{max-width:1000px;margin:auto;background:#fff;border:5px solid #08b6e8;border-radius:25px;padding:22px}
+h1{margin:0 0 18px;color:#ff0878;font-size:25px}.card{background:#f9fcff;border:2px solid #c9efff;border-radius:18px;padding:15px 18px;margin:11px 0}
+.q{font-size:18px;font-weight:600;line-height:1.45;margin-bottom:9px}.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px 13px}
+.opt{padding:10px 13px;border:2px solid #ff4fa0;border-radius:14px;background:#fff;text-align:left;font-size:16px;cursor:pointer}
+.correct{background:#d8f6d8!important;border-color:#27843a!important;color:#176325!important}.wrong{background:#ffdadd!important;border-color:#c62828!important;color:#a81616!important}
+.score{text-align:center;color:#064bad;font-size:22px;font-weight:bold;margin:15px}.actions{text-align:center}
+.btn{padding:11px 24px;margin:4px;border:0;border-radius:24px;background:#ff7b00;color:#fff;font-weight:bold;cursor:pointer}
+.row{display:flex;align-items:center;gap:12px;font-size:17px;line-height:1.5}.grow{flex:1}
+input.ans{padding:8px;border:2px solid #ff4fa0;border-radius:8px;font-size:16px;max-width:180px}
+.sel{padding:8px;border:2px solid #ff4fa0;border-radius:9px;background:white;font-size:15px;max-width:320px}
+.bank{padding:14px;margin:10px 0 18px;border-radius:14px;background:#efffc5;font-size:17px;line-height:1.7;text-align:center}
+.dropzone{min-height:44px;border:2px dashed #ff4fa0;border-radius:12px;padding:8px;margin:6px 0;background:#fff}
+.word{display:inline-block;padding:7px 12px;margin:5px;border:2px solid #ff4fa0;border-radius:999px;background:#fff;cursor:grab}
+.colwrap{display:grid;grid-template-columns:1fr 1fr;gap:18px}.col h2{text-align:center;font-size:18px}
+@media(max-width:650px){.wrap{padding:12px}.opts,.colwrap{grid-template-columns:1fr}h1{font-size:20px}.q,.row{font-size:15px}.btn{width:100%}input.ans{max-width:130px}}
+</style></head><body><div class="wrap"><h1>Fill in the blanks.</h1><div id="x"></div><div id="score" class="score"></div><div class="actions"><button class="btn" onclick="check()">Check Answers</button><button class="btn" onclick="load()">Reset</button></div></div><script>const R=[["1. You must ", "trust", " yourself."], ["2. You should use your own ", "power", " of ", "judgement", "."], ["3. You may ask for ", "advice", " from your ", "parents", " and your ", "teachers", "."], ["4. At times you have to ", "decide", " yourself."], ["5. If you listen to your ", "conscience", " you shall never go ", "wrong", "."]];let A=[];function load(){A=[];x.innerHTML='';let n=0;R.forEach(p=>{let c=document.createElement('div');c.className='card row';let d=document.createElement('div');d.className='grow';p.forEach((v,i)=>{if(i%2===0)d.append(document.createTextNode(v));else{let z=document.createElement('input');z.className='ans';z.id='i'+n;A.push([z.id,v]);n++;d.append(z)}});c.append(d);x.append(c)});score.textContent='Score: 0 / '+A.length}function check(){let sc=0;A.forEach(([id,a])=>{let z=document.getElementById(id);z.classList.remove('correct','wrong');if(z.value.trim().toLowerCase()===a.toLowerCase()){z.classList.add('correct');sc++}else z.classList.add('wrong')});score.textContent='Score: '+sc+' / '+A.length}load();</script></body></html>

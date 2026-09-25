@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arrange the Statements</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#dff6ff,#fff,#e8f5e9);display:flex;justify-content:center;align-items:center;padding:18px;color:#333}
+.quiz-box{width:min(100%,950px);background:#fff;border:5px solid #00b8f0;border-radius:28px;padding:28px;box-shadow:0 12px 35px rgba(0,0,0,.12)}
+.heading{font-size:26px;font-weight:700;color:#00a6d6;line-height:1.45;margin-bottom:22px}
+.statement{display:flex;align-items:center;gap:15px;background:#f9fcff;border:2px solid #c9efff;border-radius:18px;padding:15px 18px;margin-bottom:13px}
+.number{font-size:20px;font-weight:700;min-width:28px}
+.text{font-size:19px;line-height:1.5;flex:1}
+.order-input{width:60px;height:48px;border:2px solid #ff4fa0;border-radius:12px;background:#fff;text-align:center;font-size:21px;font-weight:700;outline:none}
+.order-input:focus{border-color:#00b8f0}
+.order-input.correct{background:#d4f8d4;border-color:#2e7d32;color:#1b5e20}
+.order-input.wrong{background:#ffd9dd;border-color:#c62828;color:#b71c1c}
+.buttons{text-align:center;margin-top:18px}
+button{border:0;border-radius:32px;padding:12px 28px;margin:5px;font-size:16px;font-weight:700;color:#fff;background:linear-gradient(135deg,#ff9800,#ff6f00);cursor:pointer}
+.result{text-align:center;margin-top:15px;font-size:24px;font-weight:700;color:#0047ab}
+@media(max-width:650px){
+body{padding:8px;align-items:flex-start}.quiz-box{padding:16px 12px;border-radius:20px}.heading{font-size:20px}
+.statement{padding:12px 10px;gap:8px}.number{font-size:16px;min-width:20px}.text{font-size:15px}
+.order-input{width:48px;height:42px;font-size:18px}.buttons button{width:100%;margin:5px 0}
+}
+</style>
+</head>
+<body>
+<div class="quiz-box">
+ <div class="heading">Arrange the statements in the correct order. Write the numbers from 1 to 4 in the given boxes.</div>
+
+ <div class="statement">
+   <div class="number">1.</div>
+   <div class="text">Aruni lay across the broken ridge.</div>
+   <input id="q1" class="order-input" type="number" min="1" max="4">
+ </div>
+
+ <div class="statement">
+   <div class="number">2.</div>
+   <div class="text">The guru blessed Aruni.</div>
+   <input id="q2" class="order-input" type="number" min="1" max="4">
+ </div>
+
+ <div class="statement">
+   <div class="number">3.</div>
+   <div class="text">Heavy rain washed away the field ridge.</div>
+   <input id="q3" class="order-input" type="number" min="1" max="4">
+ </div>
+
+ <div class="statement">
+   <div class="number">4.</div>
+   <div class="text">The guru asked Aruni to repair it.</div>
+   <input id="q4" class="order-input" type="number" min="1" max="4">
+ </div>
+
+ <div class="buttons">
+   <button onclick="checkAnswers()">Check Answers</button>
+   <button onclick="resetQuiz()">Reset</button>
+ </div>
+ <div class="result" id="result">Score: 0 / 4</div>
+</div>
+
+<script>
+const answers={q1:"3",q2:"4",q3:"1",q4:"2"};
+
+function checkAnswers(){
+ let score=0;
+ Object.entries(answers).forEach(([id,answer])=>{
+   const input=document.getElementById(id);
+   input.classList.remove("correct","wrong");
+   if(input.value.trim()===answer){
+     input.classList.add("correct");
+     score++;
+   }else{
+     input.classList.add("wrong");
+   }
+ });
+ document.getElementById("result").textContent=`Score: ${score} / 4`;
+}
+
+function resetQuiz(){
+ Object.keys(answers).forEach(id=>{
+   const input=document.getElementById(id);
+   input.value="";
+   input.classList.remove("correct","wrong");
+ });
+ document.getElementById("result").textContent="Score: 0 / 4";
+}
+</script>
+</body>
+</html>

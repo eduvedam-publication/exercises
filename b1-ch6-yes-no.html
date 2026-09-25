@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yes or No</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#dff6ff,#fff,#e8f5e9);display:flex;justify-content:center;align-items:center;padding:18px;color:#333}
+.quiz-box{width:min(100%,950px);background:#fff;border:5px solid #00b8f0;border-radius:28px;padding:28px;box-shadow:0 12px 35px rgba(0,0,0,.12)}
+.heading{font-size:27px;font-weight:700;color:#00a6d6;margin-bottom:22px}
+.statement{display:flex;align-items:center;justify-content:space-between;gap:18px;background:#f9fcff;border:2px solid #c9efff;border-radius:20px;padding:16px 20px;margin-bottom:13px}
+.text{font-size:20px;line-height:1.5;font-weight:500}
+.options{display:flex;gap:9px;flex-shrink:0}
+.option{min-width:70px;border:2px solid #ff4fa0;border-radius:13px;background:#fff;padding:10px 13px;font-size:16px;font-weight:700;cursor:pointer}
+.option:hover{background:#fff0f7}
+.option.correct{background:#d4f8d4;border-color:#2e7d32;color:#1b5e20}
+.option.wrong{background:#ffd9dd;border-color:#c62828;color:#b71c1c}
+.option:disabled{cursor:default}
+.result{text-align:center;margin:20px 0 14px;font-size:25px;font-weight:700;color:#0047ab}
+.buttons{text-align:center}
+.reset{border:0;border-radius:32px;padding:12px 30px;font-size:16px;font-weight:700;color:#fff;background:linear-gradient(135deg,#ff9800,#ff6f00);cursor:pointer}
+@media(max-width:650px){
+body{padding:8px;align-items:flex-start}.quiz-box{padding:16px 12px;border-radius:20px}.heading{font-size:21px}
+.statement{padding:13px;align-items:flex-start;flex-direction:column}.text{font-size:16px}.options{width:100%}.option{flex:1}
+.result{font-size:21px}.reset{width:100%}
+}
+</style>
+</head>
+<body>
+<div class="quiz-box">
+ <div class="heading">Write 'Yes' or 'No' in the given boxes.</div>
+ <div id="quiz"></div>
+ <div class="result" id="result">Score: 0 / 5</div>
+ <div class="buttons"><button class="reset" onclick="resetQuiz()">Reset Quiz</button></div>
+</div>
+<script>
+const questions=[
+ {text:"1. Raja loved his grandfather very much.",answer:"Yes"},
+ {text:"2. Raja was happy in America.",answer:"No"},
+ {text:"3. Raja had no friends in America.",answer:"No"},
+ {text:"4. The puppy wanted to play with Raja.",answer:"Yes"},
+ {text:"5. The puppy and Raja became enemies.",answer:"No"}
+];
+let score=0;
+function loadQuiz(){
+ const quiz=document.getElementById("quiz");quiz.innerHTML="";
+ questions.forEach(q=>{
+  const row=document.createElement("div");row.className="statement";
+  const text=document.createElement("div");text.className="text";text.textContent=q.text;
+  const opts=document.createElement("div");opts.className="options";
+  ["Yes","No"].forEach(value=>{
+   const b=document.createElement("button");b.className="option";b.textContent=value;
+   b.onclick=()=>checkAnswer(b,value,q.answer,opts);opts.appendChild(b);
+  });
+  row.append(text,opts);quiz.appendChild(row);
+ });
+}
+function checkAnswer(button,selected,correct,container){
+ const buttons=container.querySelectorAll(".option");
+ buttons.forEach(b=>{b.disabled=true;if(b.textContent===correct)b.classList.add("correct")});
+ if(selected===correct)score++;else button.classList.add("wrong");
+ document.getElementById("result").textContent=`Score: ${score} / 5`;
+}
+function resetQuiz(){score=0;document.getElementById("result").textContent="Score: 0 / 5";loadQuiz()}
+loadQuiz();
+</script>
+</body>
+</html>
