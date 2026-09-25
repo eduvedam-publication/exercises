@@ -1,0 +1,154 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Match the following.</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#dff6ff;font-family:Arial,sans-serif;color:#171717}
+.wrap{max-width:1000px;margin:0 auto;min-height:100vh;background:#fff;border:5px solid #08a9dc;border-radius:24px;padding:24px}
+h1{margin:0 0 22px;color:#ff0072;font-size:25px}
+.board{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:0 150px;padding:10px 25px 20px}
+.col{display:flex;flex-direction:column;gap:18px}
+.item{position:relative;min-height:55px;display:flex;align-items:center;padding:10px 22px;border:2px solid #ff8a3d;border-radius:12px;background:#fff;font-size:18px;cursor:pointer;user-select:none;z-index:2}
+.item.left{justify-content:flex-start}
+.item.right{justify-content:flex-start}
+.item.selected{outline:4px solid #ffd1e3}
+.item.matched{background:#fff7f0}
+.dot{position:absolute;width:16px;height:16px;border:3px solid #ff5a22;background:#fff;border-radius:50%;top:50%;transform:translateY(-50%);z-index:4}
+.left .dot{right:-9px}.right .dot{left:-9px}
+svg{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;overflow:visible}
+line{stroke:#ff3b18;stroke-width:3;stroke-linecap:round}
+.actions{display:flex;gap:10px;margin-top:18px}
+button{border:2px solid #ff2581;background:#fff;border-radius:12px;padding:9px 16px;font-size:16px;cursor:pointer}
+#result{font-weight:bold;margin-top:12px}
+@media(max-width:650px){
+ .wrap{border-width:3px;border-radius:0;padding:14px}
+ .board{gap:45px;padding:8px 5px}
+ .item{font-size:15px;padding:9px 13px;min-height:52px}
+ h1{font-size:21px}
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+<h1>Match the following.</h1>
+
+<div class="board" id="board">
+<svg id="lines"></svg>
+
+<div class="col">
+  <div class="item left" data-id="socrates">1. Socrates<span class="dot"></span></div>
+  <div class="item left" data-id="soldiers">2. Soldiers<span class="dot"></span></div>
+  <div class="item left" data-id="explorers">3. Explorers<span class="dot"></span></div>
+  <div class="item left" data-id="reformers">4. Social reformers<span class="dot"></span></div>
+  <div class="item left" data-id="wisdom">5. Wisdom<span class="dot"></span></div>
+</div>
+
+<div class="col">
+  <div class="item right" data-id="country"><span class="dot"></span>i. Serve their country</div>
+  <div class="item right" data-id="philosopher"><span class="dot"></span>ii. Greek philosopher</div>
+  <div class="item right" data-id="society"><span class="dot"></span>iii. Bring changes to society</div>
+  <div class="item right" data-id="courage"><span class="dot"></span>iv. Helps us use courage wisely</div>
+  <div class="item right" data-id="places"><span class="dot"></span>v. Discover new places</div>
+</div>
+</div>
+
+<div class="actions">
+<button id="submit">Submit</button>
+<button id="reset">Reset</button>
+</div>
+<div id="result"></div>
+</main>
+
+<script>
+const correct={
+ socrates:"philosopher",
+ soldiers:"country",
+ explorers:"places",
+ reformers:"society",
+ wisdom:"courage"
+};
+
+const board=document.getElementById("board");
+const svg=document.getElementById("lines");
+const leftItems=[...document.querySelectorAll(".left")];
+const rightItems=[...document.querySelectorAll(".right")];
+let active=null;
+let matches={};
+
+function dotCenter(item){
+ const d=item.querySelector(".dot").getBoundingClientRect();
+ const b=board.getBoundingClientRect();
+ return {x:d.left+d.width/2-b.left,y:d.top+d.height/2-b.top};
+}
+
+function draw(){
+ svg.innerHTML="";
+ Object.entries(matches).forEach(([l,r])=>{
+   const le=document.querySelector('.left[data-id="'+l+'"]');
+   const re=document.querySelector('.right[data-id="'+r+'"]');
+   if(!le||!re)return;
+   const a=dotCenter(le), b=dotCenter(re);
+   const line=document.createElementNS("http://www.w3.org/2000/svg","line");
+   line.setAttribute("x1",a.x); line.setAttribute("y1",a.y);
+   line.setAttribute("x2",b.x); line.setAttribute("y2",b.y);
+   svg.appendChild(line);
+ });
+}
+
+function refresh(){
+ document.querySelectorAll(".item").forEach(x=>x.classList.remove("matched","selected"));
+ Object.entries(matches).forEach(([l,r])=>{
+   document.querySelector('.left[data-id="'+l+'"]')?.classList.add("matched");
+   document.querySelector('.right[data-id="'+r+'"]')?.classList.add("matched");
+ });
+ if(active) active.classList.add("selected");
+ draw();
+}
+
+leftItems.forEach(item=>item.addEventListener("click",()=>{
+ active=item;
+ refresh();
+}));
+
+rightItems.forEach(item=>item.addEventListener("click",()=>{
+ if(!active)return;
+ const leftId=active.dataset.id, rightId=item.dataset.id;
+
+ // one-to-one matching: if this right item was already used, remove its old match
+ Object.keys(matches).forEach(k=>{
+   if(matches[k]===rightId) delete matches[k];
+ });
+
+ matches[leftId]=rightId;
+ active=null;
+ refresh();
+}));
+
+document.getElementById("reset").onclick=()=>{
+ matches={}; active=null; result.textContent=""; refresh();
+};
+
+document.getElementById("submit").onclick=()=>{
+ let score=0;
+ Object.keys(correct).forEach(k=>{if(matches[k]===correct[k])score++});
+ result.textContent="Score: "+score+" / "+Object.keys(correct).length;
+ window.parent.postMessage({
+   type:"VIDYALAYA_EXERCISE_SUBMIT",
+   exerciseType:"MATCHING",
+   response:{
+     completed:Object.keys(matches).length===5,
+     matches:Object.entries(matches).map(([left,right])=>({left,right})),
+     score,
+     total:5
+   }
+ },"*");
+};
+
+window.addEventListener("resize",draw);
+setTimeout(draw,50);
+</script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!doctype html><html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fill in the blanks.</title><style>
+*{box-sizing:border-box}
+body{margin:0;padding:12px;font-family:Arial,sans-serif;background:#eaf8ff;color:#252525}
+.wrap{max-width:1000px;margin:auto;background:#fff;border:5px solid #08b6e8;border-radius:24px;padding:20px}
+h1{color:#ff0878;font-size:24px;margin:0 0 16px}
+.card{background:#f9fcff;border:2px solid #c9efff;border-radius:17px;padding:14px 17px;margin:10px 0}
+.q{font-size:17px;font-weight:600;margin-bottom:8px}
+.opts{display:flex;flex-wrap:wrap;gap:8px 16px}
+.opt,.choice{padding:10px 14px;border:2px solid #ff4fa0;border-radius:13px;background:#fff;font-size:15px;cursor:pointer}
+.correct{background:#dff7df!important;border-color:#27843a!important}
+.wrong{background:#ffdede!important;border-color:#c62828!important}
+.score{text-align:center;color:#064bad;font-size:21px;font-weight:bold;margin:13px}
+.actions{text-align:center}
+.btn{padding:10px 22px;border:0;border-radius:22px;background:#ff7b00;color:white;font-weight:bold;margin:4px;cursor:pointer}
+.row{font-size:17px;line-height:2.15}
+.ans{padding:7px;border:2px solid #ff4fa0;border-radius:7px;font-size:15px;min-width:120px}
+.inline-question{display:flex;align-items:center;flex-wrap:wrap;gap:10px 18px}
+.inline-question .q{margin:0}
+.inline-question .choices{display:flex;gap:8px;flex-wrap:wrap}
+@media(max-width:650px){.wrap{padding:10px;border-width:3px}h1{font-size:20px}.q,.row{font-size:15px}.opt,.choice{font-size:14px}}
+</style></head>
+<body><div class="wrap"><h1>Fill in the blanks.</h1><div id="x"></div><div id="score" class="score"></div><div class="actions"><button class="btn" onclick="check()">Check Answers</button><button class="btn" onclick="load()">Reset</button></div></div><script>
+const R=[["1. Sri Krishna and Sudama studied together in the ", "gurukul", "."], ["2. Friendship is a relationship of ", "two", " or ", "more", " persons."], ["3. A ", "friend", " is someone whom we can ", "trust", "."], ["4. To have good ", "friends", " you have to be a good ", "friend", " yourself."]];let A=[];
+function load(){x.innerHTML='';A=[];let n=0;R.forEach(r=>{let c=document.createElement('div');c.className='card row';
+ r.forEach((v,i)=>{if(i%2===0)c.append(document.createTextNode(v));else{let z=document.createElement('input');z.className='ans';z.id='a'+n;A.push([z.id,v]);n++;c.append(z)}});
+ x.append(c)});score.textContent='Score: 0 / '+A.length}
+function check(){let s=0;A.forEach(([i,a])=>{let z=document.getElementById(i);z.classList.remove('correct','wrong');
+ if(z.value.trim().toLowerCase()===a.toLowerCase()){z.classList.add('correct');s++}else z.classList.add('wrong')});
+ score.textContent='Score: '+s+' / '+A.length} load();
+</script></body></html>
