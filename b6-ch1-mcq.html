@@ -1,0 +1,20 @@
+<!doctype html><html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Multiple choice questions.</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#dff6ff;font-family:Arial,sans-serif;color:#171717}
+.wrap{max-width:1000px;margin:auto;min-height:100vh;background:#fff;border:5px solid #08a9dc;border-radius:24px;padding:24px}
+h1{font-size:25px;color:#ff0072;margin:0 0 18px}
+.q{background:#f6fbfe;border:2px solid #a8eaff;border-radius:17px;padding:13px 16px;margin:10px 0;font-size:17px;font-weight:600;line-height:1.55}
+.opts{display:flex;flex-wrap:wrap;gap:9px;margin-top:9px}
+.opt,button{border:2px solid #ff2581;background:#fff;border-radius:11px;padding:8px 12px;font-size:16px;cursor:pointer}
+.sel{background:#ffe4f0!important}.ok{background:#dcf8df!important;border-color:#23a443!important}.bad{background:#ffe0e0!important;border-color:#d33!important}
+.actions{display:flex;justify-content:center;align-items:center;gap:12px;margin-top:20px}
+#result{text-align:center;font-weight:bold;margin-top:12px}
+input{border:2px solid #ff5a3d;border-radius:6px;padding:7px 9px;font-size:16px;min-width:135px}
+@media(max-width:650px){.wrap{border-width:3px;border-radius:0;padding:14px}h1{font-size:21px}input{min-width:110px}}
+</style></head><body><main class="wrap"><h1>Multiple choice questions.</h1><div class="q">1. Napoleon was returning from ________.<div class="opts"><button class="opt" data-q="0" data-v="0" onclick="pick(this)">i. France</button><button class="opt" data-q="0" data-v="1" onclick="pick(this)">ii. Russia</button><button class="opt" data-q="0" data-v="2" onclick="pick(this)">iii. India</button></div></div><div class="q">2. It was a very ________ winter night.<div class="opts"><button class="opt" data-q="1" data-v="0" onclick="pick(this)">i. hot</button><button class="opt" data-q="1" data-v="1" onclick="pick(this)">ii. warm</button><button class="opt" data-q="1" data-v="2" onclick="pick(this)">iii. cold</button></div></div><div class="q">3. Who was still awake in the tent?<div class="opts"><button class="opt" data-q="2" data-v="0" onclick="pick(this)">i. General Brouot</button><button class="opt" data-q="2" data-v="1" onclick="pick(this)">ii. A soldier</button><button class="opt" data-q="2" data-v="2" onclick="pick(this)">iii. Napoleon</button></div></div><div class="q">4. Why did Napoleon go around the camp?<div class="opts"><button class="opt" data-q="3" data-v="0" onclick="pick(this)">i. To wake the soldiers</button><button class="opt" data-q="3" data-v="1" onclick="pick(this)">ii. To check whether everyone was safe</button><button class="opt" data-q="3" data-v="2" onclick="pick(this)">iii. To move the tents</button></div></div><div class="q">5. According to the story, praying is ________.<div class="opts"><button class="opt" data-q="4" data-v="0" onclick="pick(this)">i. talking to God</button><button class="opt" data-q="4" data-v="1" onclick="pick(this)">ii. reading a book</button><button class="opt" data-q="4" data-v="2" onclick="pick(this)">iii. helping a friend</button></div></div>
+<div class="actions"><button onclick="check()">Submit</button><button onclick="location.reload()">Reset</button></div>
+<div id="result"></div></main><script>const A=[1, 2, 0, 1, 0],S={};
+function pick(e){document.querySelectorAll(`[data-q="${e.dataset.q}"]`).forEach(x=>x.classList.remove('sel'));e.classList.add('sel');S[e.dataset.q]=+e.dataset.v}
+function check(){let n=0;A.forEach((a,i)=>{document.querySelectorAll(`[data-q="${i}"]`).forEach(x=>{x.classList.remove('ok','bad');if(+x.dataset.v===a)x.classList.add('ok');else if(x.classList.contains('sel'))x.classList.add('bad')});if(S[i]===a)n++});result.textContent=`Score: ${n} / ${A.length}`;}</script></body></html>

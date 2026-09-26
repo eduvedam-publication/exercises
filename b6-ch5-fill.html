@@ -1,0 +1,19 @@
+<!doctype html><html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Fill in the blanks.</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#dff6ff;font-family:Arial,sans-serif;color:#171717}
+.wrap{max-width:1000px;margin:auto;min-height:100vh;background:#fff;border:5px solid #08a9dc;border-radius:24px;padding:24px}
+h1{font-size:25px;color:#ff0072;margin:0 0 18px}
+.q{background:#f6fbfe;border:2px solid #a8eaff;border-radius:17px;padding:13px 16px;margin:10px 0;font-size:17px;font-weight:600;line-height:1.55}
+.opts{display:flex;flex-wrap:wrap;gap:9px;margin-top:9px}
+.opt,button{border:2px solid #ff2581;background:#fff;border-radius:11px;padding:8px 12px;font-size:16px;cursor:pointer}
+.sel{background:#ffe4f0!important}.ok{background:#dcf8df!important;border-color:#23a443!important}.bad{background:#ffe0e0!important;border-color:#d33!important}
+.actions{display:flex;justify-content:center;align-items:center;gap:12px;margin-top:20px}
+#result{text-align:center;font-weight:bold;margin-top:12px}
+input{border:2px solid #ff5a3d;border-radius:6px;padding:7px 9px;font-size:16px;min-width:135px}
+@media(max-width:650px){.wrap{border-width:3px;border-radius:0;padding:14px}h1{font-size:21px}input{min-width:110px}}
+</style></head><body><main class="wrap"><h1>Fill in the blanks.</h1><div class="q">1. Don&#x27;t take God&#x27;s gifts for <input id="f0_0">.</div><div class="q">2. <input id="f1_0"> <input id="f1_1"> for all the <input id="f1_2"> things.</div><div class="q">3. <input id="f2_0"> is said to be the <input id="f2_1"> of God&#x27;s <input id="f2_2">.</div><div class="q">4. God has given us <input id="f3_0"> to see, hear, smell and <input id="f3_1">.</div><div class="q">5. Abhishek pulled Shantanu onto the <input id="f4_0">.</div><div class="q">6. Shantanu communicated through <input id="f5_0"> language.</div><div class="q">7. Abhishek understood that hearing and speech are precious <input id="f6_0"> of God.</div><div class="q">8. Don&#x27;t take your <input id="f7_0"> attention for granted.</div>
+<div class="actions"><button onclick="check()">Submit</button><button onclick="location.reload()">Reset</button></div>
+<div id="result"></div></main><script>const A=[["granted"], ["Thank", "God", "wonderful"], ["Man", "crown", "creation"], ["power", "taste"], ["footpath"], ["sign"], ["gifts"], ["parent's"]];
+function check(){let n=0,t=0;A.forEach((r,i)=>r.forEach((a,j)=>{t++;let e=document.getElementById(`f${i}_${j}`);let k=e.value.trim().toLowerCase()===a.toLowerCase();e.className=k?'ok':'bad';if(k)n++}));result.textContent=`Score: ${n} / ${t}`;}</script></body></html>

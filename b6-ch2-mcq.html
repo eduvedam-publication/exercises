@@ -1,0 +1,20 @@
+<!doctype html><html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Multiple choice questions.</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#dff6ff;font-family:Arial,sans-serif;color:#171717}
+.wrap{max-width:1000px;margin:auto;min-height:100vh;background:#fff;border:5px solid #08a9dc;border-radius:24px;padding:24px}
+h1{font-size:25px;color:#ff0072;margin:0 0 18px}
+.q{background:#f6fbfe;border:2px solid #a8eaff;border-radius:17px;padding:13px 16px;margin:10px 0;font-size:17px;font-weight:600;line-height:1.55}
+.opts{display:flex;flex-wrap:wrap;gap:9px;margin-top:9px}
+.opt,button{border:2px solid #ff2581;background:#fff;border-radius:11px;padding:8px 12px;font-size:16px;cursor:pointer}
+.sel{background:#ffe4f0!important}.ok{background:#dcf8df!important;border-color:#23a443!important}.bad{background:#ffe0e0!important;border-color:#d33!important}
+.actions{display:flex;justify-content:center;align-items:center;gap:12px;margin-top:20px}
+#result{text-align:center;font-weight:bold;margin-top:12px}
+input{border:2px solid #ff5a3d;border-radius:6px;padding:7px 9px;font-size:16px;min-width:135px}
+@media(max-width:650px){.wrap{border-width:3px;border-radius:0;padding:14px}h1{font-size:21px}input{min-width:110px}}
+</style></head><body><main class="wrap"><h1>Multiple choice questions.</h1><div class="q">1. What was Ahmed Rizvi skilled in?<div class="opts"><button class="opt" data-q="0" data-v="0" onclick="pick(this)">i. Weaving</button><button class="opt" data-q="0" data-v="1" onclick="pick(this)">ii. Embroidery</button><button class="opt" data-q="0" data-v="2" onclick="pick(this)">iii. Painting</button></div></div><div class="q">2. On which day did Ahmed go to the market?<div class="opts"><button class="opt" data-q="1" data-v="0" onclick="pick(this)">i. Sixth day</button><button class="opt" data-q="1" data-v="1" onclick="pick(this)">ii. Seventh day</button><button class="opt" data-q="1" data-v="2" onclick="pick(this)">iii. First day</button></div></div><div class="q">3. What did Faraz choose from his father&#x27;s possessions?<div class="opts"><button class="opt" data-q="2" data-v="0" onclick="pick(this)">i. Houseboat</button><button class="opt" data-q="2" data-v="1" onclick="pick(this)">ii. Embroidery skill</button><button class="opt" data-q="2" data-v="2" onclick="pick(this)">iii. House</button></div></div><div class="q">4. What happened to Fahad after he learned embroidery from his father?<div class="opts"><button class="opt" data-q="3" data-v="0" onclick="pick(this)">i. He stopped working</button><button class="opt" data-q="3" data-v="1" onclick="pick(this)">ii. He became successful</button><button class="opt" data-q="3" data-v="2" onclick="pick(this)">iii. He sold the skill</button></div></div><div class="q">5. What happened to Faraz&#x27;s house and Faiz&#x27;s boat?<div class="opts"><button class="opt" data-q="4" data-v="0" onclick="pick(this)">i. They were given away</button><button class="opt" data-q="4" data-v="1" onclick="pick(this)">ii. They were damaged in a natural disaster</button><button class="opt" data-q="4" data-v="2" onclick="pick(this)">iii. They were sold</button></div></div>
+<div class="actions"><button onclick="check()">Submit</button><button onclick="location.reload()">Reset</button></div>
+<div id="result"></div></main><script>const A=[1, 1, 2, 1, 1],S={};
+function pick(e){document.querySelectorAll(`[data-q="${e.dataset.q}"]`).forEach(x=>x.classList.remove('sel'));e.classList.add('sel');S[e.dataset.q]=+e.dataset.v}
+function check(){let n=0;A.forEach((a,i)=>{document.querySelectorAll(`[data-q="${i}"]`).forEach(x=>{x.classList.remove('ok','bad');if(+x.dataset.v===a)x.classList.add('ok');else if(x.classList.contains('sel'))x.classList.add('bad')});if(S[i]===a)n++});result.textContent=`Score: ${n} / ${A.length}`;}</script></body></html>
