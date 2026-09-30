@@ -1,0 +1,56 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Complete the sequences</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#e9faff;font-family:Arial,sans-serif;color:#222}
+.exercise{max-width:1000px;margin:28px auto;background:#fff;border:4px solid #08a9dc;border-radius:28px;padding:30px}
+h1{margin:0 0 28px;color:#00a5dc;font-size:25px}
+.actions{display:flex;justify-content:center;gap:14px;margin-top:32px}
+button{border:0;border-radius:22px;padding:11px 20px;background:#ff8500;color:#fff;font-weight:700;cursor:pointer}
+#result{text-align:center;font-size:22px;font-weight:700;color:#064bb4;margin-top:18px}
+.answer{border:2px solid #ff3b30;background:#fff;outline:none;font-size:18px}
+.answer.ok{background:#dcf8df;border-color:#009b8e}
+.answer.bad{background:#ffe1e1;border-color:#e43d30}
+
+.rows{display:flex;flex-direction:column;gap:14px;padding:0 15px}
+.row{display:flex;align-items:center;gap:0;font-family:Georgia,serif;font-size:20px}
+.letter{width:32px;margin-right:8px}
+.given{width:48px;height:43px;border:1.5px solid #222;display:flex;align-items:center;justify-content:center}
+.answer{height:43px;width:255px;padding:5px 8px;margin-left:0}
+.note{font-size:14px;color:#666;margin:8px 0 0 55px}
+@media(max-width:650px){.exercise{margin:0;border-radius:0;padding:16px}.answer{width:190px}}
+</style></head>
+<body><main class="exercise">
+<h1>Complete the following sequences by filling the numbers in the boxes.</h1>
+<div class="rows">
+ <div class="row"><span class="letter">a.</span><span class="given">2</span><span class="given">3</span><span class="given">5</span><span class="given">8</span><span class="given">12</span><input id="a0" class="answer"></div>
+ <div class="row"><span class="letter">b.</span><span class="given">48</span><span class="given">47</span><span class="given">45</span><span class="given">42</span><span class="given">38</span><input id="a1" class="answer"></div>
+ <div class="row"><span class="letter">c.</span><span class="given">9</span><span class="given">13</span><span class="given">18</span><span class="given">24</span><span class="given">31</span><input id="a2" class="answer"></div>
+ <div class="row"><span class="letter">d.</span><span class="given">65</span><span class="given">62</span><span class="given">58</span><span class="given">53</span><span class="given">47</span><input id="a3" class="answer"></div>
+</div>
+<div class="actions"><button onclick="checkAnswers()">Check Answers</button><button onclick="resetExercise()">Reset</button></div>
+<div id="result">Score: 0 / 4</div>
+</main>
+<script>
+const answers=[
+ ["17","23","30","38","47"],
+ ["33","27","20","12","4"],
+ ["39","48","58","69","81"],
+ ["40","32","23","13","2"]
+];
+function parse(v){return v.trim().split(/[ ,]+/).filter(Boolean)}
+function checkAnswers(){
+ let score=0;
+ answers.forEach((ans,i)=>{
+  const e=document.getElementById("a"+i), got=parse(e.value);
+  const ok=got.length===ans.length && got.every((x,j)=>x===ans[j]);
+  e.className="answer "+(ok?"ok":"bad"); if(ok)score++;
+ });
+ document.getElementById("result").textContent=`Score: ${score} / 4`;
+}
+function resetExercise(){
+ document.querySelectorAll(".answer").forEach(e=>{e.value="";e.className="answer"});
+ document.getElementById("result").textContent="Score: 0 / 4";
+}
+</script></body></html>

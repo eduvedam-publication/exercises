@@ -1,0 +1,38 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fill in the blanks</title><style>
+*{box-sizing:border-box}
+body{margin:0;background:#e9faff;font-family:Arial,sans-serif;color:#222}
+.exercise{max-width:950px;margin:28px auto;background:#fff;border:4px solid #08a9dc;border-radius:28px;padding:30px}
+h1{margin:0 0 28px;color:#00a5dc;font-size:25px}
+.actions{display:flex;justify-content:center;gap:14px;margin-top:30px}
+.action{border:0;border-radius:22px;padding:11px 20px;background:#ff8500;color:#fff;font-weight:700;cursor:pointer}
+#result{text-align:center;font-size:22px;font-weight:700;color:#064bb4;margin-top:18px}
+@media(max-width:600px){.exercise{margin:0;border-radius:0;padding:16px}}
+
+.questions{display:flex;flex-direction:column;gap:15px}
+.q{display:flex;align-items:center;flex-wrap:wrap;gap:6px;font-family:Georgia,'Times New Roman',serif;font-size:20px;line-height:1.5}
+.letter{width:25px} .answer{height:38px;border:2px solid #ff3b30;background:#fff;font-size:18px;padding:4px 7px;outline:none}
+.answer.ok{background:#dcf8df;border-color:#009b8e}.answer.bad{background:#ffe1e1;border-color:#e43d30}
+.frac{display:inline-flex;flex-direction:column;align-items:center;line-height:1;font-size:17px;vertical-align:middle}
+.frac span:first-child{border-bottom:1px solid #222;padding:0 3px 2px}
+.frac span:last-child{padding-top:2px}
+</style></head><body><main class="exercise">
+<h1>Fill in the blanks.</h1>
+<div class="questions">
+<div class="q"><span class="letter">a.</span><span>A fraction is a</span><input id="a0" class="answer" style="width:120px"><span>of a whole.</span></div>
+<div class="q"><span class="letter">b.</span><span>The</span><input id="a1" class="answer" style="width:140px"><span>of a fraction tell us the number of parts the whole is divided into.</span></div>
+<div class="q"><span class="letter">c.</span><span>The number at the top of the fraction is called the</span><input id="a2" class="answer" style="width:140px"><span>.</span></div>
+<div class="q"><span class="letter">d.</span><span>The fraction which represents three parts out of four is written as</span><input id="a3" class="answer" style="width:110px"><span>.</span></div>
+<div class="q"><span class="letter">e.</span><input id="a4" class="answer" style="width:110px"><span>halves make a whole.</span></div>
+<div class="q"><span class="letter">f.</span><input id="a5" class="answer" style="width:110px"><span>quarters make a whole.</span></div>
+<div class="q"><span class="letter">g.</span><input id="a6" class="answer" style="width:110px"><span>is half of 1 dozen.</span></div>
+<div class="q"><span class="letter">h.</span><input id="a7" class="answer" style="width:110px"><span>is</span><span class="frac"><span>3</span><span>4</span></span><span>of 1 dozen.</span></div>
+</div>
+<div class="actions"><button class="action" onclick="check()">Check Answers</button><button class="action" onclick="resetEx()">Reset</button></div>
+<div id="result">Score: 0 / 8</div></main>
+<script>
+const answers=['half','denominator','numerator','3/4','two','four','6','9'];
+function norm(v){return v.trim().toLowerCase().replace(/\s+/g,'');}
+function check(){let s=0;answers.forEach((v,i)=>{let e=document.getElementById('a'+i),ok=norm(e.value)===norm(v);e.className='answer '+(ok?'ok':'bad');if(ok)s++;});document.getElementById('result').textContent=`Score: ${s} / 8`;}
+function resetEx(){document.querySelectorAll('.answer').forEach(e=>{e.value='';e.className='answer'});document.getElementById('result').textContent='Score: 0 / 8';}
+</script></body></html>

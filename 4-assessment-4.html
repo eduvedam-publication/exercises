@@ -1,0 +1,16 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:#e8faff;font-family:Arial,sans-serif;color:#111}
+.exercise{max-width:1050px;margin:auto;background:#fff;border:4px solid #08a9dc;border-radius:28px;padding:30px}
+h1{margin:0 0 26px;color:#00a5dc;font-size:25px}
+.actions{display:flex;justify-content:center;gap:14px;margin-top:30px}
+.action{border:0;border-radius:24px;padding:12px 22px;background:#ff8200;color:#fff;font-weight:700;cursor:pointer}
+.score{text-align:center;margin-top:17px;color:#064bb4;font-size:22px;font-weight:700}
+.ok{background:#dcf8df!important;border-color:#009b8e!important}
+.bad{background:#ffe1e1!important;border-color:#e43d30!important}
+input{border:2px solid #ff3b30;background:#fff;height:40px;font-size:18px;padding:5px 8px;outline:none}
+@media(max-width:700px){body{padding:0}.exercise{border-radius:0;padding:16px}}
+
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px 70px}.cmp{display:flex;align-items:center;gap:9px;font:20px Georgia,serif}select{width:62px;height:42px;border:2px solid #ff3b30;background:#fff;font-size:20px;padding-left:8px}
+</style></head><body><main class="exercise"><h1>Put &gt;, &lt; or = in the boxes.</h1><div class="grid"><div class="cmp"><span>a. 14 × 5</span><select id="a0"><option value=""></option><option>&lt;</option><option>&gt;</option><option>=</option></select><span>12 × 7</span></div><div class="cmp"><span>b. 8 × 6</span><select id="a1"><option value=""></option><option>&lt;</option><option>&gt;</option><option>=</option></select><span>13 × 5</span></div><div class="cmp"><span>c. 24 × 2</span><select id="a2"><option value=""></option><option>&lt;</option><option>&gt;</option><option>=</option></select><span>18 × 2</span></div><div class="cmp"><span>d. 28 × 4</span><select id="a3"><option value=""></option><option>&lt;</option><option>&gt;</option><option>=</option></select><span>16 × 9</span></div><div class="cmp"><span>e. 17 × 7</span><select id="a4"><option value=""></option><option>&lt;</option><option>&gt;</option><option>=</option></select><span>12 × 9</span></div><div class="cmp"><span>f. 18 × 5</span><select id="a5"><option value=""></option><option>&lt;</option><option>&gt;</option><option>=</option></select><span>15 × 8</span></div></div><div class="actions"><button class="action" onclick="check()">Check Answers</button><button class="action" onclick="resetAll()">Reset</button></div><div id="score" class="score">Score: 0 / 6</div>
+<script>const ans=["<","<",">","<",">","<"];function check(){let s=0;ans.forEach((a,i)=>{let e=document.getElementById("a"+i),ok=e.value===a;e.className=ok?"ok":"bad";if(ok)s++});score.textContent=`Score: ${s} / 6`}function resetAll(){document.querySelectorAll("select").forEach(e=>{e.value="";e.className=""});score.textContent="Score: 0 / 6"}</script></main></body></html>

@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fill in the blanks</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#e9faff;font-family:Arial,sans-serif;color:#222}
+.exercise{max-width:900px;margin:28px auto;background:#fff;border:4px solid #08a9dc;border-radius:28px;padding:30px}
+h1{margin:0 0 22px;color:#00a5dc;font-size:25px}
+.questions{display:flex;flex-direction:column;gap:12px;padding-left:25px}
+.q{display:flex;align-items:center;flex-wrap:wrap;gap:5px;font-family:Georgia,"Times New Roman",serif;font-size:21px;min-height:38px}
+.letter{width:26px}
+.answer{width:42px;height:36px;border:2px solid #ff3b30;background:#fff;font-size:18px;padding:3px;text-align:center;outline:none}
+.answer.ok{background:#dcf8df;border-color:#009b8e}
+.answer.bad{background:#ffe1e1;border-color:#e43d30}
+.actions{display:flex;justify-content:center;gap:14px;margin-top:28px}
+button{border:0;border-radius:22px;padding:11px 20px;background:#ff8500;color:#fff;font-weight:700;cursor:pointer}
+#result{text-align:center;font-size:22px;font-weight:700;color:#064bb4;margin-top:18px}
+@media(max-width:520px){.exercise{margin:0;border-radius:0;padding:16px}.questions{padding-left:0}.q{font-size:18px}h1{font-size:22px}}
+</style>
+</head>
+<body>
+<main class="exercise">
+<h1>Fill in the blanks.</h1>
+
+<div class="questions">
+ <div class="q"><span class="letter">a.</span><span>45 − 34 =</span><input id="a0" class="answer"><span>=</span><input id="a1" class="answer"><span>tens</span><input id="a2" class="answer"><span>ones</span></div>
+ <div class="q"><span class="letter">b.</span><span>21 − 19 =</span><input id="a3" class="answer"><span>=</span><input id="a4" class="answer"><span>tens</span><input id="a5" class="answer"><span>ones</span></div>
+ <div class="q"><span class="letter">c.</span><span>83 − 69 =</span><input id="a6" class="answer"><span>=</span><input id="a7" class="answer"><span>tens</span><input id="a8" class="answer"><span>ones</span></div>
+ <div class="q"><span class="letter">d.</span><span>58 − 35 =</span><input id="a9" class="answer"><span>=</span><input id="a10" class="answer"><span>tens</span><input id="a11" class="answer"><span>ones</span></div>
+</div>
+
+<div class="actions">
+ <button onclick="checkAnswers()">Check Answers</button>
+ <button onclick="resetExercise()">Reset</button>
+</div>
+<div id="result">Score: 0 / 12</div>
+</main>
+
+<script>
+const answers=["11","1","1","2","0","2","14","1","4","23","2","3"];
+
+function checkAnswers(){
+ let score=0;
+ answers.forEach((v,i)=>{
+  const e=document.getElementById("a"+i);
+  const ok=e.value.trim()===v;
+  e.className="answer "+(ok?"ok":"bad");
+  if(ok)score++;
+ });
+ document.getElementById("result").textContent=`Score: ${score} / 12`;
+}
+function resetExercise(){
+ document.querySelectorAll(".answer").forEach(e=>{e.value="";e.className="answer"});
+ document.getElementById("result").textContent="Score: 0 / 12";
+}
+</script>
+</body>
+</html>

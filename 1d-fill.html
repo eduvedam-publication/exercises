@@ -1,0 +1,22 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fill in the blanks</title><style>
+*{box-sizing:border-box}body{margin:0;background:#e9faff;font-family:Arial,sans-serif;color:#111}.card{max-width:900px;margin:28px auto;background:#fff;border:4px solid #08a9dc;border-radius:28px;padding:30px}h1{margin:0 0 24px;color:#009ed2;font-size:28px}.q{background:#f7fbfd;border:2px solid #a9e9fb;border-radius:18px;padding:20px;margin:16px 0;font-size:19px;line-height:2}.sub{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-left:30px}.sub input{width:120px;border:0;border-bottom:2px solid #777;padding:6px 8px;font-size:18px;outline:none}.ok{background:#dcf8df!important;border-bottom-color:#009b8e!important}.bad{background:#ffe1e1!important;border-bottom-color:#e43d30!important}.actions{display:flex;justify-content:center;gap:14px;margin-top:26px}button{border:0;border-radius:22px;padding:11px 20px;background:#ff8500;color:#fff;font-weight:bold;cursor:pointer}#result{text-align:center;font-size:22px;font-weight:bold;color:#064bb4;margin-top:20px}@media(max-width:650px){.card{margin:0;border-radius:0;padding:14px}h1{font-size:23px}.sub{margin-left:5px}.sub input{width:90px}}
+</style></head><body><main class=card>
+<h1>Fill in the blanks.</h1>
+<div class=q><b>a. In the numeral 478,</b>
+<div class=sub>i. The place value of 4 is <input id=a0>.</div>
+<div class=sub>ii. The place value of 7 is <input id=a1>.</div>
+<div class=sub>iii. The place value of 8 is <input id=a2>.</div>
+</div>
+<div class=q><b>b. In the numeral 109,</b>
+<div class=sub>i. The place value of 1 is <input id=a3>.</div>
+<div class=sub>ii. The place value of 0 is <input id=a4>.</div>
+<div class=sub>iii. The place value of 9 is <input id=a5>.</div>
+</div>
+<div class=actions><button onclick=check()>Check Answers</button><button onclick=resetAll()>Reset</button></div>
+<div id=result>Score: 0 / 6</div>
+</main><script>
+const A=["400","70","8","100","00","9"];
+function check(){let n=0;A.forEach((v,i)=>{let e=document.getElementById("a"+i),k=e.value.trim()===v;e.className=k?"ok":"bad";if(k)n++});result.textContent=`Score: ${n} / 6`}
+function resetAll(){A.forEach((_,i)=>{let e=document.getElementById("a"+i);e.value="";e.className=""});result.textContent="Score: 0 / 6"}
+</script></body></html>

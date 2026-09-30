@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Encircle the Even Numbers</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#e9faff;font-family:Arial,sans-serif;color:#222}
+.exercise{max-width:1000px;margin:28px auto;background:#fff;border:4px solid #08a9dc;border-radius:28px;padding:30px}
+h1{margin:0 0 25px;color:#00a5dc;font-size:25px}
+.rows{display:flex;flex-direction:column;gap:13px;padding:0 20px}
+.row{display:grid;grid-template-columns:35px repeat(8,1fr);align-items:center;gap:10px}
+.label{font:21px Georgia,serif}
+.num{justify-self:center;min-width:55px;height:42px;padding:6px 9px;border:2px solid transparent;border-radius:50%;background:transparent;font:20px Georgia,serif;cursor:pointer}
+.num:hover{background:#f3fbff}
+.num.selected{border-color:#ff3b30}
+.num.correct{border-color:#009b8e;background:#dcf8df}
+.num.wrong{border-color:#e43d30;background:#ffe1e1}
+.actions{display:flex;justify-content:center;gap:14px;margin-top:30px}
+button.action{border:0;border-radius:22px;padding:11px 20px;background:#ff8500;color:#fff;font-weight:700;cursor:pointer}
+#result{text-align:center;font-size:22px;font-weight:700;color:#064bb4;margin-top:18px}
+@media(max-width:760px){
+ .exercise{margin:0;border-radius:0;padding:16px}
+ .rows{padding:0;overflow-x:auto}
+ .row{min-width:690px}
+}
+</style>
+</head>
+<body>
+<main class="exercise">
+<h1>Encircle the even numbers in each row.</h1>
+
+<div class="rows">
+ <div class="row"><span class="label">a.</span>
+  <button class="num">7</button><button class="num">16</button><button class="num">168</button><button class="num">50</button><button class="num">254</button><button class="num">78</button><button class="num">480</button><button class="num">89</button>
+ </div>
+ <div class="row"><span class="label">b.</span>
+  <button class="num">26</button><button class="num">19</button><button class="num">39</button><button class="num">85</button><button class="num">46</button><button class="num">258</button><button class="num">65</button><button class="num">27</button>
+ </div>
+ <div class="row"><span class="label">c.</span>
+  <button class="num">51</button><button class="num">4</button><button class="num">171</button><button class="num">194</button><button class="num">63</button><button class="num">83</button><button class="num">42</button><button class="num">70</button>
+ </div>
+ <div class="row"><span class="label">d.</span>
+  <button class="num">97</button><button class="num">49</button><button class="num">10</button><button class="num">72</button><button class="num">88</button><button class="num">95</button><button class="num">365</button><button class="num">26</button>
+ </div>
+ <div class="row"><span class="label">e.</span>
+  <button class="num">11</button><button class="num">222</button><button class="num">9</button><button class="num">68</button><button class="num">239</button><button class="num">87</button><button class="num">10</button><button class="num">55</button>
+ </div>
+</div>
+
+<div class="actions">
+ <button class="action" onclick="checkAnswers()">Check Answers</button>
+ <button class="action" onclick="resetExercise()">Reset</button>
+</div>
+<div id="result">Score: 0 / 20</div>
+</main>
+
+<script>
+const nums=[...document.querySelectorAll(".num")];
+nums.forEach(b=>b.addEventListener("click",()=>{
+ b.classList.remove("correct","wrong");
+ b.classList.toggle("selected");
+}));
+
+function checkAnswers(){
+ let score=0;
+ nums.forEach(b=>{
+   const even=Number(b.textContent)%2===0;
+   const selected=b.classList.contains("selected");
+   b.classList.remove("correct","wrong");
+   if(selected && even){b.classList.add("correct");score++}
+   else if(selected && !even){b.classList.add("wrong")}
+ });
+ document.getElementById("result").textContent=`Score: ${score} / 20`;
+}
+
+function resetExercise(){
+ nums.forEach(b=>b.classList.remove("selected","correct","wrong"));
+ document.getElementById("result").textContent="Score: 0 / 20";
+}
+</script>
+</body>
+</html>

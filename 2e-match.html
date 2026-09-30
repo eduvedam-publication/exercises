@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Match the following</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#e9faff;font-family:Arial,sans-serif;color:#222}
+.exercise{max-width:900px;margin:28px auto;background:#fff;border:4px solid #08a9dc;border-radius:28px;padding:30px}
+h1{margin:0 0 24px;color:#00a5dc;font-size:25px}
+.match-area{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:80px;min-height:260px;padding:0 25px}
+.column{display:flex;flex-direction:column;gap:16px;z-index:2}
+.item{height:48px;border:2px solid #a8e6f7;border-radius:18px;background:#f5fbfe;display:flex;align-items:center;padding:0 16px;font-family:Georgia,"Times New Roman",serif;font-size:20px;cursor:pointer;position:relative}
+.left{justify-content:flex-start}.right{justify-content:flex-end}
+.dot{position:absolute;width:18px;height:18px;background:#fff;border:3px solid #ff3b8d;transform:rotate(45deg)}
+.left .dot{right:12px}.right .dot{left:12px}
+.item.selected{border-color:#00a09a;background:#e8fbfa}
+.item.connected .dot{background:#00a09a;border-color:#00a09a}
+svg{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
+line{stroke:#009d96;stroke-width:4}
+.actions{display:flex;justify-content:center;gap:14px;margin-top:24px}
+button{border:0;border-radius:22px;padding:11px 20px;background:#ff8500;color:#fff;font-weight:700;cursor:pointer}
+#result{text-align:center;font-size:22px;font-weight:700;color:#064bb4;margin-top:18px}
+@media(max-width:600px){.exercise{margin:0;border-radius:0;padding:14px}.match-area{gap:28px;padding:0}.item{font-size:16px;padding:0 10px}.left{padding-right:34px}.right{padding-left:34px}h1{font-size:22px}}
+</style>
+</head>
+<body>
+<main class="exercise">
+<h1>Match the following:</h1>
+
+<div class="match-area" id="area">
+<svg id="lines"></svg>
+<div class="column">
+ <div class="item left" data-id="a"><span>a.&nbsp;&nbsp;22 + 51</span><i class="dot"></i></div>
+ <div class="item left" data-id="b"><span>b.&nbsp;&nbsp;32 + 0</span><i class="dot"></i></div>
+ <div class="item left" data-id="c"><span>c.&nbsp;&nbsp;236 + 21</span><i class="dot"></i></div>
+ <div class="item left" data-id="d"><span>d.&nbsp;&nbsp;42 + 0</span><i class="dot"></i></div>
+</div>
+<div class="column">
+ <div class="item right" data-id="i"><i class="dot"></i><span>i.&nbsp;&nbsp;21 + 236</span></div>
+ <div class="item right" data-id="ii"><i class="dot"></i><span>ii.&nbsp;&nbsp;0 + 42</span></div>
+ <div class="item right" data-id="iii"><i class="dot"></i><span>iii.&nbsp;&nbsp;51 + 22</span></div>
+ <div class="item right" data-id="iv"><i class="dot"></i><span>iv.&nbsp;&nbsp;0 + 32</span></div>
+</div>
+</div>
+
+<div class="actions">
+<button onclick="checkAnswers()">Check Answers</button>
+<button onclick="resetExercise()">Reset</button>
+</div>
+<div id="result">Score: 0 / 4</div>
+</main>
+
+<script>
+const area=document.getElementById("area"), svg=document.getElementById("lines");
+let selected=null, pairs={};
+const correct={a:"iii",b:"iv",c:"i",d:"ii"};
+
+document.querySelectorAll(".left").forEach(el=>el.onclick=()=>{
+ document.querySelectorAll(".left").forEach(x=>x.classList.remove("selected"));
+ selected=el.dataset.id; el.classList.add("selected");
+});
+document.querySelectorAll(".right").forEach(el=>el.onclick=()=>{
+ if(!selected)return;
+ const r=el.dataset.id;
+ Object.keys(pairs).forEach(k=>{if(pairs[k]===r)delete pairs[k]});
+ pairs[selected]=r;
+ selected=null;
+ document.querySelectorAll(".left").forEach(x=>x.classList.remove("selected"));
+ redraw();
+});
+
+function center(el,side){
+ const d=el.querySelector(".dot").getBoundingClientRect(), a=area.getBoundingClientRect();
+ return [d.left+d.width/2-a.left,d.top+d.height/2-a.top];
+}
+function redraw(){
+ svg.innerHTML="";
+ document.querySelectorAll(".item").forEach(x=>x.classList.remove("connected"));
+ Object.entries(pairs).forEach(([l,r])=>{
+  const le=document.querySelector(`.left[data-id="${l}"]`);
+  const re=document.querySelector(`.right[data-id="${r}"]`);
+  le.classList.add("connected");re.classList.add("connected");
+  const [x1,y1]=center(le),[x2,y2]=center(re);
+  svg.insertAdjacentHTML("beforeend",`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/>`);
+ });
+}
+function checkAnswers(){
+ let score=0;
+ Object.keys(correct).forEach(k=>{if(pairs[k]===correct[k])score++});
+ document.getElementById("result").textContent=`Score: ${score} / 4`;
+}
+function resetExercise(){
+ pairs={};selected=null;svg.innerHTML="";
+ document.querySelectorAll(".item").forEach(x=>x.classList.remove("selected","connected"));
+ document.getElementById("result").textContent="Score: 0 / 4";
+}
+window.addEventListener("resize",redraw);
+</script>
+</body>
+</html>

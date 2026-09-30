@@ -1,0 +1,15 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>
+*{box-sizing:border-box}body{margin:0;padding:24px;background:#e8faff;font-family:Arial,sans-serif;color:#111}
+.exercise{max-width:1050px;margin:auto;background:#fff;border:4px solid #08a9dc;border-radius:28px;padding:30px}
+h1{margin:0 0 26px;color:#00a5dc;font-size:25px}.actions{display:flex;justify-content:center;gap:14px;margin-top:30px}
+.action{border:0;border-radius:24px;padding:12px 22px;background:#ff8200;color:#fff;font-weight:700;cursor:pointer}
+.score{text-align:center;margin-top:17px;color:#064bb4;font-size:22px;font-weight:700}
+.ok{background:#dcf8df!important;border-color:#009b8e!important}.bad{background:#ffe1e1!important;border-color:#e43d30!important}
+input{height:38px;border:2px solid #ff3b30;background:#fff;font-size:18px;padding:4px 7px;outline:none}
+.mathbox{width:145px;background:#dff1fb;padding:9px}.place,.digits{display:grid;grid-template-columns:30px 30px 30px;justify-content:end;text-align:center;font-family:Georgia,serif}
+.place{color:#ff4050;font-size:20px;margin-bottom:10px}.digits{font-size:21px;line-height:1.45}.line{border-top:2px solid #08a9dc;margin:2px 0 5px}
+@media(max-width:700px){body{padding:0}.exercise{border-radius:0;padding:16px}}
+
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px 55px}.fill{display:flex;align-items:center;gap:8px;font:20px Georgia,serif;white-space:nowrap}.fill input{width:90px}
+</style></head><body><main class="exercise"><h1>Fill in the blanks.</h1><div class="grid"><div class="fill"><span>a.</span><span>41 − 41 =</span><input id="a0"></div><div class="fill"><span>b.</span><span>65 −</span><input id="a1"><span>= 64</span></div><div class="fill"><span>c.</span><span>189 −</span><input id="a2"><span>= 0</span></div><div class="fill"><span>d.</span><span></span><input id="a3"><span>− 1 = 432</span></div><div class="fill"><span>e.</span><span>234 − 0 =</span><input id="a4"></div><div class="fill"><span>f.</span><span>386 −</span><input id="a5"><span>= 385</span></div></div><div class="actions"><button class="action" onclick="check()">Check Answers</button><button class="action" onclick="resetAll()">Reset</button></div><div id="score" class="score">Score: 0 / 6</div>
+<script>const ans=["0","1","189","433","234","1"];function check(){let s=0;ans.forEach((a,i)=>{let e=document.getElementById("a"+i),ok=e.value.trim()===a;e.className=ok?"ok":"bad";if(ok)s++});score.textContent=`Score: ${s} / 6`}function resetAll(){document.querySelectorAll("input").forEach(e=>{e.value="";e.className=""});score.textContent="Score: 0 / 6"}</script></main></body></html>

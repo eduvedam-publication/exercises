@@ -1,0 +1,105 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Solve the following</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#e9faff;font-family:Arial,sans-serif;color:#222}
+.exercise{max-width:1000px;margin:25px auto;background:#fff;border:4px solid #08a9dc;border-radius:28px;padding:30px}
+h1{margin:0 0 24px;color:#00a5dc;font-size:25px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px 65px;padding:0 15px}
+.item{display:flex;align-items:flex-start;gap:10px}
+.label{font:20px Georgia,serif;padding-top:7px}
+.sum{width:136px;background:#e2f2fc;padding:6px 8px 8px}
+.head{height:28px;text-align:right;color:#ff4654;font:21px Georgia,serif;letter-spacing:14px;padding-right:0}
+.head.hto{letter-spacing:12px}
+.nums{font:21px Georgia,serif;line-height:30px}
+.numrow{display:grid;grid-template-columns:30px 30px 30px;justify-content:end;text-align:center}
+.numrow.two{grid-template-columns:30px 30px}
+.op{border-bottom:2px solid #00a8df}
+.answer{width:100%;height:35px;border:2px solid #ff3b30;background:#fff;font-size:18px;padding:3px 5px;outline:none}
+.answer.ok{background:#dcf8df;border-color:#009b8e}
+.answer.bad{background:#ffe1e1;border-color:#e43d30}
+.actions{display:flex;justify-content:center;gap:14px;margin-top:30px}
+button{border:0;border-radius:22px;padding:11px 20px;background:#ff8500;color:#fff;font-weight:700;cursor:pointer}
+#result{text-align:center;font-size:22px;font-weight:700;color:#064bb4;margin-top:18px}
+@media(max-width:720px){.grid{grid-template-columns:repeat(2,1fr);gap:20px}}
+@media(max-width:480px){.grid{grid-template-columns:1fr}.exercise{margin:0;border-radius:0;padding:16px}}
+</style>
+</head>
+<body>
+<main class="exercise">
+<h1>Solve the following:</h1>
+<div class="grid">
+
+<div class="item"><span class="label">a.</span><div class="sum">
+ <div class="head">T O</div>
+ <div class="nums">
+  <div class="numrow two"><span>1</span><span>2</span></div>
+  <div class="numrow two op"><span>×</span><span>2</span></div>
+ </div><input id="a0" class="answer" inputmode="numeric">
+</div></div>
+
+<div class="item"><span class="label">b.</span><div class="sum">
+ <div class="head">T O</div>
+ <div class="nums">
+  <div class="numrow two"><span>3</span><span>2</span></div>
+  <div class="numrow two op"><span>×</span><span>2</span></div>
+ </div><input id="a1" class="answer" inputmode="numeric">
+</div></div>
+
+<div class="item"><span class="label">c.</span><div class="sum">
+ <div class="head">T O</div>
+ <div class="nums">
+  <div class="numrow two"><span>3</span><span>1</span></div>
+  <div class="numrow two op"><span>×</span><span>3</span></div>
+ </div><input id="a2" class="answer" inputmode="numeric">
+</div></div>
+
+<div class="item"><span class="label">d.</span><div class="sum">
+ <div class="head hto">H T O</div>
+ <div class="nums">
+  <div class="numrow"><span></span><span>1</span><span>3</span></div>
+  <div class="numrow op"><span>×</span><span></span><span>4</span></div>
+ </div><input id="a3" class="answer" inputmode="numeric">
+</div></div>
+
+<div class="item"><span class="label">e.</span><div class="sum">
+ <div class="head hto">H T O</div>
+ <div class="nums">
+  <div class="numrow"><span></span><span>1</span><span>6</span></div>
+  <div class="numrow op"><span>×</span><span></span><span>6</span></div>
+ </div><input id="a4" class="answer" inputmode="numeric">
+</div></div>
+
+<div class="item"><span class="label">f.</span><div class="sum">
+ <div class="head hto">H T O</div>
+ <div class="nums">
+  <div class="numrow"><span></span><span>2</span><span>4</span></div>
+  <div class="numrow op"><span>×</span><span></span><span>3</span></div>
+ </div><input id="a5" class="answer" inputmode="numeric">
+</div></div>
+
+</div>
+<div class="actions"><button onclick="checkAnswers()">Check Answers</button><button onclick="resetExercise()">Reset</button></div>
+<div id="result">Score: 0 / 6</div>
+</main>
+<script>
+const answers=["24","64","93","52","96","72"];
+function checkAnswers(){
+ let score=0;
+ answers.forEach((v,i)=>{
+  const e=document.getElementById("a"+i),ok=e.value.trim()===v;
+  e.className="answer "+(ok?"ok":"bad"); if(ok)score++;
+ });
+ document.getElementById("result").textContent=`Score: ${score} / 6`;
+}
+function resetExercise(){
+ document.querySelectorAll(".answer").forEach(e=>{e.value="";e.className="answer"});
+ document.getElementById("result").textContent="Score: 0 / 6";
+}
+</script>
+</body>
+</html>

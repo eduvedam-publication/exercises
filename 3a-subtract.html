@@ -1,0 +1,144 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Subtract the following</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#e9faff;font-family:Arial,sans-serif;color:#111}
+.exercise{max-width:1050px;margin:28px auto;background:#fff;border:4px solid #08a9dc;border-radius:28px;padding:30px}
+h1{margin:0 0 20px;color:#009ed2;font-size:27px}
+.grid{
+ display:grid;
+ grid-template-columns:repeat(4,150px);
+ justify-content:space-between;
+ column-gap:18px;
+ row-gap:16px;
+ padding:0 12px;
+}
+.item{
+ width:150px;
+ display:grid;
+ grid-template-columns:27px 126px;
+ align-items:start;
+}
+.letter{
+ font-family:Georgia,"Times New Roman",serif;
+ font-size:19px;
+ padding-top:7px;
+}
+.sum{
+ width:126px;
+ height:140px;
+ background:#e0eff9;
+ padding:7px 8px;
+}
+.place{
+ width:110px;
+ height:38px;
+ display:grid;
+ grid-template-columns:55px 55px;
+ text-align:center;
+ align-items:start;
+ color:#ff4050;
+ font-family:Georgia,"Times New Roman",serif;
+ font-size:20px;
+}
+.row{
+ width:110px;
+ height:30px;
+ display:grid;
+ grid-template-columns:28px 41px 41px;
+ align-items:center;
+ text-align:center;
+ font-family:Georgia,"Times New Roman",serif;
+ font-size:20px;
+}
+.minus{border-bottom:2px solid #00aee8}
+.answer{
+ display:block;
+ width:110px;
+ height:34px;
+ margin:2px 0 0;
+ border:2px solid #ff3b30;
+ background:#fff;
+ padding:3px 6px;
+ font-size:18px;
+ outline:none;
+}
+.answer.ok{background:#dcf8df;border-color:#009b8e}
+.answer.bad{background:#ffe1e1;border-color:#e43d30}
+.actions{display:flex;justify-content:center;gap:14px;margin-top:28px}
+button{border:0;border-radius:22px;padding:11px 20px;background:#ff8500;color:#fff;font-weight:700;cursor:pointer}
+#result{text-align:center;font-size:22px;font-weight:700;color:#064bb4;margin-top:18px}
+@media(max-width:800px){
+ .grid{grid-template-columns:repeat(2,150px);justify-content:space-around}
+}
+@media(max-width:390px){
+ .exercise{margin:0;border-radius:0;padding:14px}
+ .grid{grid-template-columns:150px;justify-content:center;padding:0}
+ h1{font-size:22px}
+}
+</style>
+</head>
+<body>
+<main class="exercise">
+<h1>Subtract the following:</h1>
+<div class="grid" id="grid"></div>
+
+<div class="actions">
+ <button onclick="checkAnswers()">Check Answers</button>
+ <button onclick="resetExercise()">Reset</button>
+</div>
+<div id="result">Score: 0 / 8</div>
+</main>
+
+<script>
+const data=[
+ ["a",9,9,0,8,91],
+ ["b",7,8,0,1,77],
+ ["c",3,7,0,5,32],
+ ["d",6,7,0,7,60],
+ ["e",3,2,0,5,27],
+ ["f",4,6,0,9,37],
+ ["g",9,3,0,4,89],
+ ["h",7,5,0,6,69]
+];
+
+const grid=document.getElementById("grid");
+
+data.forEach((x,i)=>{
+ grid.insertAdjacentHTML("beforeend",`
+ <div class="item">
+   <div class="letter">${x[0]}.</div>
+   <div class="sum">
+     <div class="place"><span>T</span><span>O</span></div>
+     <div class="row"><span></span><span>${x[1]}</span><span>${x[2]}</span></div>
+     <div class="row minus"><span>−</span><span>${x[3] ? x[3] : ""}</span><span>${x[4]}</span></div>
+     <input id="ans${i}" class="answer" inputmode="numeric">
+   </div>
+ </div>`);
+});
+
+function checkAnswers(){
+ let score=0;
+ data.forEach((x,i)=>{
+  const e=document.getElementById("ans"+i);
+  const ok=e.value.trim()===String(x[5]);
+  e.className="answer "+(ok?"ok":"bad");
+  if(ok) score++;
+ });
+ document.getElementById("result").textContent=`Score: ${score} / 8`;
+}
+
+function resetExercise(){
+ document.querySelectorAll(".answer").forEach(e=>{
+   e.value="";
+   e.className="answer";
+ });
+ document.getElementById("result").textContent="Score: 0 / 8";
+}
+</script>
+</body>
+</html>

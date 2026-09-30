@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Choose the correct option</title>
+<style>
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    padding: 28px;
+    background: #e8faff;
+    font-family: Arial, sans-serif;
+    color: #111;
+}
+
+.exercise {
+    width: min(1000px, 100%);
+    margin: auto;
+    background: white;
+    border: 4px solid #08a9dc;
+    border-radius: 28px;
+    padding: 30px;
+}
+
+h1 {
+    margin: 0 0 28px;
+    color: #009fd6;
+    font-size: 26px;
+}
+
+.question {
+    margin-bottom: 24px;
+    font-size: 19px;
+}
+
+.statement {
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+
+.compare {
+    margin: 8px 0 10px 28px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 21px;
+}
+
+.options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+    margin-left: 28px;
+}
+
+.option {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 43px;
+    padding: 8px 14px;
+    border: 2px solid #ff1680;
+    border-radius: 12px;
+    background: #fff;
+    color: #111;
+    font-size: 17px;
+    font-family: Arial, sans-serif;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.option:hover {
+    background: #fff2f8;
+}
+
+.option.selected {
+    background: #ffe6f1;
+}
+
+.option.correct {
+    border-color: #079889;
+    background: #dff8e4;
+}
+
+.option.wrong {
+    border-color: #e43d30;
+    background: #ffe1e1;
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 30px;
+}
+
+.action-btn {
+    border: 0;
+    border-radius: 24px;
+    padding: 12px 22px;
+    background: #ff8200;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.score {
+    text-align: center;
+    margin-top: 17px;
+    color: #064bb4;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+@media (max-width: 650px) {
+    body { padding: 0; }
+    .exercise {
+        border-radius: 0;
+        padding: 18px;
+    }
+    .options { margin-left: 0; }
+    .option {
+        white-space: normal;
+        flex: 1 1 45%;
+    }
+}
+</style>
+</head>
+
+<body>
+<div class="exercise">
+    <h1>Choose the correct option.</h1>
+
+    <div class="question" data-answer="1">
+        <div class="statement">a. Which word makes this statement true?</div>
+        <div class="compare">173 __________ 183</div>
+        <div class="options">
+            <button class="option" data-value="0">i. Is greater than</button>
+            <button class="option" data-value="1">ii. Is less than</button>
+            <button class="option" data-value="2">iii. Is equal to</button>
+            <button class="option" data-value="3">iv. None of these</button>
+        </div>
+    </div>
+
+    <div class="question" data-answer="0">
+        <div class="statement">b. What is the place value of 6 in the numeral 268?</div>
+        <div class="options">
+            <button class="option" data-value="0">i. 60</button>
+            <button class="option" data-value="1">ii. 8</button>
+            <button class="option" data-value="2">iii. 6</button>
+            <button class="option" data-value="3">iv. 600</button>
+        </div>
+    </div>
+
+    <div class="question" data-answer="0">
+        <div class="statement">c. What is the face value of 4 in the numeral 174?</div>
+        <div class="options">
+            <button class="option" data-value="0">i. 4</button>
+            <button class="option" data-value="1">ii. 7</button>
+            <button class="option" data-value="2">iii. 70</button>
+            <button class="option" data-value="3">iv. 40</button>
+        </div>
+    </div>
+
+    <div class="question" data-answer="0">
+        <div class="statement">d. Which of the following is greater than the number 280?</div>
+        <div class="options">
+            <button class="option" data-value="0">i. 281</button>
+            <button class="option" data-value="1">ii. 278</button>
+            <button class="option" data-value="2">iii. 268</button>
+            <button class="option" data-value="3">iv. 260</button>
+        </div>
+    </div>
+
+    <div class="actions">
+        <button class="action-btn" id="checkBtn">Check Answers</button>
+        <button class="action-btn" id="resetBtn">Reset</button>
+    </div>
+
+    <div class="score" id="score">Score: 0 / 4</div>
+</div>
+
+<script>
+const questions = document.querySelectorAll(".question");
+
+questions.forEach(question => {
+    question.querySelectorAll(".option").forEach(option => {
+        option.addEventListener("click", () => {
+            question.querySelectorAll(".option").forEach(btn => {
+                btn.classList.remove("selected", "correct", "wrong");
+            });
+            option.classList.add("selected");
+            question.dataset.selected = option.dataset.value;
+        });
+    });
+});
+
+document.getElementById("checkBtn").addEventListener("click", () => {
+    let score = 0;
+
+    questions.forEach(question => {
+        const correctAnswer = question.dataset.answer;
+        const selectedAnswer = question.dataset.selected;
+
+        question.querySelectorAll(".option").forEach(btn => {
+            btn.classList.remove("correct", "wrong");
+
+            if (btn.dataset.value === selectedAnswer) {
+                if (selectedAnswer === correctAnswer) {
+                    btn.classList.add("correct");
+                    score++;
+                } else {
+                    btn.classList.add("wrong");
+                }
+            }
+        });
+    });
+
+    document.getElementById("score").textContent =
+        `Score: ${score} / ${questions.length}`;
+});
+
+document.getElementById("resetBtn").addEventListener("click", () => {
+    questions.forEach(question => {
+        delete question.dataset.selected;
+        question.querySelectorAll(".option").forEach(btn => {
+            btn.classList.remove("selected", "correct", "wrong");
+        });
+    });
+
+    document.getElementById("score").textContent =
+        `Score: 0 / ${questions.length}`;
+});
+</script>
+</body>
+</html>

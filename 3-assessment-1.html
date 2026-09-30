@@ -1,0 +1,24 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>
+*{box-sizing:border-box}body{margin:0;padding:24px;background:#e8faff;font-family:Arial,sans-serif;color:#111}
+.exercise{max-width:1050px;margin:auto;background:#fff;border:4px solid #08a9dc;border-radius:28px;padding:30px}
+h1{margin:0 0 26px;color:#00a5dc;font-size:25px}.actions{display:flex;justify-content:center;gap:14px;margin-top:30px}
+.action{border:0;border-radius:24px;padding:12px 22px;background:#ff8200;color:#fff;font-weight:700;cursor:pointer}
+.score{text-align:center;margin-top:17px;color:#064bb4;font-size:22px;font-weight:700}
+.ok{background:#dcf8df!important;border-color:#009b8e!important}.bad{background:#ffe1e1!important;border-color:#e43d30!important}
+input{height:38px;border:2px solid #ff3b30;background:#fff;font-size:18px;padding:4px 7px;outline:none}
+.mathbox{width:145px;background:#dff1fb;padding:9px}.place,.digits{display:grid;grid-template-columns:30px 30px 30px;justify-content:end;text-align:center;font-family:Georgia,serif}
+.place{color:#ff4050;font-size:20px;margin-bottom:10px}.digits{font-size:21px;line-height:1.45}.line{border-top:2px solid #08a9dc;margin:2px 0 5px}
+@media(max-width:700px){body{padding:0}.exercise{border-radius:0;padding:16px}}
+
+.q{font:20px Georgia,serif;margin-bottom:22px}.opts{display:flex;flex-wrap:wrap;gap:10px 20px;margin:10px 0 0 25px}.opt{border:2px solid #ff1680;border-radius:11px;background:#fff;color:#111;padding:9px 15px;font:17px Arial;cursor:pointer;min-width:100px}.opt.sel{background:#fff0f6}.sumrow{display:flex;align-items:center;gap:65px;flex-wrap:wrap;margin-top:8px}
+</style></head><body><main class="exercise"><h1>Choose the correct option.</h1>
+<div class="q" data-a="0"><div>a. 42 − 2 tens = ____</div><div class="opts"><button class="opt" data-v="0">i. 22</button><button class="opt" data-v="1">ii. 20</button><button class="opt" data-v="2">iii. 40</button><button class="opt" data-v="3">iv. 4</button></div></div>
+<div class="q" data-a="1"><div>b. 17 is ____ less than 71.</div><div class="opts"><button class="opt" data-v="0">i. 45</button><button class="opt" data-v="1">ii. 54</button><button class="opt" data-v="2">iii. 88</button><button class="opt" data-v="3">iv. 56</button></div></div>
+<div class="q" data-a="0"><div>c. 270 − ____ tens = 220</div><div class="opts"><button class="opt" data-v="0">i. 50</button><button class="opt" data-v="1">ii. 15</button><button class="opt" data-v="2">iii. 5</button><button class="opt" data-v="3">iv. 55</button></div></div>
+<div class="q" data-a="0"><div>d. Find the missing number.</div><div class="sumrow"><div class="mathbox"><div class="place"><span></span><span>T</span><span>O</span></div><div class="digits"><span></span><span>3</span><span>6</span></div><div class="digits"><span>−</span><span>2</span><span>_</span></div><div class="line"></div><div class="digits"><span></span><span>1</span><span>2</span></div></div><div class="opts"><button class="opt" data-v="0">i. 4</button><button class="opt" data-v="1">ii. 5</button><button class="opt" data-v="2">iii. 6</button><button class="opt" data-v="3">iv. 3</button></div></div></div>
+<div class="actions"><button class="action" onclick="check()">Check Answers</button><button class="action" onclick="resetAll()">Reset</button></div><div id="score" class="score">Score: 0 / 4</div>
+<script>
+document.querySelectorAll(".q").forEach(q=>q.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{q.querySelectorAll(".opt").forEach(x=>x.classList.remove("sel","ok","bad"));b.classList.add("sel");q.dataset.pick=b.dataset.v}));
+function check(){let s=0;document.querySelectorAll(".q").forEach(q=>{let p=q.dataset.pick;q.querySelectorAll(".opt").forEach(b=>{if(b.dataset.v===p)b.classList.add(p===q.dataset.a?"ok":"bad")});if(p===q.dataset.a)s++});score.textContent=`Score: ${s} / 4`}
+function resetAll(){document.querySelectorAll(".q").forEach(q=>{delete q.dataset.pick;q.querySelectorAll(".opt").forEach(b=>b.className="opt")});score.textContent="Score: 0 / 4"}
+</script></main></body></html>

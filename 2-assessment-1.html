@@ -1,0 +1,52 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>2 Assessment 1</title><style>
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:#e8faff;font-family:Arial,sans-serif;color:#111}
+.exercise{max-width:1050px;margin:auto;background:#fff;border:4px solid #08a9dc;border-radius:28px;padding:30px}
+h1{margin:0 0 26px;color:#00a5dc;font-size:25px}
+.actions{display:flex;justify-content:center;gap:14px;margin-top:30px}
+.action{border:0;border-radius:24px;padding:12px 22px;background:#ff8200;color:#fff;font-weight:700;cursor:pointer}
+.score{text-align:center;margin-top:17px;color:#064bb4;font-size:22px;font-weight:700}
+.ok{background:#dcf8df!important;border-color:#009b8e!important}.bad{background:#ffe1e1!important;border-color:#e43d30!important}
+.mathbox{width:150px;background:#dff1fb;padding:10px 8px 8px}
+.place-grid,.num-grid{display:grid;grid-template-columns:28px 28px 28px;justify-content:end;text-align:center;font-family:Georgia,"Times New Roman",serif}
+.place-grid{color:#ff4050;font-size:20px;margin-bottom:10px}
+.num-grid{font-size:21px;line-height:1.45}
+.math-line{border-top:2px solid #05a9df;margin:2px 0 5px}
+.mathbox input{width:100%;height:38px;border:2px solid #ff3b30;background:#fff;font-size:18px;padding:4px;outline:none}
+@media(max-width:700px){body{padding:0}.exercise{border-radius:0;padding:16px}}
+
+.q{font-family:Georgia,"Times New Roman",serif;font-size:20px;margin-bottom:24px}
+.options{display:flex;flex-wrap:wrap;gap:10px 20px;margin:10px 0 0 25px}
+.opt{border:2px solid #ff1680;border-radius:11px;background:#fff;color:#111;padding:9px 15px;font:17px Arial;cursor:pointer;min-width:100px}
+.opt.sel{background:#fff0f6} .sumrow{display:flex;gap:70px;align-items:center;flex-wrap:wrap;margin-top:8px}
+</style></head><body><main class="exercise"><h1>Choose the correct option.</h1>
+<div class="q" data-a="1"><div>a. If you add 18 to 56, you get ____.</div><div class="options"><button class="opt" data-v="0">i. 66</button><button class="opt" data-v="1">ii. 74</button><button class="opt" data-v="2">iii. 84</button><button class="opt" data-v="3">iv. 76</button></div></div>
+
+<div class="q" data-a="0"><div>b. Find the missing number.</div><div class="sumrow">
+<div class="mathbox">
+ <div class="place-grid"><span>H</span><span>T</span><span>O</span></div>
+ <div class="num-grid"><span>3</span><span>5</span><span>2</span><span>+</span><span>1</span><span>_ 4</span></div>
+ <div class="math-line"></div>
+ <div class="num-grid"><span>4</span><span>7</span><span>6</span></div>
+</div>
+<div class="options"><button class="opt" data-v="0">i. 2</button><button class="opt" data-v="1">ii. 7</button><button class="opt" data-v="2">iii. 12</button><button class="opt" data-v="3">iv. 3</button></div>
+</div></div>
+
+<div class="q" data-a="2"><div>c. Find the missing number.</div><div class="sumrow">
+<div class="mathbox">
+ <div class="place-grid"><span>H</span><span>T</span><span>O</span></div>
+ <div class="num-grid"><span>2</span><span>2</span><span>3</span><span>+</span><span></span><span>_</span></div>
+ <div class="math-line"></div>
+ <div class="num-grid"><span>2</span><span>2</span><span>9</span></div>
+</div>
+<div class="options"><button class="opt" data-v="0">i. 3</button><button class="opt" data-v="1">ii. 0</button><button class="opt" data-v="2">iii. 6</button><button class="opt" data-v="3">iv. Can’t say</button></div>
+</div></div>
+
+<div class="q" data-a="0"><div>d. If you add 6 ones and 4 tens, then the result is ____.</div><div class="options"><button class="opt" data-v="0">i. 46</button><button class="opt" data-v="1">ii. 64</button><button class="opt" data-v="2">iii. 10</button><button class="opt" data-v="3">iv. 1</button></div></div>
+<div class="actions"><button class="action" onclick="check()">Check Answers</button><button class="action" onclick="resetAll()">Reset</button></div><div class="score" id="score">Score: 0 / 4</div>
+<script>
+document.querySelectorAll(".q").forEach(q=>q.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{q.querySelectorAll(".opt").forEach(x=>x.classList.remove("sel","ok","bad"));b.classList.add("sel");q.dataset.pick=b.dataset.v}));
+function check(){let s=0;document.querySelectorAll(".q").forEach(q=>{let p=q.dataset.pick;q.querySelectorAll(".opt").forEach(b=>{if(b.dataset.v===p)b.classList.add(p===q.dataset.a?"ok":"bad")});if(p===q.dataset.a)s++});score.textContent=`Score: ${s} / 4`}
+function resetAll(){document.querySelectorAll(".q").forEach(q=>{delete q.dataset.pick;q.querySelectorAll(".opt").forEach(b=>b.className="opt")});score.textContent="Score: 0 / 4"}
+</script></main></body></html>

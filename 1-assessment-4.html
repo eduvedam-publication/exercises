@@ -1,0 +1,16 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>
+*{box-sizing:border-box}body{margin:0;background:#e9faff;font-family:Arial,sans-serif;color:#222}
+.exercise{max-width:1000px;margin:28px auto;background:#fff;border:4px solid #08a9dc;border-radius:28px;padding:30px}
+h1{margin:0 0 26px;color:#00a5dc;font-size:25px}.actions{display:flex;justify-content:center;gap:14px;margin-top:30px}
+button{border:0;border-radius:22px;padding:11px 20px;background:#ff8500;color:#fff;font-weight:700;cursor:pointer}
+.score{text-align:center;font-size:22px;font-weight:700;color:#064bb4;margin-top:18px}
+input{border:2px solid #ff3b30;height:40px;font-size:18px;padding:5px 8px;outline:none}
+.ok{background:#dcf8df!important;border-color:#009b8e!important}.bad{background:#ffe1e1!important;border-color:#e43d30!important}
+@media(max-width:650px){.exercise{margin:0;border-radius:0;padding:16px}}
+
+.rows{display:flex;flex-direction:column;gap:17px}.row{display:flex;align-items:center;gap:10px;font-family:Georgia,serif;font-size:20px}.row input{flex:1;min-width:180px}
+@media(max-width:650px){.row{align-items:flex-start;flex-wrap:wrap}.row input{width:100%;flex-basis:100%}}
+</style></head><body><main class="exercise"><h1>Arrange the numbers in ascending order.</h1><div class="rows"><div class="row"><span>a. 234, 143, 435, 341, 269</span><input id="a0"></div><div class="row"><span>b. 162, 126, 146, 132, 196</span><input id="a1"></div></div><div class="actions"><button onclick="check()">Check Answers</button><button onclick="reset()">Reset</button></div><div id="score" class="score">Score: 0 / 2</div>
+<script>const ans=['143, 234, 269, 341, 435', '126, 132, 146, 162, 196'];function norm(v){return v.trim().toLowerCase().replace(/[-–]/g," ").replace(/\s+/g," ")}
+function check(){let s=0;ans.forEach((a,i)=>{let e=document.getElementById("a"+i),ok=norm(e.value)===norm(a);e.className=ok?"ok":"bad";if(ok)s++});score.textContent=`Score: ${s} / 2`}
+function reset(){document.querySelectorAll("input").forEach(e=>{e.value="";e.className=""});score.textContent="Score: 0 / 2"}</script></main></body></html>

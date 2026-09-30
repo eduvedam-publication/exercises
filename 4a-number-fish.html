@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Number Line Multiplication</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#e9faff;font-family:Arial,sans-serif;color:#222}
+.exercise{max-width:1050px;margin:25px auto;background:#fff;border:4px solid #08a9dc;border-radius:28px;padding:28px 34px}
+h1{margin:0 0 24px;color:#00a5dc;font-size:25px}
+.part{margin:20px 0 40px}
+.row{display:flex;align-items:center;gap:12px}
+.label{font:21px Georgia,serif;width:24px}
+.linebox{position:relative;width:850px;max-width:calc(100% - 35px);height:105px}
+.fish{position:absolute;left:3px;top:1px;font-size:43px;transform:rotate(-8deg)}
+.axis{position:absolute;left:55px;right:15px;top:57px;height:2px;background:#222}
+.axis:before{content:"";position:absolute;left:-7px;top:-4px;border-right:8px solid #222;border-top:5px solid transparent;border-bottom:5px solid transparent}
+.axis:after{content:"";position:absolute;right:-7px;top:-4px;border-left:8px solid #222;border-top:5px solid transparent;border-bottom:5px solid transparent}
+.ticks{position:absolute;left:55px;right:15px;top:48px;height:25px;display:flex;justify-content:space-between}
+.tick{width:1px;height:18px;background:#333;position:relative}
+.tick.major{height:25px}
+.tick span{position:absolute;top:27px;left:50%;transform:translateX(-50%);font:14px Georgia,serif}
+.arcs{position:absolute;left:55px;right:15px;top:8px;height:50px}
+.arc{position:absolute;height:40px;border:1.8px solid #ff5360;border-bottom:0;border-radius:60px 60px 0 0}
+.arc:after{content:"";position:absolute;right:-3px;bottom:-2px;width:7px;height:7px;border-right:2px solid #ff5360;border-bottom:2px solid #ff5360;transform:rotate(45deg)}
+.arcnum{position:absolute;top:-16px;left:50%;transform:translateX(-50%);font:13px Georgia,serif}
+.form{display:flex;align-items:center;gap:5px;margin:4px 0 0 36px;font:21px Georgia,serif}
+.answer{width:52px;height:38px;border:2px solid #ff5360;background:#fff;font-size:18px;text-align:center;outline:none}
+.answer.ok{background:#dcf8df;border-color:#009b8e}.answer.bad{background:#ffe1e1;border-color:#e43d30}
+.divider{height:72px;margin:0 -34px 38px;background:repeating-linear-gradient(90deg,#ff4255 0 8px,#fff 8px 15px);border-bottom:14px solid #eee}
+.actions{display:flex;justify-content:center;gap:14px;margin-top:15px}
+button{border:0;border-radius:22px;padding:11px 20px;background:#ff8500;color:#fff;font-weight:700;cursor:pointer}
+#result{text-align:center;font-size:22px;font-weight:700;color:#064bb4;margin-top:17px}
+@media(max-width:700px){.exercise{margin:0;border-radius:0;padding:15px}.divider{margin-left:-15px;margin-right:-15px}.linebox{overflow:hidden}.fish{font-size:34px}h1{font-size:21px}}
+</style>
+</head>
+<body>
+<main class="exercise">
+<h1>Use number line for multiplication and fill in the placeholders.</h1>
+
+<div class="part">
+ <div class="row"><div class="label">a.</div><div class="linebox" id="lineA"><div class="fish">🐬</div><div class="axis"></div><div class="ticks"></div><div class="arcs"></div></div></div>
+ <div class="form"><input id="a0" class="answer" inputmode="numeric"><span>×</span><input id="a1" class="answer" inputmode="numeric"><span>=</span><input id="a2" class="answer" inputmode="numeric"></div>
+</div>
+
+<div class="divider"></div>
+
+<div class="part">
+ <div class="row"><div class="label">b.</div><div class="linebox" id="lineB"><div class="fish">🐬</div><div class="axis"></div><div class="ticks"></div><div class="arcs"></div></div></div>
+ <div class="form"><input id="a3" class="answer" inputmode="numeric"><span>×</span><input id="a4" class="answer" inputmode="numeric"><span>=</span><input id="a5" class="answer" inputmode="numeric"></div>
+</div>
+
+<div class="actions"><button onclick="checkAnswers()">Check Answers</button><button onclick="resetExercise()">Reset</button></div>
+<div id="result">Score: 0 / 6</div>
+</main>
+
+<script>
+function makeLine(id,max,step,jumps){
+ const box=document.getElementById(id),ticks=box.querySelector(".ticks"),arcs=box.querySelector(".arcs");
+ const units=max;
+ for(let i=0;i<=units;i++){
+   const t=document.createElement("div");
+   t.className="tick "+(i%step===0?"major":"");
+   if(i%step===0){const s=document.createElement("span");s.textContent=i;t.appendChild(s)}
+   ticks.appendChild(t);
+ }
+ for(let j=0;j<jumps;j++){
+   const a=document.createElement("div");
+   a.className="arc";
+   a.style.left=(j*step/max*100)+"%";
+   a.style.width=(step/max*100)+"%";
+   const n=document.createElement("span");n.className="arcnum";n.textContent=step;a.appendChild(n);
+   arcs.appendChild(a);
+ }
+}
+makeLine("lineA",64,8,8);
+makeLine("lineB",6,2,3);
+
+const answers=["8","8","64","3","2","6"];
+function checkAnswers(){
+ let score=0;
+ answers.forEach((v,i)=>{
+   const e=document.getElementById("a"+i),ok=e.value.trim()===v;
+   e.className="answer "+(ok?"ok":"bad"); if(ok)score++;
+ });
+ document.getElementById("result").textContent=`Score: ${score} / 6`;
+}
+function resetExercise(){
+ document.querySelectorAll(".answer").forEach(e=>{e.value="";e.className="answer"});
+ document.getElementById("result").textContent="Score: 0 / 6";
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Add the following sums using 10 × 10 grid</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#e9faff;font-family:Georgia,"Times New Roman",serif;color:#222}
+.exercise{max-width:1000px;margin:28px auto;background:#fff;border:4px solid #08a9dc;border-radius:28px;padding:30px}
+h1{margin:0 0 26px;color:#00a5dc;font:700 25px Arial,sans-serif}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px 45px;padding:0 20px}
+.q{display:flex;align-items:center;gap:8px;font-size:20px;white-space:nowrap}
+.answer{width:62px;height:38px;border:2px solid #ff3b30;background:#fff;font-size:18px;padding:4px 6px;outline:none}
+.answer.ok{background:#dcf8df;border-color:#009b8e}.answer.bad{background:#ffe1e1;border-color:#e43d30}
+.actions{display:flex;justify-content:center;gap:14px;margin-top:30px}
+button{border:0;border-radius:22px;padding:11px 20px;background:#ff8500;color:#fff;font:700 15px Arial;cursor:pointer}
+#result{text-align:center;font:700 22px Arial;color:#064bb4;margin-top:18px}
+@media(max-width:720px){.grid{grid-template-columns:repeat(2,1fr);gap:18px}.exercise{padding:18px}}
+@media(max-width:440px){.exercise{margin:0;border-radius:0;padding:14px}.grid{grid-template-columns:1fr;padding:0}.q{font-size:18px}h1{font-size:21px}}
+</style></head><body><main class="exercise">
+<h1>Add the following sums using 10 × 10 grid.</h1>
+<div class="grid" id="questions"></div>
+<div class="actions"><button onclick="checkAnswers()">Check Answers</button><button onclick="resetExercise()">Reset</button></div>
+<div id="result">Score: 0 / 9</div>
+</main>
+<script>
+const data=[
+ ["a","55 + 3",58],["b","35 + 9",44],["c","28 + 7",35],
+ ["d","32 + 7",39],["e","14 + 4",18],["f","83 + 8",91],
+ ["g","47 + 5",52],["h","52 + 9",61],["i","65 + 5",70]
+];
+const box=document.getElementById("questions");
+data.forEach((x,i)=>box.insertAdjacentHTML("beforeend",
+ `<div class="q"><span>${x[0]}.</span><span>${x[1]} =</span><input class="answer" id="a${i}" inputmode="numeric"></div>`));
+function checkAnswers(){
+ let n=0;
+ data.forEach((x,i)=>{let e=document.getElementById("a"+i),ok=e.value.trim()===String(x[2]);e.className="answer "+(ok?"ok":"bad");if(ok)n++});
+ result.textContent=`Score: ${n} / 9`;
+}
+function resetExercise(){
+ document.querySelectorAll(".answer").forEach(e=>{e.value="";e.className="answer"});
+ result.textContent="Score: 0 / 9";
+}
+</script></body></html>

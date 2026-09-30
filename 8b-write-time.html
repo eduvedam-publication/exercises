@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Write the time in o'clock</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#e9faff;font-family:Arial,sans-serif;color:#222}
+.exercise{max-width:950px;margin:28px auto;background:#fff;border:4px solid #08a9dc;border-radius:28px;padding:30px}
+h1{margin:0 0 28px;color:#00a5dc;font-size:25px}
+.clocks{display:grid;grid-template-columns:repeat(3,1fr);gap:35px;text-align:center}
+.clock-card{display:flex;flex-direction:column;align-items:center}
+.clock{width:175px;height:175px;border:10px solid #aaa;border-radius:50%;position:relative;background:#fff;box-shadow:inset 0 0 0 2px #555}
+.clock.pink{border-color:#cf8ea0;background:#fff4f7}
+.clock.green{border-color:#75ad82;background:#f4fff6}
+.num{position:absolute;font-size:13px;font-weight:600;transform:translate(-50%,-50%)}
+.center{position:absolute;width:10px;height:10px;border-radius:50%;background:#555;left:50%;top:50%;transform:translate(-50%,-50%);z-index:4}
+.hand{position:absolute;left:50%;bottom:50%;transform-origin:50% 100%;border-radius:4px}
+.minute{width:4px;height:57px;background:#555;transform:translateX(-50%) rotate(0deg)}
+.hour{width:6px;height:43px;background:#444;transform:translateX(-50%) rotate(var(--angle))}
+.answer-row{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;font-family:Georgia,serif;font-size:21px}
+.answer{width:58px;height:40px;border:2px solid #ff4a45;font-size:18px;text-align:center;outline:none}
+.answer.ok{background:#dcf8df;border-color:#009b8e}
+.answer.bad{background:#ffe1e1;border-color:#e43d30}
+.actions{display:flex;justify-content:center;gap:14px;margin-top:32px}
+button{border:0;border-radius:22px;padding:11px 20px;background:#ff8500;color:#fff;font-weight:700;cursor:pointer}
+#result{text-align:center;font-size:22px;font-weight:700;color:#064bb4;margin-top:18px}
+@media(max-width:650px){.clocks{grid-template-columns:1fr}.exercise{margin:0;border-radius:0;padding:16px}}
+</style>
+</head>
+<body>
+<main class="exercise">
+<h1>Write the time in o’clock.</h1>
+
+<div class="clocks">
+ <div class="clock-card">
+  <div class="clock" style="--angle:150deg" data-clock></div>
+  <div class="answer-row"><input id="a0" class="answer" inputmode="numeric"><span>o’clock</span></div>
+ </div>
+ <div class="clock-card">
+  <div class="clock pink" style="--angle:330deg" data-clock></div>
+  <div class="answer-row"><input id="a1" class="answer" inputmode="numeric"><span>o’clock</span></div>
+ </div>
+ <div class="clock-card">
+  <div class="clock green" style="--angle:180deg" data-clock></div>
+  <div class="answer-row"><input id="a2" class="answer" inputmode="numeric"><span>o’clock</span></div>
+ </div>
+</div>
+
+<div class="actions">
+ <button onclick="checkAnswers()">Check Answers</button>
+ <button onclick="resetExercise()">Reset</button>
+</div>
+<div id="result">Score: 0 / 3</div>
+</main>
+
+<script>
+document.querySelectorAll('[data-clock]').forEach(clock=>{
+ for(let n=1;n<=12;n++){
+   const a=n*30*Math.PI/180;
+   const span=document.createElement('span');
+   span.className='num'; span.textContent=n;
+   span.style.left=(50+39*Math.sin(a))+'%';
+   span.style.top=(50-39*Math.cos(a))+'%';
+   clock.appendChild(span);
+ }
+ const minute=document.createElement('div'); minute.className='hand minute';
+ const hour=document.createElement('div'); hour.className='hand hour';
+ const center=document.createElement('div'); center.className='center';
+ clock.append(minute,hour,center);
+});
+
+const answers=["5","11","6"];
+
+function checkAnswers(){
+ let score=0;
+ answers.forEach((v,i)=>{
+   const e=document.getElementById("a"+i);
+   const ok=e.value.trim()===v;
+   e.className="answer "+(ok?"ok":"bad");
+   if(ok)score++;
+ });
+ document.getElementById("result").textContent=`Score: ${score} / 3`;
+}
+function resetExercise(){
+ document.querySelectorAll(".answer").forEach(e=>{e.value="";e.className="answer"});
+ document.getElementById("result").textContent="Score: 0 / 3";
+}
+</script>
+</body>
+</html>

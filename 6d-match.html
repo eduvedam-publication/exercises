@@ -1,0 +1,151 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Match the fractions with its name</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#e9faff;font-family:Arial,sans-serif;color:#222}
+.exercise{max-width:900px;margin:28px auto;background:#fff;border:4px solid #08a9dc;border-radius:28px;padding:30px;position:relative}
+h1{margin:0 0 28px;color:#00a5dc;font-size:25px}
+.match-area{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:60px;min-height:330px}
+.column{display:flex;flex-direction:column;gap:16px;z-index:2}
+.item{height:58px;border:2px solid #a8e8fa;border-radius:18px;background:#f8fdff;display:flex;align-items:center;padding:0 16px;font-size:19px;cursor:pointer;position:relative}
+.left .item{justify-content:flex-start}
+.right .item{justify-content:flex-end}
+.item.selected{border-color:#ff3b8d;background:#fff0f6}
+.item.correct{border-color:#009b8e;background:#dcf8df}
+.item.wrong{border-color:#e43d30;background:#ffe1e1}
+.dot{width:18px;height:18px;border:4px solid #ff3b8d;transform:rotate(45deg);background:#fff;position:absolute}
+.left .dot{right:14px}.right .dot{left:14px}
+svg{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
+.frac{display:inline-flex;flex-direction:column;align-items:center;line-height:1;font-family:Georgia,serif;font-size:19px}
+.frac span:first-child{border-bottom:1px solid #222;padding:0 5px 3px}
+.frac span:last-child{padding-top:3px}
+.actions{display:flex;justify-content:center;gap:14px;margin-top:25px}
+.action{border:0;border-radius:22px;padding:11px 20px;background:#ff8500;color:#fff;font-weight:700;cursor:pointer}
+#result{text-align:center;font-size:22px;font-weight:700;color:#064bb4;margin-top:18px}
+@media(max-width:600px){.exercise{margin:0;border-radius:0;padding:16px}.match-area{gap:25px}.item{font-size:15px;padding:0 10px}}
+</style>
+</head>
+<body>
+<main class="exercise">
+<h1>Match the fractions with its name.</h1>
+
+<div class="match-area" id="area">
+<svg id="lines"></svg>
+
+<div class="column left">
+ <div class="item" data-id="a"><span>a.&nbsp;&nbsp; One - third</span><span class="dot"></span></div>
+ <div class="item" data-id="b"><span>b.&nbsp;&nbsp; Half</span><span class="dot"></span></div>
+ <div class="item" data-id="c"><span>c.&nbsp;&nbsp; Quarter</span><span class="dot"></span></div>
+ <div class="item" data-id="d"><span>d.&nbsp;&nbsp; Three-fourth</span><span class="dot"></span></div>
+</div>
+
+<div class="column right">
+ <div class="item" data-id="half"><span class="dot"></span><span class="frac"><span>1</span><span>2</span></span></div>
+ <div class="item" data-id="threefourth"><span class="dot"></span><span class="frac"><span>3</span><span>4</span></span></div>
+ <div class="item" data-id="onethird"><span class="dot"></span><span class="frac"><span>1</span><span>3</span></span></div>
+ <div class="item" data-id="quarter"><span class="dot"></span><span class="frac"><span>1</span><span>4</span></span></div>
+</div>
+</div>
+
+<div class="actions">
+<button class="action" onclick="checkAnswers()">Check Answers</button>
+<button class="action" onclick="resetExercise()">Reset</button>
+</div>
+<div id="result">Score: 0 / 4</div>
+</main>
+
+<script>
+const area=document.getElementById('area');
+const svg=document.getElementById('lines');
+const leftItems=[...document.querySelectorAll('.left .item')];
+const rightItems=[...document.querySelectorAll('.right .item')];
+let selectedLeft=null;
+let matches={};
+
+const correct={a:'onethird',b:'half',c:'quarter',d:'threefourth'};
+
+leftItems.forEach(item=>{
+ item.onclick=()=>{
+  leftItems.forEach(x=>x.classList.remove('selected'));
+  selectedLeft=item;
+  item.classList.add('selected');
+ };
+});
+
+rightItems.forEach(item=>{
+ item.onclick=()=>{
+  if(!selectedLeft)return;
+  const leftId=selectedLeft.dataset.id;
+  const rightId=item.dataset.id;
+
+  Object.keys(matches).forEach(k=>{
+   if(matches[k]===rightId) delete matches[k];
+  });
+  matches[leftId]=rightId;
+
+  selectedLeft.classList.remove('selected');
+  selectedLeft=null;
+  clearFeedback();
+  drawLines();
+ };
+});
+
+function point(item,side){
+ const a=area.getBoundingClientRect();
+ const d=item.querySelector('.dot').getBoundingClientRect();
+ return {
+  x:d.left-a.left+d.width/2,
+  y:d.top-a.top+d.height/2
+ };
+}
+
+function drawLines(showFeedback=false){
+ svg.innerHTML='';
+ Object.entries(matches).forEach(([l,r])=>{
+  const li=document.querySelector(`.left .item[data-id="${l}"]`);
+  const ri=document.querySelector(`.right .item[data-id="${r}"]`);
+  const p1=point(li),p2=point(ri);
+  const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+  line.setAttribute('x1',p1.x);line.setAttribute('y1',p1.y);
+  line.setAttribute('x2',p2.x);line.setAttribute('y2',p2.y);
+  line.setAttribute('stroke',showFeedback ? (correct[l]===r ? '#009b8e':'#e43d30') : '#009b8e');
+  line.setAttribute('stroke-width','4');
+  line.setAttribute('stroke-linecap','round');
+  svg.appendChild(line);
+ });
+}
+
+function clearFeedback(){
+ [...leftItems,...rightItems].forEach(x=>x.classList.remove('correct','wrong'));
+}
+
+function checkAnswers(){
+ clearFeedback();
+ let score=0;
+ Object.entries(matches).forEach(([l,r])=>{
+  const li=document.querySelector(`.left .item[data-id="${l}"]`);
+  const ri=document.querySelector(`.right .item[data-id="${r}"]`);
+  const ok=correct[l]===r;
+  li.classList.add(ok?'correct':'wrong');
+  ri.classList.add(ok?'correct':'wrong');
+  if(ok)score++;
+ });
+ drawLines(true);
+ document.getElementById('result').textContent=`Score: ${score} / 4`;
+}
+
+function resetExercise(){
+ matches={};selectedLeft=null;
+ [...leftItems,...rightItems].forEach(x=>x.classList.remove('selected','correct','wrong'));
+ svg.innerHTML='';
+ document.getElementById('result').textContent='Score: 0 / 4';
+}
+
+window.addEventListener('resize',()=>drawLines());
+</script>
+</body>
+</html>

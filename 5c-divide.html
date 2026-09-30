@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Divide using multiplication tables</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#e9faff;font-family:Arial,sans-serif;color:#222}
+.exercise{max-width:950px;margin:28px auto;background:#fff;border:4px solid #08a9dc;border-radius:28px;padding:30px}
+h1{margin:0 0 28px;color:#00a5dc;font-size:25px}
+.questions{display:grid;grid-template-columns:repeat(3,1fr);gap:18px 65px;padding:0 20px}
+.q{display:flex;align-items:center;gap:7px;font-family:Georgia,"Times New Roman",serif;font-size:21px;white-space:nowrap}
+.letter{width:24px}
+.answer{width:54px;height:38px;border:2px solid #ff3b30;background:#fff;font-size:18px;text-align:center;outline:none}
+.answer.ok{background:#dcf8df;border-color:#009b8e}
+.answer.bad{background:#ffe1e1;border-color:#e43d30}
+.actions{display:flex;justify-content:center;gap:14px;margin-top:32px}
+button{border:0;border-radius:22px;padding:11px 20px;background:#ff8500;color:#fff;font-weight:700;cursor:pointer}
+#result{text-align:center;font-size:22px;font-weight:700;color:#064bb4;margin-top:18px}
+@media(max-width:700px){.questions{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.questions{grid-template-columns:1fr}.exercise{margin:0;border-radius:0;padding:16px}}
+</style>
+</head>
+<body>
+<main class="exercise">
+<h1>Divide using multiplication tables.</h1>
+
+<div class="questions">
+ <div class="q"><span class="letter">a.</span><span>45 ÷ 5 =</span><input id="a0" class="answer" inputmode="numeric"></div>
+ <div class="q"><span class="letter">b.</span><span>56 ÷ 7 =</span><input id="a1" class="answer" inputmode="numeric"></div>
+ <div class="q"><span class="letter">c.</span><span>48 ÷ 6 =</span><input id="a2" class="answer" inputmode="numeric"></div>
+ <div class="q"><span class="letter">d.</span><span>36 ÷ 4 =</span><input id="a3" class="answer" inputmode="numeric"></div>
+ <div class="q"><span class="letter">e.</span><span>80 ÷ 10 =</span><input id="a4" class="answer" inputmode="numeric"></div>
+ <div class="q"><span class="letter">f.</span><span>16 ÷ 4 =</span><input id="a5" class="answer" inputmode="numeric"></div>
+</div>
+
+<div class="actions">
+ <button onclick="checkAnswers()">Check Answers</button>
+ <button onclick="resetExercise()">Reset</button>
+</div>
+<div id="result">Score: 0 / 6</div>
+</main>
+
+<script>
+const answers=["9","8","8","9","8","4"];
+function checkAnswers(){
+ let score=0;
+ answers.forEach((v,i)=>{
+  const e=document.getElementById("a"+i);
+  const ok=e.value.trim()===v;
+  e.className="answer "+(ok?"ok":"bad");
+  if(ok)score++;
+ });
+ document.getElementById("result").textContent=`Score: ${score} / 6`;
+}
+function resetExercise(){
+ document.querySelectorAll(".answer").forEach(e=>{e.value="";e.className="answer"});
+ document.getElementById("result").textContent="Score: 0 / 6";
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Add the following sums</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#e9faff;font-family:Arial,sans-serif;color:#111}
+.exercise{max-width:1050px;margin:28px auto;background:#fff;border:4px solid #08a9dc;border-radius:28px;padding:30px}
+h1{margin:0 0 20px;color:#009ed2;font-size:27px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);column-gap:48px;row-gap:24px}
+.item{display:grid;grid-template-columns:28px 112px;justify-content:center;align-items:start}
+.letter{font-family:Georgia,serif;font-size:19px;padding-top:8px}
+.sum{width:112px;height:133px;background:#e0eff9;padding:7px 7px 8px;overflow:hidden}
+.place{height:27px;display:grid;grid-template-columns:1fr 1fr;text-align:center;color:#ff4050;font-family:Georgia,serif;font-size:20px}
+.numrow{height:29px;display:grid;grid-template-columns:25px 1fr 1fr;align-items:center;text-align:center;font-family:Georgia,serif;font-size:20px}
+.addrow{border-bottom:2px solid #222}
+.answer{display:block;width:98px;height:37px;margin:3px auto 0;border:2px solid #ff3b30;background:#fff;padding:4px 6px;font-size:18px;outline:none}
+.answer.ok{background:#dcf8df;border-color:#009b8e}
+.answer.bad{background:#ffe1e1;border-color:#e43d30}
+.actions{display:flex;justify-content:center;gap:14px;margin-top:28px}
+.actions button{border:0;border-radius:22px;padding:11px 20px;background:#ff8500;color:#fff;font-weight:700;cursor:pointer}
+#result{text-align:center;font-size:22px;font-weight:700;color:#064bb4;margin-top:18px}
+@media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr);column-gap:20px}}
+@media(max-width:440px){.exercise{margin:0;border-radius:0;padding:14px}.grid{column-gap:4px}.item{grid-template-columns:22px 105px}.sum{width:105px}.answer{width:91px}h1{font-size:22px}}
+</style>
+</head>
+<body>
+<main class="exercise">
+<h1>Add the following sums:</h1>
+<div class="grid" id="grid"></div>
+<div class="actions">
+<button onclick="checkAnswers()">Check Answers</button>
+<button onclick="resetExercise()">Reset</button>
+</div>
+<div id="result">Score: 0 / 8</div>
+</main>
+<script>
+const data=[
+["a",5,1,6,57],
+["b",3,4,4,38],
+["c",6,4,2,66],
+["d",7,8,1,79],
+["e",7,4,6,80],
+["f",3,7,3,40],
+["g",1,7,5,22],
+["h",4,9,3,52]
+];
+
+const grid=document.getElementById("grid");
+data.forEach((x,i)=>{
+ grid.insertAdjacentHTML("beforeend",`
+ <div class="item">
+   <div class="letter">${x[0]}.</div>
+   <div class="sum">
+     <div class="place"><span>T</span><span>O</span></div>
+     <div class="numrow"><span></span><span>${x[1]}</span><span>${x[2]}</span></div>
+     <div class="numrow addrow"><span>+</span><span></span><span>${x[3]}</span></div>
+     <input id="ans${i}" class="answer" inputmode="numeric">
+   </div>
+ </div>`);
+});
+
+function checkAnswers(){
+ let score=0;
+ data.forEach((x,i)=>{
+  const e=document.getElementById("ans"+i);
+  const ok=e.value.trim()===String(x[4]);
+  e.className="answer "+(ok?"ok":"bad");
+  if(ok)score++;
+ });
+ document.getElementById("result").textContent=`Score: ${score} / 8`;
+}
+function resetExercise(){
+ document.querySelectorAll(".answer").forEach(e=>{e.value="";e.className="answer"});
+ document.getElementById("result").textContent="Score: 0 / 8";
+}
+</script>
+</body>
+</html>

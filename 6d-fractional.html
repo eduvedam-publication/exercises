@@ -1,0 +1,140 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Write fractional form</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#e9faff;font-family:Arial,sans-serif;color:#222}
+.exercise{max-width:950px;margin:28px auto;background:#fff;border:4px solid #08a9dc;border-radius:28px;padding:30px}
+h1{margin:0 0 28px;color:#00a5dc;font-size:25px}
+.questions{display:grid;grid-template-columns:1fr 1fr;gap:18px 70px;padding:0 20px}
+.q{display:grid;grid-template-columns:30px 135px 25px 58px;align-items:center;gap:8px;font-size:20px}
+.frac{display:flex;flex-direction:column;align-items:stretch;width:58px}
+.frac input,.given{width:58px;height:36px;border:2px solid #ff3b30;background:#fff;font-size:18px;text-align:center;outline:none;border-radius:4px}
+.frac .bar{height:2px;background:#222;margin:5px 0}
+.given{display:flex;align-items:center;justify-content:center;border-color:#ff8500;color:#222}
+.answer.ok{background:#dcf8df;border-color:#009b8e}
+.answer.bad{background:#ffe1e1;border-color:#e43d30}
+.example{background:#fffaf2;border-radius:12px;padding:7px 4px}
+.actions{display:flex;justify-content:center;gap:14px;margin-top:32px}
+button{border:0;border-radius:22px;padding:11px 20px;background:#ff8500;color:#fff;font-weight:700;cursor:pointer}
+#result{text-align:center;font-size:22px;font-weight:700;color:#064bb4;margin-top:18px}
+@media(max-width:700px){
+ .questions{grid-template-columns:1fr;gap:16px}
+ .exercise{margin:0;border-radius:0;padding:16px}
+}
+</style>
+</head>
+<body>
+<main class="exercise">
+<h1>Write fractional form.</h1>
+
+<div class="questions">
+
+<!-- a. is the given example, so it is already filled and is not part of the score -->
+<div class="q example">
+ <span>a.</span><span>One-fourth</span><span>=</span>
+ <div class="frac">
+   <div class="given">1</div>
+   <div class="bar"></div>
+   <div class="given">4</div>
+ </div>
+</div>
+
+<div class="q">
+ <span>d.</span><span>One-half</span><span>=</span>
+ <div class="frac">
+   <input id="a4" class="answer" inputmode="numeric">
+   <div class="bar"></div>
+   <input id="a5" class="answer" inputmode="numeric">
+ </div>
+</div>
+
+<div class="q">
+ <span>b.</span><span>Two-thirds</span><span>=</span>
+ <div class="frac">
+   <input id="a0" class="answer" inputmode="numeric">
+   <div class="bar"></div>
+   <input id="a1" class="answer" inputmode="numeric">
+ </div>
+</div>
+
+<div class="q">
+ <span>e.</span><span>Three-fourths</span><span>=</span>
+ <div class="frac">
+   <input id="a6" class="answer" inputmode="numeric">
+   <div class="bar"></div>
+   <input id="a7" class="answer" inputmode="numeric">
+ </div>
+</div>
+
+<div class="q">
+ <span>c.</span><span>One third</span><span>=</span>
+ <div class="frac">
+   <input id="a2" class="answer" inputmode="numeric">
+   <div class="bar"></div>
+   <input id="a3" class="answer" inputmode="numeric">
+ </div>
+</div>
+
+<div class="q">
+ <span>f.</span><span>Two-fourths</span><span>=</span>
+ <div class="frac">
+   <input id="a8" class="answer" inputmode="numeric">
+   <div class="bar"></div>
+   <input id="a9" class="answer" inputmode="numeric">
+ </div>
+</div>
+
+</div>
+
+<div class="actions">
+ <button onclick="checkAnswers()">Check Answers</button>
+ <button onclick="resetExercise()">Reset</button>
+</div>
+<div id="result">Score: 0 / 5</div>
+</main>
+
+<script>
+const pairs=[
+ ["2","3"],
+ ["1","3"],
+ ["1","2"],
+ ["3","4"],
+ ["2","4"]
+];
+
+const ids=[
+ ["a0","a1"],
+ ["a2","a3"],
+ ["a4","a5"],
+ ["a6","a7"],
+ ["a8","a9"]
+];
+
+function checkAnswers(){
+ let score=0;
+ pairs.forEach((pair,i)=>{
+   const n=document.getElementById(ids[i][0]);
+   const d=document.getElementById(ids[i][1]);
+   const nOk=n.value.trim()===pair[0];
+   const dOk=d.value.trim()===pair[1];
+   n.className="answer "+(nOk?"ok":"bad");
+   d.className="answer "+(dOk?"ok":"bad");
+   if(nOk && dOk) score++;
+ });
+ document.getElementById("result").textContent=`Score: ${score} / 5`;
+}
+
+function resetExercise(){
+ document.querySelectorAll(".answer").forEach(e=>{
+   e.value="";
+   e.className="answer";
+ });
+ document.getElementById("result").textContent="Score: 0 / 5";
+}
+</script>
+</body>
+</html>

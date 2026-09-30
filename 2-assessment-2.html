@@ -1,0 +1,34 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Match the following</title><style>
+*{box-sizing:border-box} body{margin:0;padding:24px;background:#e8faff;font-family:Arial,sans-serif;color:#111}
+.exercise{max-width:1050px;margin:auto;background:#fff;border:4px solid #08a9dc;border-radius:28px;padding:30px}
+h1{margin:0 0 26px;color:#00a5dc;font-size:25px}
+.actions{display:flex;justify-content:center;gap:14px;margin-top:30px}
+.action{border:0;border-radius:24px;padding:12px 22px;background:#ff8200;color:#fff;font-weight:700;cursor:pointer}
+.score{text-align:center;margin-top:17px;color:#064bb4;font-size:22px;font-weight:700}
+.ok{background:#dcf8df!important;border-color:#009b8e!important}.bad{background:#ffe1e1!important;border-color:#e43d30!important}
+@media(max-width:700px){body{padding:0}.exercise{border-radius:0;padding:16px}}
+
+.area{position:relative;display:grid;grid-template-columns:1.45fr .75fr;gap:90px;min-height:390px}.col{display:flex;flex-direction:column;justify-content:space-around;gap:14px;z-index:2}
+.item{min-height:68px;border:2px solid #a8e8fa;border-radius:16px;background:#f8fdff;padding:10px 18px;display:flex;align-items:center;position:relative;cursor:pointer;font-size:18px}
+.right .item{justify-content:flex-end}.item.sel{border-color:#ff3b8d;background:#fff0f6}.dot{width:16px;height:16px;border:4px solid #ff3b8d;transform:rotate(45deg);position:absolute;background:#fff}
+.left .dot{right:13px}.right .dot{left:13px}.pics{font-size:25px;line-height:1.05;letter-spacing:1px;max-width:420px}svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
+</style></head><body><main class="exercise"><h1>Match the following:</h1><div class="area" id="area"><svg id="svg"></svg>
+<div class="col left">
+<div class="item" data-id="23"><span>a.&nbsp;&nbsp;</span><span class="pics">🍅🍅🍅🍅🍅🍅🍅🍅🍅🍅🍅🍅<br>🍅🍅🍅🍅🍅🍅🍅🍅🍅🍅🍅</span><span class="dot"></span></div>
+<div class="item" data-id="21"><span>b.&nbsp;&nbsp;</span><span class="pics">🧸🧸🧸🧸🧸🧸🧸🧸🧸🧸🧸<br>🧸🧸🧸🧸🧸🧸🧸🧸🧸🧸</span><span class="dot"></span></div>
+<div class="item" data-id="20"><span>c.&nbsp;&nbsp;</span><span class="pics">🐦🐦🐦🐦🐦🐦🐦🐦🐦🐦<br>🐦🐦🐦🐦🐦🐦🐦🐦🐦🐦</span><span class="dot"></span></div>
+<div class="item" data-id="10"><span>d.&nbsp;&nbsp;</span><span class="pics">🔷🔷🔷🔷🔷<br>🔷🔷🔷🔷🔷</span><span class="dot"></span></div>
+</div>
+<div class="col right"><div class="item" data-id="21"><span class="dot"></span>i. &nbsp;12 + 9</div><div class="item" data-id="23"><span class="dot"></span>ii. &nbsp;15 + 8</div><div class="item" data-id="10"><span class="dot"></span>iii. &nbsp;8 + 2</div><div class="item" data-id="20"><span class="dot"></span>iv. &nbsp;14 + 6</div></div>
+</div><div class="actions"><button class="action" onclick="check()">Check Answers</button><button class="action" onclick="resetAll()">Reset</button></div><div class="score" id="score">Score: 0 / 4</div>
+<script>
+let selected=null,m={};const area=document.getElementById("area"),svg=document.getElementById("svg");
+document.querySelectorAll(".left .item").forEach(x=>x.onclick=()=>{document.querySelectorAll(".left .item").forEach(y=>y.classList.remove("sel"));selected=x;x.classList.add("sel")});
+document.querySelectorAll(".right .item").forEach(x=>x.onclick=()=>{if(!selected)return;Object.keys(m).forEach(k=>{if(m[k]===x.dataset.id)delete m[k]});m[selected.dataset.id]=x.dataset.id;selected.classList.remove("sel");selected=null;draw(false)});
+function point(el){let a=area.getBoundingClientRect(),d=el.querySelector(".dot").getBoundingClientRect();return[d.left-a.left+d.width/2,d.top-a.top+d.height/2]}
+function draw(mark){svg.innerHTML="";Object.entries(m).forEach(([l,r])=>{let L=document.querySelector(`.left [data-id="${l}"]`),R=document.querySelector(`.right [data-id="${r}"]`),a=point(L),b=point(R),line=document.createElementNS("http://www.w3.org/2000/svg","line");line.setAttribute("x1",a[0]);line.setAttribute("y1",a[1]);line.setAttribute("x2",b[0]);line.setAttribute("y2",b[1]);line.setAttribute("stroke",mark?(l===r?"#009b8e":"#e43d30"):"#009b8e");line.setAttribute("stroke-width","4");svg.appendChild(line)})}
+function check(){let s=Object.entries(m).filter(([a,b])=>a===b).length;draw(true);score.textContent=`Score: ${s} / 4`}
+function resetAll(){m={};selected=null;svg.innerHTML="";document.querySelectorAll(".item").forEach(x=>x.classList.remove("sel"));score.textContent="Score: 0 / 4"}
+addEventListener("resize",()=>draw(false));
+</script></main></body></html>

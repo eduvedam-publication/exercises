@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Arrange the numbers in the mentioned order</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#e9faff;font-family:Arial,sans-serif;color:#111}
+.exercise{max-width:1000px;margin:28px auto;background:#fff;border:4px solid #08a9dc;border-radius:28px;padding:32px}
+h1{margin:0 0 28px;color:#009ed2;font-size:27px}
+.block{margin:0 0 34px}
+.instruction{font-size:21px;margin:0 0 17px 28px}
+.work{display:flex;align-items:center;gap:24px;margin-left:28px;flex-wrap:wrap}
+
+/* source oval exactly like textbook */
+.source{
+ width:165px;height:105px;border:2px solid #ff6d67;border-radius:50%;
+ background:#ffd2ce;position:relative;flex:0 0 auto;font-family:Georgia,serif;font-size:20px
+}
+.source.purple{background:#dddaf5;border-color:#8583c7}
+.source span{position:absolute;transform:translate(-50%,-50%)}
+.p1{left:50%;top:20%}.p2{left:18%;top:50%}.p3{left:50%;top:50%}.p4{left:82%;top:50%}.p5{left:50%;top:80%}
+
+/* answer circles */
+.answers{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.circle{
+ width:58px;height:58px;border-radius:50%;border:2px solid #ff827c;background:#ffd9d6;
+ display:flex;align-items:center;justify-content:center
+}
+.block:nth-of-type(2) .circle{border-color:#8888c7;background:#e0def4}
+.circle input{
+ width:46px;border:0;border-bottom:2px solid #ff3b30;background:transparent;
+ text-align:center;font-size:17px;padding:3px 1px;outline:none;color:#111
+}
+.fixed{font-size:20px}.circle.ok{background:#dff8e2!important;border-color:#009b8e!important}
+.circle.bad{background:#ffe1e1!important;border-color:#e43d30!important}
+.actions{display:flex;justify-content:center;gap:14px;margin-top:15px}
+button{border:0;border-radius:22px;padding:11px 20px;background:#ff8500;color:#fff;font-weight:700;cursor:pointer}
+#result{text-align:center;font-size:22px;font-weight:700;color:#064bb4;margin-top:18px}
+@media(max-width:650px){
+ .exercise{margin:0;border-radius:0;padding:16px}
+ h1{font-size:22px}.instruction,.work{margin-left:0}
+ .work{gap:14px}.source{width:145px;height:95px}
+ .circle{width:52px;height:52px}.circle input{width:41px;font-size:15px}
+}
+</style>
+</head>
+<body>
+<main class="exercise">
+<h1>1. Arrange the numbers in the mentioned order.</h1>
+
+<section class="block">
+ <div class="instruction">Start with the greatest number.</div>
+ <div class="work">
+   <div class="source">
+     <span class="p1">125</span><span class="p2">185</span><span class="p3">169</span>
+     <span class="p4">144</span><span class="p5">115</span>
+   </div>
+   <div class="answers">
+     <div class="circle fixed">185</div>
+     <div class="circle"><input id="a1"></div>
+     <div class="circle"><input id="a2"></div>
+     <div class="circle"><input id="a3"></div>
+     <div class="circle"><input id="a4"></div>
+   </div>
+ </div>
+</section>
+
+<section class="block">
+ <div class="instruction">Start with the smallest number.</div>
+ <div class="work">
+   <div class="source purple">
+     <span class="p1">168</span><span class="p2">121</span><span class="p3">231</span>
+     <span class="p4">323</span><span class="p5">482</span>
+   </div>
+   <div class="answers">
+     <div class="circle fixed">121</div>
+     <div class="circle"><input id="b1"></div>
+     <div class="circle"><input id="b2"></div>
+     <div class="circle"><input id="b3"></div>
+     <div class="circle"><input id="b4"></div>
+   </div>
+ </div>
+</section>
+
+<div class="actions">
+ <button onclick="checkAnswers()">Check Answers</button>
+ <button onclick="resetExercise()">Reset</button>
+</div>
+<div id="result">Score: 0 / 8</div>
+</main>
+
+<script>
+const greatest=[169,144,125,115];
+const smallest=[168,231,323,482];
+
+function grade(prefix,answers){
+ let score=0;
+ answers.forEach((answer,i)=>{
+   const input=document.getElementById(prefix+(i+1));
+   const circle=input.parentElement;
+   const correct=input.value.trim()===String(answer);
+   circle.classList.remove("ok","bad");
+   circle.classList.add(correct?"ok":"bad");
+   if(correct) score++;
+ });
+ return score;
+}
+function checkAnswers(){
+ const score=grade("a",greatest)+grade("b",smallest);
+ document.getElementById("result").textContent=`Score: ${score} / 8`;
+}
+function resetExercise(){
+ document.querySelectorAll("input").forEach(x=>x.value="");
+ document.querySelectorAll(".circle").forEach(x=>x.classList.remove("ok","bad"));
+ document.getElementById("result").textContent="Score: 0 / 8";
+}
+</script>
+</body>
+</html>
