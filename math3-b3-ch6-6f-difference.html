@@ -1,0 +1,178 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>b3-ch6-6f-difference</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:12px;background:#e5f9fd;color:#111;font-family:Georgia,"Times New Roman",serif}
+.exercise{max-width:1120px;min-height:650px;margin:auto;background:#fff;border:4px solid #08a8d8;border-radius:28px;padding:28px 42px;display:flex;flex-direction:column}
+h1{margin:0 0 28px;color:#00a3dc;font:700 25px Arial,sans-serif}
+.content{flex:1}
+.grid{display:grid;grid-template-columns:1fr 1fr;column-gap:120px;row-gap:27px}
+.question{display:flex;align-items:center;gap:15px;font-size:21px;min-height:50px}
+.label{width:26px}
+.frac{display:inline-flex;flex-direction:column;text-align:center;line-height:1.05;min-width:35px}
+.frac span:first-child{border-bottom:1.7px solid #111;padding:0 5px 4px}
+.frac span:last-child{padding:4px 5px 0}
+.minus{font-size:25px}
+.answer{width:86px;height:42px;border:2px solid #ff2727;border-radius:6px;background:white;padding:5px 8px;font:18px Arial,sans-serif}
+.answer.correct{background:#dcf7df;border-color:#169447}
+.answer.wrong{background:#ffe1e1;border-color:#d93636}
+.controls{margin-top:auto;padding-top:30px;text-align:center}
+button{border:0;border-radius:25px;background:#ff7d00;color:#fff;font:bold 14px Arial,sans-serif;padding:13px 22px;margin:0 6px;cursor:pointer}
+.score{margin-top:14px;text-align:center;color:#064bb4;font:bold 22px Arial,sans-serif}
+@media(max-width:760px){
+ .exercise{padding:20px}
+ .grid{grid-template-columns:1fr;row-gap:18px}
+ .question{font-size:19px}
+}
+</style>
+</head>
+<body>
+<main class="exercise">
+<h1>Find the difference.</h1>
+<div class="content"><div class="grid">
+    <div class="question">
+      <span class="label">a.</span>
+      <span class="frac"><span>4</span><span>5</span></span>
+      <span class="minus">−</span>
+      <span class="frac"><span>2</span><span>5</span></span>
+      <input id="a0" class="answer" autocomplete="off" inputmode="text">
+    </div>
+    <div class="question">
+      <span class="label">b.</span>
+      <span class="frac"><span>6</span><span>7</span></span>
+      <span class="minus">−</span>
+      <span class="frac"><span>4</span><span>7</span></span>
+      <input id="a1" class="answer" autocomplete="off" inputmode="text">
+    </div>
+    <div class="question">
+      <span class="label">c.</span>
+      <span class="frac"><span>7</span><span>9</span></span>
+      <span class="minus">−</span>
+      <span class="frac"><span>5</span><span>9</span></span>
+      <input id="a2" class="answer" autocomplete="off" inputmode="text">
+    </div>
+    <div class="question">
+      <span class="label">d.</span>
+      <span class="frac"><span>6</span><span>11</span></span>
+      <span class="minus">−</span>
+      <span class="frac"><span>3</span><span>11</span></span>
+      <input id="a3" class="answer" autocomplete="off" inputmode="text">
+    </div>
+    <div class="question">
+      <span class="label">e.</span>
+      <span class="frac"><span>7</span><span>15</span></span>
+      <span class="minus">−</span>
+      <span class="frac"><span>4</span><span>15</span></span>
+      <input id="a4" class="answer" autocomplete="off" inputmode="text">
+    </div>
+    <div class="question">
+      <span class="label">f.</span>
+      <span class="frac"><span>9</span><span>17</span></span>
+      <span class="minus">−</span>
+      <span class="frac"><span>3</span><span>17</span></span>
+      <input id="a5" class="answer" autocomplete="off" inputmode="text">
+    </div>
+    <div class="question">
+      <span class="label">g.</span>
+      <span class="frac"><span>15</span><span>19</span></span>
+      <span class="minus">−</span>
+      <span class="frac"><span>11</span><span>19</span></span>
+      <input id="a6" class="answer" autocomplete="off" inputmode="text">
+    </div>
+    <div class="question">
+      <span class="label">h.</span>
+      <span class="frac"><span>14</span><span>20</span></span>
+      <span class="minus">−</span>
+      <span class="frac"><span>10</span><span>20</span></span>
+      <input id="a7" class="answer" autocomplete="off" inputmode="text">
+    </div>
+    <div class="question">
+      <span class="label">i.</span>
+      <span class="frac"><span>18</span><span>23</span></span>
+      <span class="minus">−</span>
+      <span class="frac"><span>15</span><span>23</span></span>
+      <input id="a8" class="answer" autocomplete="off" inputmode="text">
+    </div>
+    <div class="question">
+      <span class="label">j.</span>
+      <span class="frac"><span>16</span><span>25</span></span>
+      <span class="minus">−</span>
+      <span class="frac"><span>14</span><span>25</span></span>
+      <input id="a9" class="answer" autocomplete="off" inputmode="text">
+    </div>
+    <div class="question">
+      <span class="label">k.</span>
+      <span class="frac"><span>19</span><span>37</span></span>
+      <span class="minus">−</span>
+      <span class="frac"><span>12</span><span>37</span></span>
+      <input id="a10" class="answer" autocomplete="off" inputmode="text">
+    </div>
+    <div class="question">
+      <span class="label">l.</span>
+      <span class="frac"><span>23</span><span>40</span></span>
+      <span class="minus">−</span>
+      <span class="frac"><span>18</span><span>40</span></span>
+      <input id="a11" class="answer" autocomplete="off" inputmode="text">
+    </div>
+    <div class="question">
+      <span class="label">m.</span>
+      <span class="frac"><span>14</span><span>19</span></span>
+      <span class="minus">−</span>
+      <span class="frac"><span>6</span><span>19</span></span>
+      <input id="a12" class="answer" autocomplete="off" inputmode="text">
+    </div>
+    <div class="question">
+      <span class="label">n.</span>
+      <span class="frac"><span>22</span><span>24</span></span>
+      <span class="minus">−</span>
+      <span class="frac"><span>10</span><span>24</span></span>
+      <input id="a13" class="answer" autocomplete="off" inputmode="text">
+    </div>
+    <div class="question">
+      <span class="label">o.</span>
+      <span class="frac"><span>37</span><span>40</span></span>
+      <span class="minus">−</span>
+      <span class="frac"><span>22</span><span>40</span></span>
+      <input id="a14" class="answer" autocomplete="off" inputmode="text">
+    </div>
+    <div class="question">
+      <span class="label">p.</span>
+      <span class="frac"><span>28</span><span>33</span></span>
+      <span class="minus">−</span>
+      <span class="frac"><span>19</span><span>33</span></span>
+      <input id="a15" class="answer" autocomplete="off" inputmode="text">
+    </div></div></div>
+<div class="controls">
+<button onclick="checkAnswers()">Check Answers</button>
+<button onclick="resetAll()">Reset</button>
+</div>
+<div id="score" class="score">Score: 0 / 16</div>
+</main>
+<script>
+const answers=['2/5', '2/7', '2/9', '3/11', '3/15', '6/17', '4/19', '4/20', '3/23', '2/25', '7/37', '5/40', '8/19', '12/24', '15/40', '9/33'];
+const norm=v=>v.trim().replace(/\s+/g,"");
+function checkAnswers(){
+ let score=0;
+ answers.forEach((ans,i)=>{
+   const el=document.getElementById("a"+i);
+   const ok=norm(el.value)===norm(ans);
+   el.classList.remove("correct","wrong");
+   el.classList.add(ok?"correct":"wrong");
+   if(ok) score++;
+ });
+ document.getElementById("score").textContent="Score: "+score+" / 16";
+}
+function resetAll(){
+ document.querySelectorAll(".answer").forEach(el=>{
+   el.value="";
+   el.classList.remove("correct","wrong");
+ });
+ document.getElementById("score").textContent="Score: 0 / 16";
+}
+</script>
+</body>
+</html>

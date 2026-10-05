@@ -1,0 +1,13 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>B3 Ch8 8A Fill</title><style>
+*{box-sizing:border-box}body{margin:0;background:#e2f8fc;font-family:Georgia,"Times New Roman",serif}.card{width:min(1080px,calc(100% - 24px));min-height:430px;margin:14px auto;background:#fff;border:4px solid #08a6d6;border-radius:28px;padding:34px 42px;display:flex;flex-direction:column}h1{font:700 25px Arial;color:#00a1db;margin:0 0 30px}.qs{display:grid;gap:18px;flex:1}.q{display:flex;align-items:center;gap:12px;font-size:21px;line-height:1.5}.letter{width:28px}.text{flex:1}input{width:115px;height:39px;border:2px solid #ff2b22;padding:4px 8px;font:18px Arial}input.ok{background:#dff7df;border-color:#198c3d}input.bad{background:#ffe1e1;border-color:#d92c2c}.footer{margin-top:auto;text-align:center;padding-top:30px}button{border:0;border-radius:25px;background:#ff7b00;color:white;padding:13px 22px;margin:0 6px;font:bold 14px Arial}.score{margin-top:14px;color:#064bb4;font:bold 22px Arial}@media(max-width:700px){.card{padding:24px 18px}.q{font-size:18px;flex-wrap:wrap}.text{min-width:calc(100% - 45px)}input{margin-left:40px}}</style></head><body>
+<main class="card"><h1>Fill in the blanks with a.m. and p.m.</h1><div class="qs">
+<div class="q"><span class="letter">a.</span><span class="text">You come back from school in the afternoon.</span><input id="a0"></div>
+<div class="q"><span class="letter">b.</span><span class="text">The plane will take off before noon.</span><input id="a1"></div>
+<div class="q"><span class="letter">c.</span><span class="text">Every day you watch television after dinner.</span><input id="a2"></div>
+<div class="q"><span class="letter">d.</span><span class="text">You go to the school at 7 o’clock every morning.</span><input id="a3"></div>
+</div><div class="footer"><button onclick="check()">Check Answers</button><button onclick="resetAll()">Reset</button><div class="score" id="score">Score: 0 / 4</div></div></main>
+<script>
+const A=["p.m","a.m","p.m","a.m"];const norm=v=>v.trim().toLowerCase().replace(/\s/g,"").replace(/\.$/,"");
+function check(){let s=0;A.forEach((a,i)=>{let e=document.getElementById("a"+i),ok=norm(e.value)==norm(a);e.classList.remove("ok","bad");e.classList.add(ok?"ok":"bad");if(ok)s++});score.textContent=`Score: ${s} / 4`}
+function resetAll(){A.forEach((_,i)=>{let e=document.getElementById("a"+i);e.value="";e.classList.remove("ok","bad")});score.textContent="Score: 0 / 4"}
+</script></body></html>

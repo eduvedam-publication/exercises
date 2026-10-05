@@ -1,0 +1,21 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>
+*{box-sizing:border-box}body{margin:0;padding:16px;background:#e8faff;font-family:Arial,sans-serif;color:#111}
+.exercise{max-width:1080px;margin:auto;background:#fff;border:4px solid #08a8d8;border-radius:28px;padding:30px 38px}
+h1{margin:0 0 28px;color:#00a3dc;font-size:25px}
+.questions{display:grid;gap:24px 42px}.four{grid-template-columns:repeat(4,minmax(0,1fr))}
+.q{display:flex;align-items:center;gap:7px;font:20px Georgia,serif;white-space:nowrap}
+.ans{width:90px;height:37px;border:2px solid red;font-size:18px;padding:4px;text-align:center}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:35px 70px}
+.problem{display:flex;gap:8px;justify-content:center;font:19px Georgia,serif}
+.card{width:190px;background:#d9effb;padding:8px}
+.cols{display:grid;grid-template-columns:repeat(4,1fr);text-align:center}
+.head{color:#ff0870;font-size:19px;border-bottom:1px solid #21c9e9;padding:6px 0}
+.row{min-height:38px;align-items:center;border-bottom:1px solid #21c9e9;font-size:20px}
+.answer{width:100%;height:38px;margin-top:4px;border:2px solid red;font-size:18px;padding:4px}
+.blankrow{height:34px;border-bottom:1px solid #21c9e9}
+.controls{display:flex;justify-content:center;gap:14px;margin-top:38px}
+.controls button{border:0;border-radius:24px;background:#ff7d00;color:#fff;font-weight:bold;padding:12px 22px;cursor:pointer}
+.score{text-align:center;color:#064bb4;font-size:22px;font-weight:bold;margin-top:16px}
+.ok{background:#dcf8df!important;border-color:#009b8e!important}.bad{background:#ffe1e1!important;border-color:#e43d30!important}
+@media(max-width:850px){.four,.cards{grid-template-columns:repeat(2,1fr)}}@media(max-width:550px){.four,.cards{grid-template-columns:1fr}.exercise{padding:20px}.q{justify-content:flex-start}}
+</style></head><body><main class="exercise"><h1>Identify multiplicand and multiplier and then multiply.</h1><div class="questions four"><div class="q"><span>a. &nbsp;62 × 16</span><input class="ans" id="a0" inputmode="numeric"></div><div class="q"><span>b. &nbsp;48 × 54</span><input class="ans" id="a1" inputmode="numeric"></div><div class="q"><span>c. &nbsp;87 × 52</span><input class="ans" id="a2" inputmode="numeric"></div><div class="q"><span>d. &nbsp;66 × 54</span><input class="ans" id="a3" inputmode="numeric"></div><div class="q"><span>e. &nbsp;27 × 16</span><input class="ans" id="a4" inputmode="numeric"></div><div class="q"><span>f. &nbsp;64 × 29</span><input class="ans" id="a5" inputmode="numeric"></div><div class="q"><span>g. &nbsp;89 × 28</span><input class="ans" id="a6" inputmode="numeric"></div><div class="q"><span>h. &nbsp;37 × 19</span><input class="ans" id="a7" inputmode="numeric"></div></div><div class="controls"><button onclick="check()">Check Answers</button><button onclick="resetAll()">Reset</button></div><div class="score" id="score">Score: 0 / 8</div></main><script>const A=['992', '2592', '4524', '3564', '432', '1856', '2492', '703'];function check(){let s=0;A.forEach((a,i)=>{let e=document.getElementById('a'+i),g=e.value.trim()===a;e.classList.remove('ok','bad');e.classList.add(g?'ok':'bad');if(g)s++});score.textContent='Score: '+s+' / 8'}function resetAll(){document.querySelectorAll('input').forEach(e=>{e.value='';e.classList.remove('ok','bad')});score.textContent='Score: 0 / 8'}</script></body></html>

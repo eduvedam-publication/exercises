@@ -1,0 +1,66 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Arial,sans-serif}
+body{padding:16px;background:#e8faff;color:#111}
+.exercise{
+  width:min(1080px,calc(100vw - 32px));
+  margin:0 auto;background:#fff;border:4px solid #08a8d8;border-radius:28px;
+  padding:30px 38px;
+}
+h1{margin:0 0 30px;color:#00a3dc;font-size:25px}
+.questions{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:24px 55px;
+}
+.q{
+  min-width:0;display:flex;align-items:center;gap:8px;
+  font:20px Georgia,"Times New Roman",serif;
+}
+.qtext{white-space:nowrap}
+.ans{
+  flex:0 0 105px;width:105px;max-width:105px;height:38px;
+  border:2px solid #ff3b30;background:#fff;font-size:18px;padding:4px 7px;
+}
+.controls{display:flex;justify-content:center;gap:14px;margin-top:38px}
+.controls button{
+  border:0;border-radius:24px;background:#ff7d00;color:#fff;
+  font-weight:bold;padding:12px 22px;cursor:pointer
+}
+.score{text-align:center;color:#064bb4;font-size:22px;font-weight:bold;margin-top:16px}
+.ok{background:#dcf8df!important;border-color:#009b8e!important}
+.bad{background:#ffe1e1!important;border-color:#e43d30!important}
+@media(max-width:760px){
+  .exercise{width:100%;padding:22px 20px}
+  .questions{grid-template-columns:1fr}
+}
+</style></head><body>
+<main class="exercise">
+<h1>Estimate the difference of the following numbers by rounding the numbers to nearest 10.</h1>
+<div class="questions"><div class="q"><span class="qtext">a. &nbsp;688 − 354</span><input class="ans" id="a0" inputmode="numeric"></div><div class="q"><span class="qtext">b. &nbsp;7556 − 2562</span><input class="ans" id="a1" inputmode="numeric"></div><div class="q"><span class="qtext">c. &nbsp;3569 − 425</span><input class="ans" id="a2" inputmode="numeric"></div><div class="q"><span class="qtext">d. &nbsp;7673 − 4258</span><input class="ans" id="a3" inputmode="numeric"></div></div>
+<div class="controls">
+<button onclick="checkAnswers()">Check Answers</button>
+<button onclick="resetAll()">Reset</button>
+</div>
+<div class="score" id="score">Score: 0 / 4</div>
+</main>
+<script>
+const answers=['340', '5000', '3140', '3410'];
+function checkAnswers(){
+ let s=0;
+ answers.forEach((a,i)=>{
+   const e=document.getElementById('a'+i);
+   const good=e.value.trim()===a;
+   e.classList.remove('ok','bad');
+   e.classList.add(good?'ok':'bad');
+   if(good)s++;
+ });
+ document.getElementById('score').textContent='Score: '+s+' / 4';
+}
+function resetAll(){
+ document.querySelectorAll('.ans').forEach(e=>{e.value='';e.classList.remove('ok','bad')});
+ document.getElementById('score').textContent='Score: 0 / 4';
+}
+</script></body></html>

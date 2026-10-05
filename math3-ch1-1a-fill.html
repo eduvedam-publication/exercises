@@ -1,0 +1,14 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>b3-ch1-1a-fill</title><style>
+*{box-sizing:border-box}body{margin:0;padding:24px;background:#e8faff;font-family:Arial}.ex{max-width:1050px;margin:auto;background:#fff;border:4px solid #08a9dc;border-radius:28px;padding:30px}h1{color:#00a5dc;font-size:25px;margin:0 0 18px}table{width:100%;border-collapse:collapse;font:20px Georgia}th,td{border:1.5px solid #ff4f83;padding:8px 10px}th{background:#fff1bc}.sn{width:9%;text-align:center}.num{width:14%;text-align:center}input{width:100%;height:42px;border:2px solid #ff3b30;font-size:18px;padding:6px}.ok{background:#dcf8df;border-color:#009b8e}.bad{background:#ffe1e1;border-color:#e43d30}.actions{text-align:center;margin-top:28px}.actions button{border:0;border-radius:24px;padding:12px 22px;margin:0 6px;background:#ff8200;color:#fff;font-weight:bold}.score{text-align:center;color:#064bb4;font-size:22px;font-weight:bold;margin-top:16px}@media(max-width:700px){body{padding:0}.ex{padding:14px;border-radius:0}table{font-size:16px}}
+</style></head><body><main class="ex"><h1>Fill in the blanks.</h1><table><tr><th class="sn">S. No.</th><th class="num">Numeral</th><th>Number Name</th></tr>
+<tr><td class="sn">a.</td><td class="num">4124</td><td><input id="a0"></td></tr>
+<tr><td class="sn">b.</td><td class="num">1654</td><td><input id="a1"></td></tr>
+<tr><td class="sn">c.</td><td class="num"><input id="a2" inputmode="numeric"></td><td>Two thousand nine hundred twenty-two</td></tr>
+<tr><td class="sn">d.</td><td class="num">7568</td><td><input id="a3"></td></tr></table>
+<div class="actions"><button onclick="check()">Check Answers</button><button onclick="resetAll()">Reset</button></div><div id="score" class="score">Score: 0 / 4</div></main>
+<script>
+const ans=["four thousand one hundred twenty-four","one thousand six hundred fifty-four","2922","seven thousand five hundred sixty-eight"];
+const norm=s=>s.trim().toLowerCase().replace(/[–—]/g,"-").replace(/\s+/g," ");
+function check(){let s=0;ans.forEach((a,i)=>{let e=document.getElementById("a"+i),ok=norm(e.value)===norm(a);e.className=ok?"ok":"bad";if(ok)s++});score.textContent=`Score: ${s} / 4`}
+function resetAll(){document.querySelectorAll("input").forEach(e=>{e.value="";e.className=""});score.textContent="Score: 0 / 4"}
+</script></body></html>

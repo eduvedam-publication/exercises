@@ -1,0 +1,33 @@
+<!doctype html><html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Choose the correct option.</title><style>
+*{box-sizing:border-box}
+body{margin:0;padding:12px;background:#e5f9fd;font-family:Georgia,"Times New Roman",serif;color:#111}
+.exercise{max-width:1080px;min-height:560px;margin:auto;background:#fff;border:4px solid #08a8d8;border-radius:28px;padding:30px 44px;display:flex;flex-direction:column}
+h1{margin:0 0 28px;color:#00a3dc;font:700 25px Arial,sans-serif}
+.content{flex:1}
+.question{font-size:19px;margin:18px 0}
+.options{display:flex;flex-wrap:wrap;gap:14px 20px;margin:12px 0 0 28px}
+.option,.tf{border:2px solid #ff1680;background:#fff;border-radius:12px;padding:9px 17px;font-size:17px;cursor:pointer}
+.selected{background:#ffe0ef}
+.correct{background:#dcf7df!important;border-color:#159447!important}
+.wrong{background:#ffe1e1!important;border-color:#d93636!important}
+.frac{display:inline-flex;flex-direction:column;text-align:center;vertical-align:middle;line-height:1.05;min-width:28px}
+.frac span:first-child{border-bottom:1.5px solid #111;padding:0 4px 3px}
+.frac span:last-child{padding:3px 4px 0}
+.input{height:38px;width:105px;border:2px solid #ff2727;border-radius:5px;font:18px Arial;padding:4px 7px}
+.controls{margin-top:auto;padding-top:28px;text-align:center}
+.action{border:0;border-radius:24px;background:#ff7d00;color:#fff;font:bold 14px Arial;padding:13px 22px;margin:0 6px;cursor:pointer}
+.score{text-align:center;color:#064bb4;font:bold 22px Arial;margin-top:14px}
+@media(max-width:700px){.exercise{padding:20px}.options{margin-left:0}.question{font-size:17px}}
+</style></head><body>
+<main class="exercise"><h1>Choose the correct option.</h1><div class="content"><div class="question"><b>a.</b> What is the fraction of each colour in the rainbow?<div class="options"><button class="option" data-q="0" data-o="0" onclick="pick(this)">i. <span class="frac"><span>1</span><span>2</span></span></button><button class="option" data-q="0" data-o="1" onclick="pick(this)">ii. <span class="frac"><span>1</span><span>7</span></span></button><button class="option" data-q="0" data-o="2" onclick="pick(this)">iii. <span class="frac"><span>2</span><span>5</span></span></button><button class="option" data-q="0" data-o="3" onclick="pick(this)">iv. <span class="frac"><span>2</span><span>7</span></span></button></div></div><div class="question"><b>b.</b> The numerator of the fraction <span class="frac"><span>2</span><span>11</span></span> is ____.<div class="options"><button class="option" data-q="1" data-o="0" onclick="pick(this)">i. 2</button><button class="option" data-q="1" data-o="1" onclick="pick(this)">ii. 11</button><button class="option" data-q="1" data-o="2" onclick="pick(this)">iii. 1</button><button class="option" data-q="1" data-o="3" onclick="pick(this)">iv. 0</button></div></div><div class="question"><b>c.</b> What is the denominator of the fraction <span class="frac"><span>15</span><span>17</span></span>?<div class="options"><button class="option" data-q="2" data-o="0" onclick="pick(this)">i. 15</button><button class="option" data-q="2" data-o="1" onclick="pick(this)">ii. 17</button><button class="option" data-q="2" data-o="2" onclick="pick(this)">iii. 7</button><button class="option" data-q="2" data-o="3" onclick="pick(this)">iv. 5</button></div></div><div class="question"><b>d.</b> Which one is the improper fraction among the following?<div class="options"><button class="option" data-q="3" data-o="0" onclick="pick(this)">i. <span class="frac"><span>7</span><span>3</span></span></button><button class="option" data-q="3" data-o="1" onclick="pick(this)">ii. <span class="frac"><span>4</span><span>7</span></span></button><button class="option" data-q="3" data-o="2" onclick="pick(this)">iii. <span class="frac"><span>1</span><span>2</span></span></button><button class="option" data-q="3" data-o="3" onclick="pick(this)">iv. <span class="frac"><span>2</span><span>6</span></span></button></div></div></div>
+<div class="controls"><button class="action" onclick="checkAll()">Check Answers</button>
+<button class="action" onclick="resetAll()">Reset</button></div>
+<div id="score" class="score">Score: 0 / 4</div></main>
+<script>
+const A=[2,0,1,0], picks={};
+function pick(e){document.querySelectorAll('.option[data-q="'+e.dataset.q+'"]').forEach(x=>x.classList.remove('selected'));e.classList.add('selected');picks[e.dataset.q]=+e.dataset.o}
+function checkAll(){let s=0;for(let q=0;q<A.length;q++){document.querySelectorAll('.option[data-q="'+q+'"]').forEach(e=>{e.classList.remove('correct','wrong');if(picks[q]===+e.dataset.o){let ok=picks[q]===A[q];e.classList.add(ok?'correct':'wrong');if(ok)s++}})}score.textContent='Score: '+s+' / 4'}
+function resetAll(){Object.keys(picks).forEach(k=>delete picks[k]);document.querySelectorAll('.option').forEach(e=>e.classList.remove('selected','correct','wrong'));score.textContent='Score: 0 / 4'}
+</script></body></html>

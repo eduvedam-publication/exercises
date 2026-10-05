@@ -1,0 +1,39 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:16px;background:#e5f9fd;font-family:Arial,sans-serif}
+.exercise{max-width:1080px;min-height:390px;margin:auto;background:#fff;border:4px solid #08a8d8;border-radius:28px;padding:30px 42px;display:flex;flex-direction:column}
+h1{margin:0 0 30px;color:#00a3dc;font-size:25px}
+.content{flex:1}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px 50px}
+.item{display:flex;align-items:center;gap:8px;font:20px Georgia,serif;white-space:nowrap}
+.ans{width:92px;height:38px;border:2px solid red;font-size:18px;text-align:center;padding:4px}
+.ok{background:#dcf8df!important;border-color:#009b8e!important}
+.bad{background:#ffe1e1!important;border-color:#e43d30!important}
+.controls{margin-top:auto;padding-top:34px;display:flex;justify-content:center;gap:14px}
+.controls button{border:0;border-radius:24px;background:#ff7d00;color:#fff;font-weight:bold;padding:12px 22px;cursor:pointer}
+.score{text-align:center;color:#064bb4;font-size:22px;font-weight:bold;margin-top:15px}
+@media(max-width:760px){.grid{grid-template-columns:repeat(2,1fr)}.exercise{padding:22px}}
+@media(max-width:520px){.grid{grid-template-columns:1fr}}
+</style></head><body><main class="exercise">
+<h1>Divide and find the quotient.</h1><section class="content"><div class="grid"><div class="item"><b>a.</b><span>920 ÷ 8 <input class="ans" id="a0" inputmode="numeric"></span></div><div class="item"><b>b.</b><span>756 ÷ 7 <input class="ans" id="a1" inputmode="numeric"></span></div><div class="item"><b>c.</b><span>744 ÷ 6 <input class="ans" id="a2" inputmode="numeric"></span></div><div class="item"><b>d.</b><span>8064 ÷ 8 <input class="ans" id="a3" inputmode="numeric"></span></div><div class="item"><b>e.</b><span>9432 ÷ 8 <input class="ans" id="a4" inputmode="numeric"></span></div><div class="item"><b>f.</b><span>7136 ÷ 8 <input class="ans" id="a5" inputmode="numeric"></span></div></div></section>
+<div class="controls"><button onclick="check()">Check Answers</button><button onclick="resetAll()">Reset</button></div>
+<div class="score" id="score">Score: 0 / 6</div>
+</main><script>
+const A=['115', '108', '124', '1008', '1179', '892'];
+function check(){
+ let s=0;
+ A.forEach((a,i)=>{
+   const e=document.getElementById('a'+i);
+   const good=e.value.trim()===a;
+   e.classList.remove('ok','bad');
+   e.classList.add(good?'ok':'bad');
+   if(good)s++;
+ });
+ document.getElementById('score').textContent='Score: '+s+' / 6';
+}
+function resetAll(){
+ document.querySelectorAll('input').forEach(e=>{e.value='';e.classList.remove('ok','bad')});
+ document.getElementById('score').textContent='Score: 0 / 6';
+}
+</script></body></html>

@@ -1,0 +1,33 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>
+*{box-sizing:border-box}
+body{margin:0;padding:16px;background:#e5f9fd;font-family:Arial,sans-serif}
+.exercise{max-width:1080px;min-height:430px;margin:auto;background:#fff;border:4px solid #08a8d8;border-radius:28px;padding:30px 42px;display:flex;flex-direction:column}
+h1{margin:0 0 26px;color:#00a3dc;font-size:25px}
+.content{flex:1}
+.question{margin:0 0 22px;font:20px Georgia,serif}
+.qline{display:flex;gap:10px;align-items:flex-start}
+.qtext{line-height:1.35}
+.options{display:flex;flex-wrap:wrap;gap:12px 22px;margin:10px 0 0 28px}
+.option{border:2px solid #ff0870;background:#fff;border-radius:12px;padding:8px 15px;font:17px Georgia,serif;cursor:pointer;min-width:100px}
+.option.selected{background:#fff1f6}
+.option.ok,.ans.ok{background:#dcf8df;border-color:#009b8e}
+.option.bad,.ans.bad{background:#ffe1e1;border-color:#e43d30}
+.grid{display:grid;gap:24px 44px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.item{display:flex;align-items:center;gap:7px;font:20px Georgia,serif;white-space:nowrap}
+.ans{height:38px;width:88px;border:2px solid red;font-size:18px;text-align:center;padding:3px 6px}
+.choice{display:flex;align-items:center;gap:8px;font:20px Georgia,serif;margin:15px 0}
+.tf{margin-left:auto;display:flex;gap:9px}
+.tf button{width:48px;height:38px;border:2px solid #ff0870;border-radius:10px;background:#fff;font-weight:bold;cursor:pointer}
+.tf button.selected{background:#fff1f6}
+.controls{margin-top:auto;padding-top:32px;display:flex;justify-content:center;gap:14px}
+.controls button{border:0;border-radius:24px;background:#ff7d00;color:#fff;font-weight:bold;padding:12px 22px;cursor:pointer}
+.score{text-align:center;color:#064bb4;font-size:22px;font-weight:bold;margin-top:15px}
+@media(max-width:760px){.g3,.g2{grid-template-columns:1fr}.exercise{padding:22px}.options{margin-left:0}.choice{flex-wrap:wrap}.tf{margin-left:0}}
+</style></head>
+<body><main class="exercise"><h1>Choose the correct option.</h1><section class="content"><div class="question"><div class="qline"><b>a.</b><div class="qtext">In 7 × 9 = 63, 63 is known as ________.</div></div><div class="options"><button class="option" data-q="0" data-v="0" onclick="pick(this)">i. Multiplicand</button><button class="option" data-q="0" data-v="1" onclick="pick(this)">ii. Sum</button><button class="option" data-q="0" data-v="2" onclick="pick(this)">iii. Product</button><button class="option" data-q="0" data-v="3" onclick="pick(this)">iv. Multiplier</button></div></div><div class="question"><div class="qline"><b>b.</b><div class="qtext">Which of the following is equal to 76 × 28?</div></div><div class="options"><button class="option" data-q="1" data-v="0" onclick="pick(this)">i. 76 × (20 × 8)</button><button class="option" data-q="1" data-v="1" onclick="pick(this)">ii. 28 × 76</button><button class="option" data-q="1" data-v="2" onclick="pick(this)">iii. (70 × 6) × 28</button><button class="option" data-q="1" data-v="3" onclick="pick(this)">iv. None of these</button></div></div><div class="question"><div class="qline"><b>c.</b><div class="qtext">The product of the greatest 3-digit number and greatest 1-digit number is ____.</div></div><div class="options"><button class="option" data-q="2" data-v="0" onclick="pick(this)">i. 9990</button><button class="option" data-q="2" data-v="1" onclick="pick(this)">ii. 9999</button><button class="option" data-q="2" data-v="2" onclick="pick(this)">iii. 8991</button><button class="option" data-q="2" data-v="3" onclick="pick(this)">iv. 999</button></div></div><div class="question"><div class="qline"><b>d.</b><div class="qtext">10 × 100 = ____.</div></div><div class="options"><button class="option" data-q="3" data-v="0" onclick="pick(this)">i. 10</button><button class="option" data-q="3" data-v="1" onclick="pick(this)">ii. 100</button><button class="option" data-q="3" data-v="2" onclick="pick(this)">iii. 1000</button><button class="option" data-q="3" data-v="3" onclick="pick(this)">iv. None of these</button></div></div></section>
+<div class="controls"><button onclick="check()">Check Answers</button><button onclick="resetAll()">Reset</button></div>
+<div class="score" id="score">Score: 0 / 4</div></main><script>const A=[3, 1, 2, 3];let S={};function pick(b){document.querySelectorAll('[data-q="'+b.dataset.q+'"]').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');S[b.dataset.q]=+b.dataset.v}
+function check(){let s=0;A.forEach((a,i)=>{document.querySelectorAll('[data-q="'+i+'"]').forEach(x=>{x.classList.remove('ok','bad');if(x.classList.contains('selected'))x.classList.add(+x.dataset.v===a?'ok':'bad')});if(S[i]===a)s++});score.textContent='Score: '+s+' / 4'}
+function resetAll(){S={};document.querySelectorAll('.option').forEach(x=>x.classList.remove('selected','ok','bad'));score.textContent='Score: 0 / 4'}</script></body></html>

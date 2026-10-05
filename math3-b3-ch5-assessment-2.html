@@ -1,0 +1,19 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>
+*{box-sizing:border-box}body{margin:0;padding:14px;background:#e5f9fd;font-family:Arial,sans-serif}
+.exercise{max-width:1100px;min-height:430px;margin:auto;background:#fff;border:4px solid #08a8d8;border-radius:28px;padding:30px 42px;display:flex;flex-direction:column}
+h1{margin:0 0 25px;color:#00a3dc;font-size:25px}.content{flex:1}.q{font:20px Georgia,serif;margin:0 0 18px;line-height:1.45}
+.options{display:flex;flex-wrap:wrap;gap:10px 20px;margin:8px 0 0 28px}.opt{border:2px solid #ff1681;background:#fff;border-radius:12px;padding:8px 16px;font:17px Georgia;cursor:pointer}
+.opt.sel{background:#fff0f7}.opt.ok,.ans.ok{background:#dcf8df;border-color:#009b8e}.opt.bad,.ans.bad{background:#ffe1e1;border-color:#e43d30}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 50px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:26px 38px}
+.row{font:20px Georgia,serif;line-height:1.7;display:flex;align-items:center;flex-wrap:wrap;gap:7px}.ans{height:38px;min-width:75px;width:105px;border:2px solid red;font-size:18px;text-align:center;padding:3px}
+.binary{display:flex;gap:10px;margin-left:auto}.binary button{min-width:55px;border:2px solid #ff1681;border-radius:10px;background:white;padding:7px 12px;font-weight:bold;cursor:pointer}
+.binary button.sel{background:#fff0f7}.binary button.ok{background:#dcf8df;border-color:#009b8e}.binary button.bad{background:#ffe1e1;border-color:#e43d30}
+.controls{margin-top:auto;padding-top:30px;display:flex;justify-content:center;gap:14px}.controls button{border:0;border-radius:24px;background:#ff7d00;color:#fff;font-weight:bold;padding:12px 22px;cursor:pointer}.score{text-align:center;color:#064bb4;font-size:22px;font-weight:bold;margin-top:14px}
+@media(max-width:780px){.exercise{padding:22px}.grid2,.grid3{grid-template-columns:1fr}.binary{margin-left:0}.q{font-size:18px}}
+</style></head>
+<body><main class="exercise"><h1>Fill in the blanks.</h1><section class="content"><div class="grid2"><div class="row"><b>a.</b> The answer of a division is known as <input class="ans" id="a0">.</div><div class="row"><b>b.</b> If a number is <input class="ans" id="a1"> by itself, the answer is 1.</div><div class="row"><b>c.</b> The number that divides is known as <input class="ans" id="a2">.</div><div class="row"><b>d.</b> If 5 × 615 = 3075, then 3075 ÷ 5 = <input class="ans" id="a3" inputmode="numeric">.</div></div></section>
+<div class="controls"><button onclick="check()">Check Answers</button><button onclick="resetAll()">Reset</button></div>
+<div class="score" id="score">Score: 0 / 4</div></main><script>
+function markInputs(A){let s=0;A.forEach((a,i)=>{let e=document.getElementById('a'+i),g=e.value.trim().toLowerCase()===String(a).toLowerCase();e.classList.remove('ok','bad');e.classList.add(g?'ok':'bad');if(g)s++});return s}
+function resetInputs(){document.querySelectorAll('input').forEach(e=>{e.value='';e.classList.remove('ok','bad')})}
+const A=['quotient', 'divided', 'divisor', '615'];function check(){let s=markInputs(A);score.textContent='Score: '+s+' / 4'}function resetAll(){resetInputs();score.textContent='Score: 0 / 4'}</script></body></html>

@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>b3-ch2-2d-fill</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:#e8faff;font-family:Arial,sans-serif;color:#111}
+.ex{max-width:1100px;margin:auto;background:#fff;border:4px solid #08a9dc;border-radius:28px;padding:28px 34px}
+h1{margin:0 0 26px;color:#00a5dc;font-size:25px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:34px 58px}
+.item{display:grid;grid-template-columns:28px auto;align-items:start;font:19px Georgia,"Times New Roman",serif}
+.work{display:flex;align-items:center;gap:12px;background:#fdecef;padding:8px;width:max-content;min-height:138px}
+.arrow{font-size:30px}
+.card{width:118px}
+.cols{display:grid;grid-template-columns:repeat(3,1fr);text-align:center}
+.head{color:#ff1680;font-size:18px;padding:4px 0 6px;border-bottom:1px solid #63d5ef}
+.row{font-size:18px;padding:6px 0;border-bottom:1px solid #63d5ef;position:relative;min-height:32px}
+.row.plus:before,.blank.plus:before{content:"+";position:absolute;left:-10px;top:5px;font-size:20px}
+.blank{height:39px;border-bottom:1px solid #63d5ef;position:relative}
+.blank input,.answer input{width:100%;height:37px;border:2px solid #ff3b30;background:#fff;font-size:18px;padding:4px}
+.answer{width:118px;margin-top:4px}
+.actions{display:flex;justify-content:center;gap:14px;margin-top:30px}
+.actions button{border:0;border-radius:24px;padding:12px 22px;background:#ff8200;color:#fff;font-weight:bold}
+.score{text-align:center;color:#064bb4;font-size:22px;font-weight:bold;margin-top:16px}
+.ok{background:#dcf8df!important;border-color:#009b8e!important}
+.bad{background:#ffe1e1!important;border-color:#e43d30!important}
+@media(max-width:800px){.grid{grid-template-columns:1fr}}
+@media(max-width:520px){body{padding:0}.ex{padding:15px;border-radius:0}.work{transform:scale(.88);transform-origin:left top}}
+</style>
+</head>
+<body>
+<main class="ex">
+<h1>Fill the blanks.</h1>
+
+<div class="grid">
+
+<!-- a -->
+<div class="item"><span>a.</span>
+ <div class="work">
+  <div class="card">
+   <div class="cols head"><span>H</span><span>T</span><span>O</span></div>
+   <div class="cols row"><span>5</span><span>6</span><span>3</span></div>
+   <div class="cols row plus"><span>3</span><span>1</span><span>5</span></div>
+  </div>
+  <span class="arrow">→</span>
+  <div>
+   <div class="card">
+    <div class="cols head"><span>H</span><span>T</span><span>O</span></div>
+    <div class="cols row"><span>5</span><span>6</span><span>0</span></div>
+    <div class="cols row plus"><span>3</span><span>2</span><span>0</span></div>
+   </div>
+   <div class="answer"><input id="a0" inputmode="numeric"></div>
+  </div>
+ </div>
+</div>
+
+<!-- b -->
+<div class="item"><span>b.</span>
+ <div class="work">
+  <div class="card">
+   <div class="cols head"><span>H</span><span>T</span><span>O</span></div>
+   <div class="cols row"><span>2</span><span>3</span><span>1</span></div>
+   <div class="cols row plus"><span>4</span><span>4</span><span>7</span></div>
+  </div>
+  <span class="arrow">→</span>
+  <div class="card">
+   <div class="cols head"><span>H</span><span>T</span><span>O</span></div>
+   <div class="cols row"><span>2</span><span>3</span><span>0</span></div>
+   <div class="blank plus"><input id="a1" inputmode="numeric"></div>
+   <div class="cols row"><span>6</span><span>8</span><span>0</span></div>
+  </div>
+ </div>
+</div>
+
+<!-- c -->
+<div class="item"><span>c.</span>
+ <div class="work">
+  <div class="card">
+   <div class="cols head"><span>H</span><span>T</span><span>O</span></div>
+   <div class="cols row"><span>6</span><span>1</span><span>2</span></div>
+   <div class="cols row plus"><span>2</span><span>8</span><span>9</span></div>
+  </div>
+  <span class="arrow">→</span>
+  <div class="card">
+   <div class="cols head"><span>H</span><span>T</span><span>O</span></div>
+   <div class="cols row"><span>6</span><span>1</span><span>0</span></div>
+   <div class="blank plus"><input id="a2" inputmode="numeric"></div>
+   <div class="cols row"><span>2</span><span>9</span><span>0</span></div>
+   <div class="cols row"><span>9</span><span>0</span><span>0</span></div>
+  </div>
+ </div>
+</div>
+
+<!-- d -->
+<div class="item"><span>d.</span>
+ <div class="work">
+  <div class="card">
+   <div class="cols head"><span>H</span><span>T</span><span>O</span></div>
+   <div class="cols row"><span>7</span><span>9</span><span>2</span></div>
+   <div class="cols row plus"><span>1</span><span>3</span><span>4</span></div>
+  </div>
+  <span class="arrow">→</span>
+  <div class="card">
+   <div class="cols head"><span>H</span><span>T</span><span>O</span></div>
+   <div class="cols row"><span>7</span><span>9</span><span>0</span></div>
+   <div class="blank plus"><input id="a3" inputmode="numeric"></div>
+   <div class="cols row"><span>9</span><span>2</span><span>0</span></div>
+  </div>
+ </div>
+</div>
+
+</div>
+
+<div class="actions">
+<button onclick="check()">Check Answers</button>
+<button onclick="resetAll()">Reset</button>
+</div>
+<div id="score" class="score">Score: 0 / 4</div>
+</main>
+
+<script>
+const ans=["880","450","610","30"];
+function check(){
+ let s=0;
+ ans.forEach((a,i)=>{
+  const e=document.getElementById("a"+i);
+  const ok=e.value.trim()===a;
+  e.classList.remove("ok","bad");
+  e.classList.add(ok?"ok":"bad");
+  if(ok)s++;
+ });
+ score.textContent=`Score: ${s} / 4`;
+}
+function resetAll(){
+ document.querySelectorAll("input").forEach(e=>{
+  e.value="";
+  e.classList.remove("ok","bad");
+ });
+ score.textContent="Score: 0 / 4";
+}
+</script>
+</body>
+</html>

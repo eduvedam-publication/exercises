@@ -1,0 +1,17 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>b3-ch9-9a-rupees-paise.html</title><style>
+*{box-sizing:border-box}body{margin:0;background:#e2f8fc;font-family:Georgia,"Times New Roman",serif}
+.card{width:min(1100px,calc(100% - 24px));min-height:420px;margin:14px auto;background:#fff;border:4px solid #08a6d6;border-radius:28px;padding:34px 42px;display:flex;flex-direction:column}
+h1{font:700 25px Arial,sans-serif;color:#00a1db;margin:0 0 30px}.qs{display:grid;gap:22px;flex:1}
+.q{display:flex;align-items:center;flex-wrap:wrap;gap:7px;font-size:21px;line-height:1.55}.letter{width:28px;flex:0 0 28px}
+input{height:38px;border:2px solid #ff2b22;background:#fff;color:#111;padding:4px 7px;font:18px Arial,sans-serif;min-width:90px}
+input.ok{background:#dff7df;border-color:#198c3d}input.bad{background:#ffe1e1;border-color:#d92c2c}
+.footer{margin-top:auto;text-align:center;padding-top:30px}.footer button{border:0;border-radius:25px;background:#ff7b00;color:#fff;padding:13px 22px;margin:0 6px;font:bold 14px Arial;cursor:pointer}
+.score{margin-top:14px;color:#064bb4;font:bold 22px Arial}@media(max-width:700px){.card{padding:24px 18px}.q{font-size:18px}}
+</style></head>
+<body><main class="card"><h1>Convert the following amount of money into ‘rupees and paise’.</h1><div class="qs"><div class="q"><span class="letter">a.</span><span>2200 p</span><input id="a0" style="width:220px" autocomplete="off"></div><div class="q"><span class="letter">b.</span><span>5277 p</span><input id="a1" style="width:220px" autocomplete="off"></div><div class="q"><span class="letter">c.</span><span>1001 p</span><input id="a2" style="width:220px" autocomplete="off"></div><div class="q"><span class="letter">d.</span><span>187 p</span><input id="a3" style="width:220px" autocomplete="off"></div><div class="q"><span class="letter">e.</span><span>604 p</span><input id="a4" style="width:220px" autocomplete="off"></div><div class="q"><span class="letter">f.</span><span>207 p</span><input id="a5" style="width:220px" autocomplete="off"></div></div>
+<div class="footer"><button onclick="check()">Check Answers</button><button onclick="resetAll()">Reset</button><div class="score" id="score">Score: 0 / 6</div></div></main>
+<script>
+const A=[['22 rupees', '₹22', 'rs22'],['52 rupees 77 paise', '₹52.77', 'rs52.77'],['10 rupees 1 paisa', '₹10.01', 'rs10.01'],['1 rupee 87 paise', '₹1.87', 'rs1.87'],['6 rupees 4 paise', '₹6.04', 'rs6.04'],['2 rupees 7 paise', '₹2.07', 'rs2.07']]; const norm=v=>v.trim().toLowerCase().replace(/\s+/g," ").replace(/₹/g,"rs").replace(/\./g,"");
+function check(){let s=0;A.forEach((a,i)=>{let e=document.getElementById("a"+i);let accepted=Array.isArray(a)?a:[a];let ok=accepted.some(x=>norm(e.value)===norm(x));e.classList.remove("ok","bad");e.classList.add(ok?"ok":"bad");if(ok)s++});score.textContent=`Score: ${s} / 6`}
+function resetAll(){A.forEach((_,i)=>{let e=document.getElementById("a"+i);e.value="";e.classList.remove("ok","bad")});score.textContent="Score: 0 / 6"}
+</script></body></html>

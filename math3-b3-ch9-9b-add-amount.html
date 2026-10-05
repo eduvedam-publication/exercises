@@ -1,0 +1,18 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>b3-ch9-9b-add-amount.html</title><style>
+*{box-sizing:border-box}body{margin:0;background:#e2f8fc;font-family:Georgia,"Times New Roman",serif}
+.card{width:min(1080px,calc(100% - 24px));min-height:420px;margin:14px auto;background:#fff;border:4px solid #08a6d6;border-radius:28px;padding:34px 42px;display:flex;flex-direction:column}
+h1{font:700 25px Arial,sans-serif;color:#00a1db;margin:0 0 32px}.qs{display:grid;grid-template-columns:1fr 1fr;gap:25px 42px;flex:1}
+.q{display:flex;align-items:center;gap:8px;font-size:21px;line-height:1.5}.letter{width:28px;flex:0 0 28px}.text{white-space:nowrap}
+input{width:145px;height:39px;border:2px solid #ff2b22;background:#fff;color:#111;padding:4px 8px;font:18px Arial,sans-serif}
+input.ok{background:#dff7df;border-color:#198c3d}input.bad{background:#ffe1e1;border-color:#d92c2c}
+.footer{margin-top:auto;text-align:center;padding-top:34px}.footer button{border:0;border-radius:25px;background:#ff7b00;color:#fff;padding:13px 22px;margin:0 6px;font:bold 14px Arial;cursor:pointer}
+.score{margin-top:14px;color:#064bb4;font:bold 22px Arial}
+@media(max-width:760px){.card{padding:24px 18px}.qs{grid-template-columns:1fr}.q{font-size:18px;flex-wrap:wrap}.text{white-space:normal}}
+</style></head>
+<body><main class="card"><h1>Add the following amounts.</h1><div class="qs"><div class="q"><span class="letter">a.</span><span class="text">₹ 56.72 and ₹ 82.13</span><input id="a0" autocomplete="off"></div><div class="q"><span class="letter">b.</span><span class="text">₹ 49.75 and ₹ 9.56</span><input id="a1" autocomplete="off"></div><div class="q"><span class="letter">c.</span><span class="text">₹ 64.06 and ₹ 18.42</span><input id="a2" autocomplete="off"></div><div class="q"><span class="letter">d.</span><span class="text">₹ 12.53 and ₹ 29.07</span><input id="a3" autocomplete="off"></div></div>
+<div class="footer"><button onclick="check()">Check Answers</button><button onclick="resetAll()">Reset</button><div class="score" id="score">Score: 0 / 4</div></div></main>
+<script>
+const A=["138.85","59.31","82.48","41.60"]; const norm=v=>v.trim().toLowerCase().replace(/₹/g,"").replace(/rs\.?/g,"").replace(/\s/g,"");
+function check(){let s=0;A.forEach((a,i)=>{let e=document.getElementById("a"+i),ok=norm(e.value)===norm(a);e.classList.remove("ok","bad");e.classList.add(ok?"ok":"bad");if(ok)s++});score.textContent=`Score: ${s} / 4`}
+function resetAll(){A.forEach((_,i)=>{let e=document.getElementById("a"+i);e.value="";e.classList.remove("ok","bad")});score.textContent="Score: 0 / 4"}
+</script></body></html>

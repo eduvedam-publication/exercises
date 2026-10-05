@@ -1,0 +1,53 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:#e8faff;font-family:Arial,sans-serif;color:#111}
+.exercise{max-width:1050px;margin:auto;background:#fff;border:4px solid #08a9dc;border-radius:28px;padding:30px}
+h1{margin:0 0 26px;color:#00a5dc;font-size:25px}
+.actions{display:flex;justify-content:center;gap:14px;margin-top:30px}
+.action{border:0;border-radius:24px;padding:12px 22px;background:#ff8200;color:#fff;font-weight:700;cursor:pointer}
+.score{text-align:center;margin-top:17px;color:#064bb4;font-size:22px;font-weight:700}
+.ok{background:#dcf8df!important;border-color:#009b8e!important}
+.bad{background:#ffe1e1!important;border-color:#e43d30!important}
+@media(max-width:700px){body{padding:0}.exercise{border-radius:0;padding:16px}}
+
+.match-area{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:100px;min-height:470px}
+.col{display:flex;flex-direction:column;justify-content:space-around;gap:12px;z-index:2}
+.item{height:56px;border:2px solid #a8e8fa;border-radius:17px;background:#f8fdff;display:flex;align-items:center;padding:0 16px;position:relative;cursor:pointer;font:19px Georgia,"Times New Roman",serif}
+.rightitem{justify-content:flex-end}
+.item.sel{border-color:#ff3b8d;background:#fff0f6}
+.dot{width:17px;height:17px;border:4px solid #ff3b8d;transform:rotate(45deg);position:absolute;background:#fff}
+.leftitem .dot{right:14px}.rightitem .dot{left:14px}
+svg{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
+@media(max-width:650px){.match-area{gap:35px}.item{font-size:16px;padding:0 10px}}
+</style></head><body><main class="exercise"><h1>Match the following. One has been done for you.</h1><div class="match-area" id="area"><svg id="lines"></svg><div class="col"><div class="item leftitem" data-id="198"><span>198</span><span class="dot"></span></div><div class="item leftitem" data-id="5643"><span>5643</span><span class="dot"></span></div><div class="item leftitem" data-id="204"><span>204</span><span class="dot"></span></div><div class="item leftitem" data-id="686"><span>686</span><span class="dot"></span></div><div class="item leftitem" data-id="335"><span>335</span><span class="dot"></span></div><div class="item leftitem" data-id="5644"><span>5644</span><span class="dot"></span></div></div><div class="col"><div class="item rightitem" data-id="690"><span class="dot"></span><span>690</span></div><div class="item rightitem" data-id="200"><span class="dot"></span><span>200</span></div><div class="item rightitem" data-id="110"><span class="dot"></span><span>110</span></div><div class="item rightitem" data-id="5640"><span class="dot"></span><span>5640</span></div><div class="item rightitem" data-id="130"><span class="dot"></span><span>130</span></div><div class="item rightitem" data-id="340"><span class="dot"></span><span>340</span></div></div></div><div class="actions"><button class="action" onclick="check()">Check Answers</button><button class="action" onclick="resetAll()">Reset</button></div><div id="score" class="score">Score: 0 / 6</div></main><script>
+const correct={"198":"200","5643":"5640","204":"200","686":"690","335":"340","5644":"5640"};
+const area=document.getElementById("area"),svg=document.getElementById("lines");
+let selected=null,matches={};
+document.querySelectorAll(".leftitem").forEach(x=>x.onclick=()=>{
+ document.querySelectorAll(".leftitem").forEach(y=>y.classList.remove("sel"));
+ selected=x;x.classList.add("sel");
+});
+document.querySelectorAll(".rightitem").forEach(x=>x.onclick=()=>{
+ if(!selected)return;
+ matches[selected.dataset.id]=x.dataset.id;
+ selected.classList.remove("sel");selected=null;draw(false);
+});
+function point(el){
+ const a=area.getBoundingClientRect(),d=el.querySelector(".dot").getBoundingClientRect();
+ return {x:d.left-a.left+d.width/2,y:d.top-a.top+d.height/2};
+}
+function draw(mark){
+ svg.innerHTML="";
+ Object.entries(matches).forEach(([l,r])=>{
+  const L=document.querySelector(`.leftitem[data-id="${l}"]`);
+  const R=document.querySelector(`.rightitem[data-id="${r}"]`);
+  const p1=point(L),p2=point(R),line=document.createElementNS("http://www.w3.org/2000/svg","line");
+  line.setAttribute("x1",p1.x);line.setAttribute("y1",p1.y);line.setAttribute("x2",p2.x);line.setAttribute("y2",p2.y);
+  line.setAttribute("stroke",mark?(correct[l]===r?"#009b8e":"#e43d30"):"#009b8e");
+  line.setAttribute("stroke-width","4");line.setAttribute("stroke-linecap","round");svg.appendChild(line);
+ });
+}
+function check(){let s=0;Object.entries(matches).forEach(([l,r])=>{if(correct[l]===r)s++});draw(true);score.textContent=`Score: ${s} / 6`}
+function resetAll(){matches={};selected=null;svg.innerHTML="";document.querySelectorAll(".item").forEach(x=>x.classList.remove("sel"));score.textContent="Score: 0 / 6"}
+addEventListener("resize",()=>draw(false));
+</script></body></html>

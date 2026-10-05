@@ -1,0 +1,17 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>
+*{box-sizing:border-box}body{margin:0;padding:12px;background:#e4f9fd;font-family:Arial,sans-serif}
+.exercise{max-width:1080px;min-height:430px;margin:auto;background:#fff;border:4px solid #08a8d8;border-radius:28px;padding:30px 42px;display:flex;flex-direction:column}
+h1{color:#00a3dc;font-size:25px;margin:0 0 28px}.content{flex:1}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px 55px}
+.row{display:flex;align-items:center;flex-wrap:wrap;gap:8px;font:20px Georgia,serif;line-height:1.5}.ans{width:115px;height:38px;border:2px solid red;font-size:18px;padding:4px 7px}
+.ans.wide{width:185px}.ans.small{width:80px}.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.05;min-width:28px}.frac span:first-child{border-bottom:1.5px solid #222;padding:0 4px 3px}.frac span:last-child{padding-top:3px}
+.controls{margin-top:auto;padding-top:30px;display:flex;justify-content:center;gap:14px}.controls button{border:0;border-radius:24px;background:#ff7d00;color:#fff;font-weight:bold;padding:12px 22px;cursor:pointer}
+.score{text-align:center;color:#064bb4;font-size:22px;font-weight:bold;margin-top:14px}.ok{background:#dcf8df!important;border-color:#009b8e!important}.bad{background:#ffe1e1!important;border-color:#e43d30!important}
+@media(max-width:720px){.exercise{padding:22px}.grid2{grid-template-columns:1fr}.row{font-size:18px}}
+</style></head><body>
+<main class="exercise"><h1>Write in words.</h1><section class="content"><div class="grid2"><div class="row"><b>a.</b><span class="frac"><span>3</span><span>7</span></span><span>=</span><input id="a0" class="ans wide"></div><div class="row"><b>b.</b><span class="frac"><span>2</span><span>6</span></span><span>=</span><input id="a1" class="ans wide"></div><div class="row"><b>c.</b><span class="frac"><span>11</span><span>7</span></span><span>=</span><input id="a2" class="ans wide"></div><div class="row"><b>d.</b><span class="frac"><span>4</span><span>7</span></span><span>=</span><input id="a3" class="ans wide"></div><div class="row"><b>e.</b><span class="frac"><span>6</span><span>11</span></span><span>=</span><input id="a4" class="ans wide"></div><div class="row"><b>f.</b><span class="frac"><span>3</span><span>8</span></span><span>=</span><input id="a5" class="ans wide"></div></div></section>
+<div class="controls"><button onclick="check()">Check Answers</button><button onclick="resetAll()">Reset</button></div><div id="score" class="score">Score: 0 / 6</div></main>
+<script>
+function norm(v){return v.trim().toLowerCase().replace(/\s+/g,' ')}
+function checkVals(A){let s=0;A.forEach((a,i)=>{let e=document.getElementById('a'+i);let ok=(Array.isArray(a)?a.map(norm).includes(norm(e.value)):norm(e.value)==norm(String(a)));e.classList.remove('ok','bad');e.classList.add(ok?'ok':'bad');if(ok)s++});return s}
+function resetVals(){document.querySelectorAll('input').forEach(e=>{e.value='';e.classList.remove('ok','bad')})}
+const A=[['three-seventh', 'three seventh'], ['two-sixth', 'two sixth'], ['eleven-seventh', 'eleven seventh'], ['four-seventh', 'four seventh'], ['six-eleventh', 'six eleventh'], ['three-eighths', 'three eighths']];function check(){let s=checkVals(A);score.textContent='Score: '+s+' / 6'}function resetAll(){resetVals();score.textContent='Score: 0 / 6'}</script></body></html>
