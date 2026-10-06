@@ -1,15 +1,410 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tick (✓) the correct option.</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{min-height:100vh;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#dff6ff,#fff,#e8f5e9);padding:18px;color:#333}
-.quiz{width:min(100%,1000px);margin:auto;background:#fff;border:5px solid #00b8f0;border-radius:28px;padding:26px;box-shadow:0 12px 35px rgba(0,0,0,.12)}
-h1{font-size:27px;color:#00a6d6;margin-bottom:20px}
-.card{background:#f9fcff;border:2px solid #c9efff;border-radius:20px;padding:17px 20px;margin-bottom:14px}
-.q{font-size:20px;font-weight:600;line-height:1.5;margin-bottom:12px}
-.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px}
-.opt{background:#fff;border:2px solid #ff4fa0;border-radius:16px;padding:11px 16px;text-align:left;font-size:16px;cursor:pointer}
-.opt.correct{background:#d4f8d4;border-color:#2e7d32;color:#1b5e20;font-weight:700}.opt.wrong{background:#ffd9dd;border-color:#c62828;color:#b71c1c;font-weight:700}
-.score{text-align:center;margin:18px 0;font-size:24px;font-weight:700;color:#0047ab}
-.actions{text-align:center}.reset,.check{border:0;border-radius:30px;padding:12px 28px;margin:5px;background:linear-gradient(135deg,#ff9800,#ff6f00);color:#fff;font-weight:700;cursor:pointer}
-@media(max-width:650px){body{padding:8px}.quiz{padding:15px 11px}h1{font-size:21px}.q{font-size:16px}.opts{grid-template-columns:1fr}.opt{font-size:15px}.reset,.check{width:100%;margin:5px 0}}
-.line{font-size:19px;font-weight:600;line-height:1.8}.choice{display:inline-block;border:2px solid #ff4fa0;border-radius:50px;padding:5px 12px;margin:2px 4px;cursor:pointer;background:#fff}.choice.correct{background:#d4f8d4;border-color:#2e7d32;color:#1b5e20}.choice.wrong{background:#ffd9dd;border-color:#c62828;color:#b71c1c}.disabled{pointer-events:none}</style></head><body><div class="quiz"><h1>Tick (✓) the correct option.</h1><div id="tick"></div><div class="score" id="score">Score: 0 / 5</div><div class="actions"><button class="reset" onclick="load()">Reset Quiz</button></div></div><script>const qs=[('1. Mohan lived in a ', 'bungalow', 'multi-storeyed building', '.', 'multi-storeyed building'), ('2. Mohan tried to put out the fire with ', 'water', 'sand', '.', 'water'), ('3. Mohan was ', 'courageous', 'coward', '.', 'courageous'), ('4. When you face any adverse situation you should ', 'face it bravely', 'get panic', '.', 'face it bravely'), ('5. Mohan took his little sister to a ', 'safe place', 'alone in the house', '.', 'safe place')];let score=0;function load(){score=0;document.getElementById('score').textContent='Score: 0 / 5';let r=document.getElementById('tick');r.innerHTML='';qs.forEach(x=>{let c=document.createElement('div');c.className='card line';c.append(document.createTextNode(x[0]));let a=document.createElement('span');a.className='choice';a.textContent=x[1];let slash=document.createTextNode(' / ');let b=document.createElement('span');b.className='choice';b.textContent=x[2];c.append(a,slash,b,document.createTextNode(x[3]));[a,b].forEach(z=>z.onclick=()=>{if(a.classList.contains('disabled'))return;a.classList.add('disabled');b.classList.add('disabled');let val=z.textContent;if(a.textContent===x[4])a.classList.add('correct');if(b.textContent===x[4])b.classList.add('correct');if(val===x[4])score++;else z.classList.add('wrong');document.getElementById('score').textContent='Score: '+score+' / 5'});r.append(c)})}load();</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tick (✓) the correct option.</title>
+  <!-- Confetti script for celebration on perfect score -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+      background: linear-gradient(135deg, #e0f2fe 0%, #fdf4ff 50%, #f0fdf4 100%);
+      padding: 24px 16px;
+      color: #334155;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .quiz {
+      width: min(100%, 860px);
+      margin: auto;
+      background: #ffffff;
+      border: 4px solid #38bdf8;
+      border-radius: 28px;
+      padding: 32px 36px;
+      box-shadow: 0 16px 40px -8px rgba(14, 165, 233, 0.18), 0 8px 20px -6px rgba(0, 0, 0, 0.06);
+    }
+
+    .header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 2px dashed #e2e8f0;
+    }
+
+    h1 {
+      font-size: 26px;
+      font-weight: 800;
+      color: #e11d48;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .badge-remembering {
+      background: linear-gradient(135deg, #e11d48, #be123c);
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 6px 18px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 8px rgba(225, 29, 72, 0.25);
+    }
+
+    .cards-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 18px 22px;
+      transition: transform 0.15s ease, border-color 0.2s ease, background-color 0.2s ease;
+    }
+
+    .card:hover {
+      border-color: #cbd5e1;
+    }
+
+    .line {
+      font-size: 19px;
+      font-weight: 600;
+      line-height: 1.8;
+      color: #1e293b;
+    }
+
+    .choice {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 2px solid #ec4899;
+      border-radius: 50px;
+      padding: 4px 16px;
+      margin: 3px 6px;
+      cursor: pointer;
+      background: #ffffff;
+      color: #1e293b;
+      font-weight: 700;
+      font-size: 18px;
+      transition: all 0.18s ease-in-out;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+      user-select: none;
+    }
+
+    .choice:hover:not(.disabled) {
+      background: #fdf2f8;
+      border-color: #db2777;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(236, 72, 153, 0.2);
+    }
+
+    .choice:active:not(.disabled) {
+      transform: translateY(0);
+    }
+
+    .choice.correct {
+      background: #ecfdf5 !important;
+      border-color: #059669 !important;
+      color: #047857 !important;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25) !important;
+    }
+
+    .choice.wrong {
+      background: #fef2f2 !important;
+      border-color: #dc2626 !important;
+      color: #b91c1c !important;
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2) !important;
+    }
+
+    .disabled {
+      cursor: default !important;
+      pointer-events: none;
+    }
+
+    .feedback-icon {
+      margin-left: 8px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .feedback-icon.ok {
+      color: #059669;
+    }
+
+    .feedback-icon.miss {
+      color: #dc2626;
+    }
+
+    .score-container {
+      text-align: center;
+      margin: 26px 0 16px;
+      padding: 16px;
+      background: #f0f9ff;
+      border-radius: 18px;
+      border: 1px solid #bae6fd;
+    }
+
+    .score {
+      font-size: 24px;
+      font-weight: 800;
+      color: #0284c7;
+    }
+
+    .score-message {
+      font-size: 15px;
+      color: #64748b;
+      margin-top: 6px;
+      font-weight: 600;
+    }
+
+    .actions {
+      text-align: center;
+      margin-top: 12px;
+    }
+
+    .reset {
+      border: 0;
+      border-radius: 30px;
+      padding: 12px 34px;
+      margin: 5px;
+      background: linear-gradient(135deg, #f97316, #ea580c);
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(234, 88, 12, 0.28);
+      transition: all 0.2s ease;
+    }
+
+    .reset:hover {
+      background: linear-gradient(135deg, #ea580c, #c2410c);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(234, 88, 12, 0.35);
+    }
+
+    .reset:active {
+      transform: translateY(1px);
+    }
+
+    @media (max-width: 650px) {
+      body {
+        padding: 12px 8px;
+      }
+      .quiz {
+        padding: 20px 14px;
+        border-radius: 20px;
+        border-width: 3px;
+      }
+      h1 {
+        font-size: 21px;
+      }
+      .line {
+        font-size: 16px;
+        line-height: 1.7;
+      }
+      .choice {
+        font-size: 15px;
+        padding: 3px 12px;
+        margin: 2px;
+      }
+      .score {
+        font-size: 20px;
+      }
+      .reset {
+        width: 100%;
+        margin: 5px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Main Quiz Container -->
+  <main class="quiz">
+    <header class="header-bar">
+      <h1>Tick (<span style="color:#059669;">✓</span>) the correct option.</h1>
+      <span class="badge-remembering">Remembering</span>
+    </header>
+
+    <!-- Quiz Question Cards List -->
+    <div id="tick" class="cards-list"></div>
+
+    <div class="score-container">
+      <div class="score" id="score">Score: 0 / 5</div>
+      <div class="score-message" id="score-msg">Click an option in each sentence to answer!</div>
+    </div>
+
+    <div class="actions">
+      <button class="reset" onclick="load()">Reset Quiz</button>
+    </div>
+  </main>
+
+  <script>
+    // Using proper JavaScript 2D array representation
+    const qs = [
+      [
+        '1. Mohan lived in a ',
+        'bungalow',
+        'multi-storeyed building',
+        '.',
+        'multi-storeyed building'
+      ],
+      [
+        '2. Mohan tried to put out the fire with ',
+        'water',
+        'sand',
+        '.',
+        'water'
+      ],
+      [
+        '3. Mohan was ',
+        'courageous',
+        'coward',
+        '.',
+        'courageous'
+      ],
+      [
+        '4. When you face any adverse situation you should ',
+        'face it bravely',
+        'get panic',
+        '.',
+        'face it bravely'
+      ],
+      [
+        '5. Mohan took his little sister to a ',
+        'safe place',
+        'alone in the house',
+        '.',
+        'safe place'
+      ]
+    ];
+
+    let score = 0;
+    let answeredCount = 0;
+
+    function load() {
+      score = 0;
+      answeredCount = 0;
+      document.getElementById('score').textContent = 'Score: 0 / 5';
+      document.getElementById('score-msg').textContent = 'Click an option in each sentence to answer!';
+      
+      const r = document.getElementById('tick');
+      r.innerHTML = '';
+
+      qs.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'card line';
+        card.id = `q-card-${index}`;
+
+        // Question prefix text
+        card.appendChild(document.createTextNode(item[0]));
+
+        // First choice button
+        const btnA = document.createElement('span');
+        btnA.className = 'choice';
+        btnA.textContent = item[1];
+
+        // Slash divider
+        const slash = document.createTextNode(' / ');
+
+        // Second choice button
+        const btnB = document.createElement('span');
+        btnB.className = 'choice';
+        btnB.textContent = item[2];
+
+        // Punctuation suffix
+        const suffix = document.createTextNode(item[3]);
+
+        // Status indicator tag
+        const indicator = document.createElement('span');
+        indicator.className = 'feedback-icon';
+
+        card.append(btnA, slash, btnB, suffix, indicator);
+
+        [btnA, btnB].forEach(selectedBtn => {
+          selectedBtn.onclick = () => {
+            if (btnA.classList.contains('disabled')) return;
+
+            btnA.classList.add('disabled');
+            btnB.classList.add('disabled');
+            answeredCount++;
+
+            const correctAnswer = item[4];
+            const chosenAnswer = selectedBtn.textContent;
+
+            // Highlight the true correct choice in green with a checkmark
+            if (btnA.textContent === correctAnswer) {
+              btnA.classList.add('correct');
+              btnA.innerHTML = `<span>✓</span> ${btnA.textContent}`;
+            }
+            if (btnB.textContent === correctAnswer) {
+              btnB.classList.add('correct');
+              btnB.innerHTML = `<span>✓</span> ${btnB.textContent}`;
+            }
+
+            // Check if user chose correctly
+            if (chosenAnswer === correctAnswer) {
+              score++;
+              card.style.borderColor = '#86efac';
+              card.style.background = '#f0fdf4';
+              indicator.className = 'feedback-icon ok';
+              indicator.textContent = '✓ Correct';
+            } else {
+              selectedBtn.classList.add('wrong');
+              selectedBtn.innerHTML = `<span>✗</span> ${chosenAnswer}`;
+              card.style.borderColor = '#fca5a5';
+              card.style.background = '#fff1f2';
+              indicator.className = 'feedback-icon miss';
+              indicator.textContent = '✗ Incorrect';
+            }
+
+            // Update live score display
+            document.getElementById('score').textContent = `Score: ${score} / 5`;
+
+            if (answeredCount === qs.length) {
+              const msgElem = document.getElementById('score-msg');
+              if (score === 5) {
+                msgElem.textContent = '🎉 Brilliant! You got all answers right!';
+                if (typeof confetti === 'function') {
+                  confetti({
+                    particleCount: 90,
+                    spread: 70,
+                    origin: { y: 0.65 }
+                  });
+                }
+              } else if (score >= 3) {
+                msgElem.textContent = '👍 Good job! Review the green circled answers.';
+              } else {
+                msgElem.textContent = '📚 Keep practicing! You can reset and try again.';
+              }
+            }
+          };
+        });
+
+        r.appendChild(card);
+      });
+    }
+
+    // Initialize quiz on load
+    load();
+  </script>
+</body>
+</html>
