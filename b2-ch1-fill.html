@@ -22,9 +22,9 @@ body{min-height:100vh;font-family:Arial,Helvetica,sans-serif;background:linear-g
 <div class="question-box"><div class="question">3. God <input id="q3" class="blank"> us to <input id="q4" class="blank"> others.</div></div>
 <div class="question-box"><div class="question">4. God <input id="q5" class="blank"> us and gives us <input id="q6" class="blank">.</div></div>
 <div class="buttons"><button class="action" onclick="checkAnswers()">Check Answers</button><button class="reset" onclick="resetQuiz()">Reset</button></div>
-<div class="result" id="result">Score: 0 / 6</div></div>
+<div class="result" id="result">Score: 0 / 4</div></div>
 <script>
 const answers={q1:"truth",q2:"bless",q3:"teaches",q4:"love",q5:"guides",q6:"happiness"};
-function checkAnswers(){let score=0;Object.entries(answers).forEach(([id,a])=>{const x=document.getElementById(id);x.classList.remove("correct","wrong");if(x.value.trim().toLowerCase()===a){x.classList.add("correct");score++}else x.classList.add("wrong")});document.getElementById("result").textContent=`Score: ${score} / 6`;}
-function resetQuiz(){Object.keys(answers).forEach(id=>{const x=document.getElementById(id);x.value="";x.classList.remove("correct","wrong")});document.getElementById("result").textContent="Score: 0 / 6";}
+function checkAnswers(){let score=0;Object.entries(answers).forEach(([id,a])=>{const x=document.getElementById(id);x.classList.remove("correct","wrong");if(x.value.trim().toLowerCase()===a){x.classList.add("correct");score++}else x.classList.add("wrong")});document.getElementById("result").textContent=`Score: ${score} / 4`;}
+function resetQuiz(){Object.keys(answers).forEach(id=>{const x=document.getElementById(id);x.value="";x.classList.remove("correct","wrong")});document.getElementById("result").textContent="Score: 0 / 4";}
 </script></body></html>
