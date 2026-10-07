@@ -58,7 +58,7 @@ button{border:0;border-radius:22px;padding:11px 20px;background:#ff8500;color:#f
  <button onclick="checkAnswers()">Check Answers</button>
  <button onclick="resetExercise()">Reset</button>
 </div>
-<div id="result">Score: 0 / 6</div>
+<div id="result">Score: 0 / 3</div>
 </main>
 
 <script>
@@ -72,7 +72,7 @@ function checkAnswers(){
   e.className="answer "+(ok?"ok":"bad");
   if(ok)score++;
  });
- document.getElementById("result").textContent=`Score: ${score} / 6`;
+ document.getElementById("result").textContent=`Score: ${score} / 3`;
 }
 
 function resetExercise(){
@@ -80,7 +80,7 @@ function resetExercise(){
   e.value="";
   e.className="answer";
  });
- document.getElementById("result").textContent="Score: 0 / 6";
+ document.getElementById("result").textContent="Score: 0 / 3";
 }
 </script>
 </body>
