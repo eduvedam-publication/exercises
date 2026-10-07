@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>दिए गए वाक्यों को भूतकाल में बदलिए–</title>
+<style>
+*{box-sizing:border-box} body{margin:0;background:#d9f8ff;font-family:"Noto Sans Devanagari","Mangal",Arial,sans-serif;color:#17212b}
+.wrap{width:calc(100% - 28px);min-height:calc(100vh - 20px);margin:10px auto;background:#fff;border:5px solid #08a7cf;border-radius:24px;padding:22px 26px;display:flex;flex-direction:column}
+h1{margin:0 0 20px;color:#ff0060;font-size:clamp(25px,3vw,38px);font-weight:700}
+.bank{background:#e0f8ff;border-radius:15px;padding:14px;display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.word{border:2px solid #00a9ee;background:#fff;border-radius:10px;padding:8px 18px;font-size:clamp(18px,2vw,24px);cursor:grab;user-select:none}
+.row{border:2px solid #00c7e9;background:#f2fcff;border-radius:15px;padding:18px;margin:0 0 13px;font-size:clamp(19px,2.2vw,27px);line-height:1.65}
+.drop{display:inline-flex;vertical-align:middle;min-width:220px;min-height:43px;margin:0 7px;border:2px dashed #ff452d;border-radius:8px;background:#fff;align-items:center;justify-content:center;padding:3px 10px}
+.drop.correct{border-color:#19a85b;background:#eaffef} .drop.wrong{border-color:#e53935;background:#fff0f0}
+.actions{margin-top:auto;text-align:center;padding-top:18px} button{font-size:18px;padding:8px 18px;margin:4px;border:2px solid #ff0060;background:#fff;border-radius:10px;cursor:pointer}
+.score{text-align:center;color:#0072bc;font-size:20px;font-weight:700;margin-top:7px}
+@media(max-width:650px){.wrap{padding:16px}.drop{min-width:150px}}
+</style>
+</head>
+<body><main class="wrap">
+<h1>दिए गए वाक्यों को भूतकाल में बदलिए–</h1><div id="bank" class="bank"></div><div id="rows"></div>
+<div class="actions"><button onclick="submitEx()">Submit</button><button onclick="resetEx()">Reset</button><div id="score" class="score">Score: 0 / 2</div></div>
+</main>
+<script>
+const KEY="kopal-hindi2-ch11-drag-drop-1", DATA=[["(क) राजा बलि यज्ञ आरंभ करते हैं।", "राजा बलि ने यज्ञ आरंभ किया।"], ["(ख) भगवान वामन अवतार धारण करते हैं।", "भगवान वामन ने अवतार धारण किया।"]], WORDS=["राजा बलि ने यज्ञ आरंभ किया।", "भगवान वामन ने अवतार धारण किया।"];
+let state={answers:Array(DATA.length).fill(""),score:0}, chosen="";
+try{const x=JSON.parse(localStorage.getItem(KEY)||"null");if(x&&Array.isArray(x.answers))state=x}catch(e){}
+function save(){localStorage.setItem(KEY,JSON.stringify(state))}
+function draw(){
+ document.getElementById("bank").innerHTML=WORDS.map((w,i)=>`<div class="word" draggable="true" data-word="${w}" ondragstart="event.dataTransfer.setData('text/plain',this.dataset.word)" onclick="chosen=this.dataset.word">${w}</div>`).join("");
+ document.getElementById("rows").innerHTML=DATA.map((x,i)=>`<div class="row">${x[0]} <span class="drop" id="d${i}" ondragover="event.preventDefault()" ondrop="put(event,${i})" onclick="place(${i})">${state.answers[i]||""}</span></div>`).join("");
+ document.getElementById("score").textContent=`Score: ${state.score||0} / ${DATA.length}`;
+}
+function put(e,i){e.preventDefault();const w=e.dataTransfer.getData("text/plain");if(w){state.answers[i]=w;save();draw()}}
+function place(i){if(chosen){state.answers[i]=chosen;chosen="";save();draw()}}
+function submitEx(){
+ let n=0;DATA.forEach((x,i)=>{const d=document.getElementById("d"+i);const ok=state.answers[i]===x[1];d.classList.add(ok?"correct":"wrong");if(ok)n++});
+ state.score=n;save();document.getElementById("score").textContent=`Score: ${n} / ${DATA.length}`;
+ const response={};state.answers.forEach((a,i)=>response["question"+(i+1)]=a);
+ parent.postMessage({type:"VIDYALAYA_EXERCISE_SUBMIT",payload:{exerciseType:"DRAG_DROP",response}},"*");
+}
+function resetEx(){state={answers:Array(DATA.length).fill(""),score:0};chosen="";save();draw()}
+draw();
+</script></body></html>

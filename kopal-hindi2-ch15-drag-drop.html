@@ -1,0 +1,25 @@
+<!doctype html><html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;font-family:"Noto Sans Devanagari","Mangal",Arial,sans-serif;color:#20242a;background:#d8f8ff}
+body{padding:12px}
+.app{width:min(1080px,calc(100vw - 24px));margin:0 auto;background:#fff;border:4px solid #08a7cf;border-radius:22px;padding:18px 24px}
+h1{color:#ff0060;font-size:clamp(23px,2.5vw,34px);margin:0 0 18px;font-weight:700}
+.card{background:#f2fbfe;border:2px solid #00c9e8;border-radius:14px;padding:12px 16px;margin-bottom:10px;font-size:clamp(17px,1.8vw,23px)}
+.actions{text-align:center;padding-top:14px}
+button{border:2px solid #ff0060;background:#fff;border-radius:10px;padding:7px 16px;font-size:16px;cursor:pointer}
+.score{color:#0073bd;font-weight:700;font-size:19px;margin-top:7px}
+
+.bank{background:#e2f8ff;border-radius:13px;padding:11px;display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-bottom:16px}
+.word{border:2px solid #00a8e8;border-radius:9px;background:#fff;padding:6px 12px;font-size:19px;cursor:grab}
+.drop{display:inline-flex;min-width:130px;min-height:32px;border:2px dashed #ff452d;border-radius:7px;background:#fff;vertical-align:middle;align-items:center;justify-content:center;padding:2px 7px;margin:0 4px}
+</style></head><body><main class="app"><h1>रिक्त स्थान भरिए–</h1><div id="bank" class="bank"></div><div id="rows"></div>
+<div class="actions"><button onclick="sub()">Submit</button> <button onclick="rst()">Reset</button><div id="score" class="score">Score: 0 / 5</div></div></main>
+<script>
+const D=[["हिरन और कौआ ____ में रहते थे।", "जंगल"], ["हिरन और कौए में गहरी ____ थी।", "मित्रता"], ["कौए ने दूर से ____ को आते देखा।", "शिकारी"], ["हिरन कौए का ____ समझकर झाड़ी के पीछे छिप गया।", "इशारा"], ["सच्चा मित्र मुसीबत में अपने मित्र की ____ करता है।", "सहायता"]],W=["शिकारियों", "जंगल", "सहायता", "इशारा", "मित्रता", "शिकारी"],K="kopal-hindi2-ch14-drag-drop";
+let a=JSON.parse(localStorage.getItem(K)||'["","","","",""]'),chosen="";
+function save(){localStorage.setItem(K,JSON.stringify(a))}
+function blank(i){return `<span class="drop" ondragover="event.preventDefault()" ondrop="event.preventDefault();a[${i}]=event.dataTransfer.getData('text/plain');save();draw()" onclick="if(chosen){a[${i}]=chosen;chosen='';save();draw()}">${a[i]||""}</span>`}
+function draw(){bank.innerHTML=W.map(w=>`<span class="word" draggable="true" data-w="${w}" ondragstart="event.dataTransfer.setData('text/plain',this.dataset.w)" onclick="chosen=this.dataset.w">${w}</span>`).join("");rows.innerHTML=D.map((x,i)=>`<div class="card"><b>${["(क)","(ख)","(ग)","(घ)","(ङ)"][i]}</b> ${x[0].replace("____",blank(i))}</div>`).join("")}
+function sub(){let n=D.filter((x,i)=>a[i]===x[1]).length;score.textContent=`Score: ${n} / 5`;let r={};a.forEach((v,i)=>r["question"+(i+1)]=v);parent.postMessage({type:"VIDYALAYA_EXERCISE_SUBMIT",payload:{exerciseType:"DRAG_DROP",response:r}},"*")}
+function rst(){a=Array(5).fill("");chosen="";save();score.textContent="Score: 0 / 5";draw()}draw()
+</script></body></html>

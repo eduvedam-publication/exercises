@@ -1,0 +1,19 @@
+<!doctype html><html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;font-family:"Noto Sans Devanagari","Mangal",Arial,sans-serif;color:#20242a;background:#d8f8ff}
+body{padding:12px}
+.app{width:min(1080px,calc(100vw - 24px));margin:0 auto;background:#fff;border:4px solid #08a7cf;border-radius:22px;padding:18px 24px}
+h1{color:#ff0060;font-size:clamp(23px,2.5vw,34px);margin:0 0 18px;font-weight:700}
+.card{background:#f2fbfe;border:2px solid #00c9e8;border-radius:14px;padding:12px 16px;margin-bottom:10px;font-size:clamp(17px,1.8vw,23px)}
+.actions{text-align:center;padding-top:14px}
+button{border:2px solid #ff0060;background:#fff;border-radius:10px;padding:7px 16px;font-size:16px;cursor:pointer}
+.score{color:#0073bd;font-weight:700;font-size:19px;margin-top:7px}
+
+.opts{display:flex;gap:10px 14px;flex-wrap:wrap;margin-top:7px}.opt{border:2px solid #ff0060;border-radius:9px;padding:6px 11px;background:#fff;cursor:pointer}.opt.sel{background:#e7f7ff}
+</style></head><body><main class="app"><h1>सही विकल्प पर सही (✓) का निशान लगाएँ–</h1><div id="q"></div><div class="actions"><button onclick="sub()">Submit</button> <button onclick="rst()">Reset</button><div id="score" class="score">Score: 0 / 5</div></div></main>
+<script>
+const D=[["हिरन और कौआ क्या करते थे?", ["एक दूसरे का ख्याल रखते थे", "लड़ते थे", "एक दूसरे को भगाते थे"], "एक दूसरे का ख्याल रखते थे"], ["कौआ कहाँ बैठा था?", ["नदी के पास", "घर के ऊपर", "ऊँची डाल पर"], "ऊँची डाल पर"], ["‘निराशा’ का उल्टा शब्द है?", ["निशा", "आशा", "अभिलाषा"], "आशा"], ["‘हिरन’ शब्द का बहुवचन क्या है?", ["हिरनों", "हिरनें", "हिरनियाँ"], "हिरनों"], ["‘सच्चा मित्र’ में ‘सच्चा’ कौन-सा शब्द है?", ["संज्ञा", "विशेषण", "क्रिया"], "विशेषण"]],K="kopal-hindi2-ch14-mcq";let a=JSON.parse(localStorage.getItem(K)||'["","","","",""]');
+function save(){localStorage.setItem(K,JSON.stringify(a))}function draw(){q.innerHTML=D.map((x,i)=>`<div class="card"><b>${["(क)","(ख)","(ग)","(घ)","(ङ)"][i]}</b> ${x[0]}<div class="opts">${x[1].map((o,j)=>`<span class="opt ${a[i]===o?'sel':''}" onclick="a[${i}]='${o}';save();draw()">${["(i)","(ii)","(iii)"][j]} ${o}</span>`).join("")}</div></div>`).join("")}
+function sub(){let n=D.filter((x,i)=>a[i]===x[2]).length;score.textContent=`Score: ${n} / 5`;let r={};a.forEach((v,i)=>r["question"+(i+1)]=v);parent.postMessage({type:"VIDYALAYA_EXERCISE_SUBMIT",payload:{exerciseType:"OPTION",response:r}},"*")}
+function rst(){a=Array(5).fill("");save();score.textContent="Score: 0 / 5";draw()}draw()
+</script></body></html>
