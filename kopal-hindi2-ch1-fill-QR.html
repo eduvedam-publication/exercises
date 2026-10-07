@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>समानार्थी या पर्यायवाची शब्द अभ्यास</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rozha+One&family=Yantramanav:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Yantramanav', sans-serif;
+    }
+    .sheet-text-accent {
+      color: #aa276a;
+    }
+    .worksheet-input {
+      border-bottom: 2px solid #cbd5e1;
+      background: transparent;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+    .worksheet-input:focus {
+      border-bottom-color: #aa276a;
+      background-color: #fdf2f8;
+    }
+    .worksheet-input.correct {
+      border-bottom-color: #10b981;
+      background-color: #ecfdf5;
+      color: #065f46;
+    }
+    .worksheet-input.incorrect {
+      border-bottom-color: #ef4444;
+      background-color: #fef2f2;
+      color: #991b1b;
+    }
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+      body {
+        background: white !important;
+        padding: 0 !important;
+      }
+      .sheet-container {
+        box-shadow: none !important;
+        border: none !important;
+        padding: 20px 0 !important;
+        max-width: 100% !important;
+      }
+      .worksheet-input {
+        border-bottom: 1.5px solid #64748b !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-100 min-h-screen text-slate-800 flex flex-col justify-between p-4 sm:p-8">
+
+  <!-- Action Bar (Top Controls) -->
+  <div class="max-w-3xl mx-auto w-full mb-4 no-print flex flex-wrap items-center justify-between gap-3 bg-white px-5 py-3 rounded-2xl shadow-sm border border-slate-200">
+    <div class="flex items-center gap-2">
+      <span class="inline-block w-3 h-3 rounded-full bg-pink-600"></span>
+      <span class="font-bold text-slate-700 text-sm sm:text-base">कार्यपत्रक अभ्यास (Worksheet)</span>
+    </div>
+    <div class="flex flex-wrap items-center gap-2">
+      <button onclick="checkAnswers()" class="px-4 py-2 bg-pink-700 hover:bg-pink-800 active:scale-95 text-white text-sm font-semibold rounded-xl shadow-sm transition">
+        उत्तर जाँचें (Check)
+      </button>
+      <button onclick="toggleAnswers()" id="toggle-ans-btn" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-xl transition">
+        उत्तर देखें (Show)
+      </button>
+      <button onclick="resetExercise()" class="px-3 py-2 bg-slate-100 hover:bg-rose-50 hover:text-rose-600 text-slate-600 text-sm font-semibold rounded-xl transition">
+        रीसेट
+      </button>
+      <button onclick="window.print()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-xl transition flex items-center gap-1.5">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+        प्रिंट
+      </button>
+    </div>
+  </div>
+
+  <!-- Worksheet Paper Card -->
+  <main class="max-w-3xl mx-auto w-full sheet-container bg-white rounded-3xl shadow-lg border border-slate-200/80 p-6 sm:p-12 transition-all">
+    
+    <!-- Exact Text from Image (Intro & Rules) -->
+    <div class="sheet-text-accent text-lg sm:text-2xl font-semibold leading-relaxed tracking-wide space-y-2 select-text">
+      <p>
+        बच्चो! समान अर्थ बताने वाले शब्दों को ‘समानार्थी’ या ‘पर्यायवाची’ शब्द कहते हैं।
+      </p>
+      <p>
+        जैसे- माता को ‘माँ’, ‘जननी’ और ‘अंबा’ भी कहते हैं।
+      </p>
+      <p>
+        नीचे दिए गए शब्दों के दो-दो पर्यायवाची शब्द लिखिए-
+      </p>
+    </div>
+
+    <!-- Exact Exercise Rows -->
+    <div class="mt-8 sm:mt-10 space-y-7 text-slate-900 text-xl sm:text-2xl font-medium">
+      
+      <!-- Question (क) -->
+      <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+        <div class="flex items-center min-w-[140px]">
+          <span class="w-12 text-slate-700 font-semibold">(क)</span>
+          <span class="font-bold">जग</span>
+          <span class="mx-4 text-slate-500 font-light">–</span>
+        </div>
+        <div class="grid grid-cols-2 gap-4 flex-1">
+          <div class="relative">
+            <input type="text" id="ans-ka-1" class="worksheet-input w-full py-1.5 px-3 text-lg sm:text-xl font-medium" placeholder="पहला शब्द" autocomplete="off">
+            <span class="answer-hint hidden text-xs text-emerald-700 font-bold block mt-1">संसार</span>
+          </div>
+          <div class="relative">
+            <input type="text" id="ans-ka-2" class="worksheet-input w-full py-1.5 px-3 text-lg sm:text-xl font-medium" placeholder="दूसरा शब्द" autocomplete="off">
+            <span class="answer-hint hidden text-xs text-emerald-700 font-bold block mt-1">विश्व</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question (ख) -->
+      <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+        <div class="flex items-center min-w-[140px]">
+          <span class="w-12 text-slate-700 font-semibold">(ख)</span>
+          <span class="font-bold">भगवान</span>
+          <span class="mx-4 text-slate-500 font-light">–</span>
+        </div>
+        <div class="grid grid-cols-2 gap-4 flex-1">
+          <div class="relative">
+            <input type="text" id="ans-kha-1" class="worksheet-input w-full py-1.5 px-3 text-lg sm:text-xl font-medium" placeholder="पहला शब्द" autocomplete="off">
+            <span class="answer-hint hidden text-xs text-emerald-700 font-bold block mt-1">ईश्वर</span>
+          </div>
+          <div class="relative">
+            <input type="text" id="ans-kha-2" class="worksheet-input w-full py-1.5 px-3 text-lg sm:text-xl font-medium" placeholder="दूसरा शब्द" autocomplete="off">
+            <span class="answer-hint hidden text-xs text-emerald-700 font-bold block mt-1">परमात्मा</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question (ग) -->
+      <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+        <div class="flex items-center min-w-[140px]">
+          <span class="w-12 text-slate-700 font-semibold">(ग)</span>
+          <span class="font-bold">राह</span>
+          <span class="mx-4 text-slate-500 font-light">–</span>
+        </div>
+        <div class="grid grid-cols-2 gap-4 flex-1">
+          <div class="relative">
+            <input type="text" id="ans-ga-1" class="worksheet-input w-full py-1.5 px-3 text-lg sm:text-xl font-medium" placeholder="पहला शब्द" autocomplete="off">
+            <span class="answer-hint hidden text-xs text-emerald-700 font-bold block mt-1">पथ</span>
+          </div>
+          <div class="relative">
+            <input type="text" id="ans-ga-2" class="worksheet-input w-full py-1.5 px-3 text-lg sm:text-xl font-medium" placeholder="दूसरा शब्द" autocomplete="off">
+            <span class="answer-hint hidden text-xs text-emerald-700 font-bold block mt-1">मार्ग</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Result / Feedback Banner -->
+    <div id="result-message-box" class="hidden mt-8 p-4 rounded-2xl text-center text-sm font-semibold transition-all"></div>
+  </main>
+
+  <!-- Footer Info -->
+  <footer class="max-w-3xl mx-auto w-full text-center text-xs text-slate-400 py-4 no-print">
+    अभ्यास कार्य • प्राथमिक हिन्दी व्याकरण
+  </footer>
+
+  <script>
+    // Valid accepted synonyms for each question
+    const answersData = {
+      ka: ["संसार", "विश्व", "दुनिया", "जगत", "लोक"],
+      kha: ["ईश्वर", "परमात्मा", "प्रभु", "ईश", "भगवान", "दीनानाथ"],
+      ga: ["पथ", "मार्ग", "रास्ता", "डगर", "सड़क"]
+    };
+
+    function normalizeText(text) {
+      return text.trim().replace(/\s+/g, '');
+    }
+
+    function checkAnswers() {
+      let totalFields = 6;
+      let correctCount = 0;
+
+      function evaluatePair(input1Id, input2Id, validList) {
+        const el1 = document.getElementById(input1Id);
+        const el2 = document.getElementById(input2Id);
+        const val1 = normalizeText(el1.value);
+        const val2 = normalizeText(el2.value);
+
+        // Reset classes
+        el1.classList.remove("correct", "incorrect");
+        el2.classList.remove("correct", "incorrect");
+
+        const is1Valid = validList.includes(val1);
+        const is2Valid = validList.includes(val2);
+
+        // Ensure user didn't enter the identical word in both blanks
+        if (is1Valid && is2Valid && val1 === val2) {
+          el1.classList.add("correct");
+          el2.classList.add("incorrect");
+          correctCount += 1;
+          return;
+        }
+
+        if (is1Valid) {
+          el1.classList.add("correct");
+          correctCount++;
+        } else if (val1.length > 0) {
+          el1.classList.add("incorrect");
+        }
+
+        if (is2Valid) {
+          el2.classList.add("correct");
+          correctCount++;
+        } else if (val2.length > 0) {
+          el2.classList.add("incorrect");
+        }
+      }
+
+      evaluatePair("ans-ka-1", "ans-ka-2", answersData.ka);
+      evaluatePair("ans-kha-1", "ans-kha-2", answersData.kha);
+      evaluatePair("ans-ga-1", "ans-ga-2", answersData.ga);
+
+      const msgBox = document.getElementById("result-message-box");
+      msgBox.classList.remove("hidden");
+
+      if (correctCount === totalFields) {
+        msgBox.className = "mt-8 p-4 rounded-2xl text-center text-sm font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300";
+        msgBox.innerHTML = "🎉 बहुत बढ़िया! आपके सभी उत्तर बिल्कुल सही हैं।";
+      } else {
+        msgBox.className = "mt-8 p-4 rounded-2xl text-center text-sm font-semibold bg-amber-50 text-amber-900 border border-amber-200";
+        msgBox.innerHTML = `आपने 6 में से <strong>${correctCount}</strong> सही शब्द लिखे हैं। 'उत्तर देखें' बटन दबाकर सही उत्तर देख सकते हैं।`;
+      }
+    }
+
+    let answersShown = false;
+    function toggleAnswers() {
+      answersShown = !answersShown;
+      const hints = document.querySelectorAll(".answer-hint");
+      const toggleBtn = document.getElementById("toggle-ans-btn");
+
+      hints.forEach(hint => {
+        if (answersShown) {
+          hint.classList.remove("hidden");
+        } else {
+          hint.classList.add("hidden");
+        }
+      });
+
+      toggleBtn.textContent = answersShown ? "उत्तर छिपाएँ (Hide)" : "उत्तर देखें (Show)";
+      toggleBtn.classList.toggle("bg-pink-100", answersShown);
+      toggleBtn.classList.toggle("text-pink-800", answersShown);
+    }
+
+    function resetExercise() {
+      const inputs = document.querySelectorAll(".worksheet-input");
+      inputs.forEach(input => {
+        input.value = "";
+        input.classList.remove("correct", "incorrect");
+      });
+
+      const hints = document.querySelectorAll(".answer-hint");
+      hints.forEach(hint => hint.classList.add("hidden"));
+      answersShown = false;
+      document.getElementById("toggle-ans-btn").textContent = "उत्तर देखें (Show)";
+      document.getElementById("toggle-ans-btn").classList.remove("bg-pink-100", "text-pink-800");
+
+      const msgBox = document.getElementById("result-message-box");
+      msgBox.classList.add("hidden");
+      msgBox.innerHTML = "";
+    }
+  </script>
+</body>
+</html>
