@@ -1,0 +1,53 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>b7-ch1-fill</title><style>
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Arial,Helvetica,sans-serif;background:#eefcff;color:#24323a}
+body{padding:18px}
+.exercise{width:min(1100px,100%);margin:0 auto;background:#fff;border:2px solid #27bddd;border-radius:18px;box-shadow:0 8px 24px rgba(0,0,0,.08);padding:24px 28px;min-height:calc(100vh - 36px);display:flex;flex-direction:column}
+.title{margin:0 0 20px;text-align:center;color:#08aeca;font-size:clamp(22px,3vw,32px);font-weight:800}
+.content{flex:1}
+.question{margin:14px 0;padding:14px 16px;border-radius:13px;background:#fff6f8;font-size:clamp(16px,2vw,20px);line-height:1.55}
+.options{display:flex;flex-wrap:wrap;gap:10px 14px;margin-top:10px}
+.option{border:2px solid #28b9dc;background:#fff;border-radius:10px;padding:9px 13px;cursor:pointer;font-size:16px;transition:.15s}
+.option.selected{background:#dff8ff;box-shadow:0 0 0 2px rgba(40,185,220,.12)}
+.option.correct,.answer.correct{background:#dff7e4!important;border-color:#39a95b!important}
+.option.wrong,.answer.wrong{background:#ffe2e2!important;border-color:#e84b4b!important}
+.answer{border:2px solid #ef5350;border-radius:6px;background:#fff;padding:7px 9px;font-size:17px;min-width:130px;max-width:190px;margin:3px}
+.bottom{margin-top:24px;text-align:center}
+.buttons{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.btn{border:0;border-radius:24px;background:#f7941d;color:#fff;font-size:17px;font-weight:800;padding:11px 25px;cursor:pointer;min-width:145px}
+.score{margin-top:10px;color:#087fc2;font-weight:800;font-size:19px}
+.tf{display:flex;gap:9px;flex-shrink:0}
+.tfbtn{width:48px;height:42px;border:2px solid #27bddd;border-radius:7px;background:#fff;font-size:23px;cursor:pointer}
+.tfbtn.selected{background:#dff8ff}
+.tfbtn.correct{background:#dff7e4;border-color:#39a95b}.tfbtn.wrong{background:#ffe2e2;border-color:#e84b4b}
+.tfrow{display:flex;align-items:center;justify-content:space-between;gap:16px}
+@media(max-width:650px){
+ body{padding:8px}.exercise{padding:17px 13px;min-height:calc(100vh - 16px)}
+ .question{padding:12px}.options{flex-direction:column}.option{width:100%;text-align:left}
+ .answer{min-width:105px;max-width:145px}.tfrow{align-items:flex-start}.btn{min-width:125px}
+}
+</style></head><body>
+<div class="exercise"><h1 class="title">Fill in the blanks.</h1><div class="content" id="content"></div>
+<div class="bottom"><div class="buttons"><button class="btn" onclick="checkAnswers()">Check Answers</button><button class="btn" onclick="resetExercise()">Reset</button></div><div class="score" id="score">Score: 0 / 13</div></div></div>
+<script>
+function loadState(key){try{return JSON.parse(localStorage.getItem(key)||'{}')}catch(e){return {}}}
+function storeState(key,state){localStorage.setItem(key,JSON.stringify(state))}
+function submitExercise(exerciseType,response){
+  const payload={exerciseType:exerciseType,response:response};
+  try{window.parent.postMessage({type:'VIDYALAYA_EXERCISE_SUBMIT',payload:payload},'*')}catch(e){}
+  try{window.ReactNativeWebView&&window.ReactNativeWebView.postMessage(JSON.stringify({type:'VIDYALAYA_EXERCISE_SUBMIT',payload:payload}))}catch(e){}
+}
+
+const KEY='b7-ch1-fill', answers=['mysterious','man','within','epitome','creation','temporal','existence','God','giver','peace','protection','welfare','sharing'];
+const rows=[
+['There is a ',0,' universe around ',1,' and also ',2,' him.'],
+['Man is the ',3," of God's ",4,'.'],
+['Man in his ',5,' ',6,' does not exist apart from ',7,'.'],
+['God is the ',8,' of ',9,'.'],
+['Peace depends on the ',10,' of the ',11,' of individual persons through ',12,' with each other.']];
+let state=loadState(KEY);state.values=state.values||{};state.score=state.score||0;
+function render(){content.innerHTML=rows.map((r,i)=>`<div class="question"><b>${i+1}.</b> `+r.map(x=>typeof x==='number'?`<input class="answer" id="a${x}" value="${(state.values[x]||'').replace(/"/g,'&quot;')}" oninput="update(${x},this.value)">`:x).join('')+'</div>').join('');score.textContent=`Score: ${state.score} / 13`}
+function update(i,v){state.values[i]=v;storeState(KEY,state)}
+function checkAnswers(){let n=0;answers.forEach((a,i)=>{const e=document.getElementById('a'+i),ok=e.value.trim().toLowerCase()===a.toLowerCase();e.classList.toggle('correct',ok);e.classList.toggle('wrong',!ok&&e.value.trim()!=='');if(ok)n++});state.score=n;storeState(KEY,state);score.textContent=`Score: ${n} / 13`;submitExercise('FILL_BLANK',{answers:state.values,score:n,total:13,completed:answers.every((_,i)=>(state.values[i]||'').trim())})}
+function resetExercise(){state={values:{},score:0};storeState(KEY,state);render()}render();
+</script></body></html>
