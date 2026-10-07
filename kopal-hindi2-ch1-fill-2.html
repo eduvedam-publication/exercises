@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>‘कर’ लगाकर शब्द बनाइए - अभ्यास</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Yantramanav:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Yantramanav', sans-serif;
+    }
+    .sheet-title {
+      color: #aa276a;
+    }
+    .worksheet-input {
+      border-bottom: 2px solid #94a3b8;
+      background: transparent;
+      outline: none;
+      transition: all 0.2s ease;
+      text-align: left;
+    }
+    .worksheet-input:focus {
+      border-bottom-color: #aa276a;
+      background-color: #fdf2f8;
+    }
+    .worksheet-input.correct {
+      border-bottom-color: #10b981;
+      background-color: #ecfdf5;
+      color: #065f46;
+      font-weight: 600;
+    }
+    .worksheet-input.incorrect {
+      border-bottom-color: #ef4444;
+      background-color: #fef2f2;
+      color: #991b1b;
+    }
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+      body {
+        background: white !important;
+        padding: 0 !important;
+      }
+      .sheet-container {
+        box-shadow: none !important;
+        border: none !important;
+        padding: 24px 0 !important;
+        max-width: 100% !important;
+      }
+      .worksheet-input {
+        border-bottom: 1.5px solid #475569 !important;
+        background: transparent !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-100 min-h-screen text-slate-800 flex flex-col justify-between p-4 sm:p-8">
+
+  <!-- Action Bar (Top Controls) -->
+  <div class="max-w-3xl mx-auto w-full mb-6 no-print flex flex-wrap items-center justify-between gap-3 bg-white px-5 py-3.5 rounded-2xl shadow-sm border border-slate-200">
+    <div class="flex items-center gap-2">
+      <span class="inline-block w-3 h-3 rounded-full bg-pink-600"></span>
+      <span class="font-bold text-slate-700 text-sm sm:text-base">कार्यपत्रक अभ्यास (Worksheet)</span>
+    </div>
+    <div class="flex flex-wrap items-center gap-2">
+      <button onclick="checkAnswers()" class="px-4 py-2 bg-pink-700 hover:bg-pink-800 active:scale-95 text-white text-sm font-semibold rounded-xl shadow-sm transition">
+        उत्तर जाँचें (Check)
+      </button>
+      <button onclick="toggleAnswers()" id="toggle-ans-btn" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-xl transition">
+        उत्तर देखें (Show)
+      </button>
+      <button onclick="resetExercise()" class="px-3 py-2 bg-slate-100 hover:bg-rose-50 hover:text-rose-600 text-slate-600 text-sm font-semibold rounded-xl transition">
+        रीसेट
+      </button>
+      <button onclick="window.print()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-xl transition flex items-center gap-1.5">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+        प्रिंट
+      </button>
+    </div>
+  </div>
+
+  <!-- Worksheet Paper Card -->
+  <main class="max-w-3xl mx-auto w-full sheet-container bg-white rounded-3xl shadow-lg border border-slate-200/80 p-6 sm:p-14 transition-all">
+    
+    <!-- Exact Title / Prompt from Image -->
+    <div class="sheet-title text-2xl sm:text-3xl font-semibold tracking-wide mb-10 select-text">
+      ‘कर’ लगाकर शब्द बनाइए -
+    </div>
+
+    <!-- Exact Exercise Rows -->
+    <div class="space-y-8 text-slate-900 text-xl sm:text-2xl font-medium">
+      
+      <!-- Row (क) - Solved Example from Image -->
+      <div class="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-2">
+        <div class="flex items-center min-w-[200px]">
+          <span class="w-12 text-slate-700 font-semibold">(क)</span>
+          <span class="w-16 font-semibold">लिख</span>
+          <span class="mx-3 text-slate-500 font-normal">+</span>
+          <span class="font-semibold">कर</span>
+        </div>
+        <div class="hidden sm:inline text-slate-500 font-light mx-4">=</div>
+        <div class="flex items-center flex-1">
+          <span class="sm:hidden font-medium mr-2">=</span>
+          <span class="text-xl sm:text-2xl font-semibold text-slate-800 px-3 py-1 bg-slate-50 border-b-2 border-slate-300 w-full sm:max-w-xs">
+            लिखकर
+          </span>
+        </div>
+      </div>
+
+      <!-- Row (ख) -->
+      <div class="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-2">
+        <div class="flex items-center min-w-[200px]">
+          <span class="w-12 text-slate-700 font-semibold">(ख)</span>
+          <span class="w-16 font-semibold">सुन</span>
+          <span class="mx-3 text-slate-500 font-normal">+</span>
+          <div class="relative w-28 sm:w-24">
+            <input type="text" id="ans-kha-plus" class="worksheet-input w-full py-1 px-2 text-xl font-medium" placeholder="" autocomplete="off">
+            <span class="answer-hint hidden text-xs text-emerald-700 font-bold block mt-1">कर</span>
+          </div>
+        </div>
+        <div class="hidden sm:inline text-slate-500 font-light mx-4">=</div>
+        <div class="flex items-center flex-1">
+          <span class="sm:hidden font-medium mr-2">=</span>
+          <div class="relative w-full sm:max-w-xs">
+            <input type="text" id="ans-kha-res" class="worksheet-input w-full py-1 px-3 text-xl font-medium" placeholder="" autocomplete="off">
+            <span class="answer-hint hidden text-xs text-emerald-700 font-bold block mt-1">सुनकर</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row (ग) -->
+      <div class="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-2">
+        <div class="flex items-center min-w-[200px]">
+          <span class="w-12 text-slate-700 font-semibold">(ग)</span>
+          <span class="w-16 font-semibold">डर</span>
+          <span class="mx-3 text-slate-500 font-normal">+</span>
+          <div class="relative w-28 sm:w-24">
+            <input type="text" id="ans-ga-plus" class="worksheet-input w-full py-1 px-2 text-xl font-medium" placeholder="" autocomplete="off">
+            <span class="answer-hint hidden text-xs text-emerald-700 font-bold block mt-1">कर</span>
+          </div>
+        </div>
+        <div class="hidden sm:inline text-slate-500 font-light mx-4">=</div>
+        <div class="flex items-center flex-1">
+          <span class="sm:hidden font-medium mr-2">=</span>
+          <div class="relative w-full sm:max-w-xs">
+            <input type="text" id="ans-ga-res" class="worksheet-input w-full py-1 px-3 text-xl font-medium" placeholder="" autocomplete="off">
+            <span class="answer-hint hidden text-xs text-emerald-700 font-bold block mt-1">डरकर</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Feedback Message Banner -->
+    <div id="result-message-box" class="hidden mt-10 p-4 rounded-2xl text-center text-sm sm:text-base font-semibold transition-all"></div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="max-w-3xl mx-auto w-full text-center text-xs text-slate-400 py-4 no-print">
+    अभ्यास कार्य • प्राथमिक हिन्दी व्याकरण
+  </footer>
+
+  <script>
+    function normalize(text) {
+      return text.trim().replace(/\s+/g, '');
+    }
+
+    const correctData = {
+      "ans-kha-plus": "कर",
+      "ans-kha-res": "सुनकर",
+      "ans-ga-plus": "कर",
+      "ans-ga-res": "डरकर"
+    };
+
+    function checkAnswers() {
+      let correctCount = 0;
+      const keys = Object.keys(correctData);
+
+      keys.forEach(id => {
+        const input = document.getElementById(id);
+        const userVal = normalize(input.value);
+        input.classList.remove("correct", "incorrect");
+
+        if (userVal === correctData[id]) {
+          input.classList.add("correct");
+          correctCount++;
+        } else if (userVal.length > 0) {
+          input.classList.add("incorrect");
+        }
+      });
+
+      const msgBox = document.getElementById("result-message-box");
+      msgBox.classList.remove("hidden");
+
+      if (correctCount === keys.length) {
+        msgBox.className = "mt-10 p-4 rounded-2xl text-center text-sm sm:text-base font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300";
+        msgBox.innerHTML = "🎉 बहुत बढ़िया! आपके सभी उत्तर बिल्कुल सही हैं।";
+      } else {
+        msgBox.className = "mt-10 p-4 rounded-2xl text-center text-sm sm:text-base font-semibold bg-amber-50 text-amber-900 border border-amber-200";
+        msgBox.innerHTML = `आपने ${keys.length} में से <strong>${correctCount}</strong> रिक्त स्थान सही भरे हैं। 'उत्तर देखें' बटन से सही उत्तर देख सकते हैं।`;
+      }
+    }
+
+    let answersVisible = false;
+    function toggleAnswers() {
+      answersVisible = !answersVisible;
+      const hints = document.querySelectorAll(".answer-hint");
+      const toggleBtn = document.getElementById("toggle-ans-btn");
+
+      hints.forEach(hint => {
+        if (answersVisible) {
+          hint.classList.remove("hidden");
+        } else {
+          hint.classList.add("hidden");
+        }
+      });
+
+      toggleBtn.textContent = answersVisible ? "उत्तर छिपाएँ (Hide)" : "उत्तर देखें (Show)";
+      toggleBtn.classList.toggle("bg-pink-100", answersVisible);
+      toggleBtn.classList.toggle("text-pink-800", answersVisible);
+    }
+
+    function resetExercise() {
+      const inputs = document.querySelectorAll(".worksheet-input");
+      inputs.forEach(input => {
+        input.value = "";
+        input.classList.remove("correct", "incorrect");
+      });
+
+      const hints = document.querySelectorAll(".answer-hint");
+      hints.forEach(hint => hint.classList.add("hidden"));
+      answersVisible = false;
+      document.getElementById("toggle-ans-btn").textContent = "उत्तर देखें (Show)";
+      document.getElementById("toggle-ans-btn").classList.remove("bg-pink-100", "text-pink-800");
+
+      const msgBox = document.getElementById("result-message-box");
+      msgBox.classList.add("hidden");
+      msgBox.innerHTML = "";
+    }
+  </script>
+</body>
+</html>
