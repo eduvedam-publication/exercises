@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>मिलान कीजिए- (विलोम शब्द अभ्यास)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans Devanagari', 'Mukta', sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .connection-line {
+            transition: stroke-dashoffset 0.3s ease, stroke 0.25s ease;
+            cursor: pointer;
+        }
+        .connection-line:hover {
+            stroke-width: 5.5px;
+        }
+        .dot-indicator {
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease, border-color 0.2s ease;
+        }
+        .dot-indicator:hover {
+            transform: scale(1.4);
+        }
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            .print-border {
+                border: none !important;
+                box-shadow: none !important;
+            }
+            body {
+                background: white !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex flex-col items-center justify-center p-3 sm:p-6 text-slate-800">
+    <main class="w-full max-w-2xl bg-white rounded-2xl shadow-xl border border-slate-200/80 p-5 sm:p-8 relative print-border overflow-hidden">
+        
+        <!-- Header Banner -->
+        <header class="mb-6 sm:mb-8 border-b border-slate-100 pb-4">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+                <h1 class="text-2xl sm:text-3xl font-bold text-[#1a90d9] tracking-wide flex items-center gap-2">
+                    मिलान कीजिए-
+                </h1>
+                <div class="no-print flex items-center gap-2">
+                    <span id="score-badge" class="px-3 py-1 bg-sky-50 text-sky-700 font-semibold rounded-full text-xs sm:text-sm border border-sky-200">
+                        जोड़े: <span id="matched-count">0</span>/5
+                    </span>
+                    <button id="toggle-sound-btn" title="ध्वनि चालू/बंद करें" class="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 text-sm transition">
+                        🔊
+                    </button>
+                </div>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-500 mt-1 no-print">
+                बाईं ओर के किसी शब्द पर क्लिक करें और दाईं ओर के सही शब्द से मिलान करें (खींचें या क्लिक करें)।
+            </p>
+        </header>
+
+        <!-- Matching Board Section -->
+        <div id="board-container" class="relative w-full py-4 min-h-[380px] sm:min-h-[420px] flex justify-between select-none">
+            
+            <!-- Dynamic SVG Canvas for drawing connecting lines -->
+            <svg id="svg-canvas" class="absolute inset-0 w-full h-full pointer-events-none z-10 overflow-visible"></svg>
+
+            <!-- Column Left -->
+            <div id="col-left" class="flex flex-col justify-between w-[44%] sm:w-[42%] z-20 space-y-4">
+                <!-- Row items injected via JS -->
+            </div>
+
+            <!-- Column Right -->
+            <div id="col-right" class="flex flex-col justify-between w-[44%] sm:w-[42%] z-20 space-y-4">
+                <!-- Row items injected via JS -->
+            </div>
+        </div>
+
+        <!-- Feedback & Evaluation Message -->
+        <div id="feedback-box" class="min-h-[48px] my-4 flex items-center justify-center text-center font-medium text-sm sm:text-base transition-all rounded-xl p-2.5"></div>
+
+        <footer class="no-print pt-2 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-2">
+                <button id="check-btn" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-semibold rounded-xl text-sm shadow-md transition flex items-center gap-1.5">
+                    <span>✓</span> जाँच करें
+                </button>
+                <button id="reset-btn" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 font-semibold rounded-xl text-sm transition flex items-center gap-1.5">
+                    <span>↻</span> फिर से करें
+                </button>
+            </div>
+            
+            <div class="flex items-center gap-2">
+                <button id="show-ans-btn" class="px-3.5 py-2.5 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 active:scale-95 font-medium rounded-xl text-xs sm:text-sm transition">
+                    उत्तर देखें
+                </button>
+                <button onclick="window.print()" class="px-3.5 py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200 rounded-xl text-xs sm:text-sm transition flex items-center gap-1">
+                    🖨️ प्रिंट
+                </button>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        // Exact original content preserved from image
+        const leftItemsData = [
+            { id: "L1", code: "(क)", text: "भला", targetId: "R2" },   // भला -> बुरा
+            { id: "L2", code: "(ख)", text: "दुख", targetId: "R3" },   // दुख -> सुख
+            { id: "L3", code: "(ग)", text: "नया", targetId: "R4" },   // नया -> पुराना
+            { id: "L4", code: "(घ)", text: "काला", targetId: "R5" },  // काला -> सफ़ेद
+            { id: "L5", code: "(ङ)", text: "छाँव", targetId: "R1" }   // छाँव -> धूप
+        ];
+
+        const rightItemsData = [
+            { id: "R1", code: "(अ)", text: "धूप" },
+            { id: "R2", code: "(ब)", text: "बुरा" },
+            { id: "R3", code: "(स)", text: "सुख" },
+            { id: "R4", code: "(द)", text: "पुराना" },
+            { id: "R5", code: "(य)", text: "सफ़ेद" }
+        ];
+
+        // State management
+        let matches = {}; // key: leftId, value: rightId
+        let activeSelectedLeft = null;
+        let isEvaluated = false;
+        let soundEnabled = true;
+
+        // Line colors palette for visual clarity
+        const colorPalette = [
+            "#2563eb", // blue
+            "#059669", // emerald
+            "#d97706", // amber
+            "#7c3aed", // purple
+            "#db2777"  // pink
+        ];
+
+        // Audio synthesizer with Web Audio API (Self-contained, no external assets)
+        let audioCtx = null;
+        function playChime(type) {
+            if (!soundEnabled) return;
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                const now = audioCtx.currentTime;
+
+                if (type === 'connect') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(440, now);
+                    osc.frequency.exponentialRampToValueAtTime(660, now + 0.12);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
+                    osc.start(now);
+                    osc.stop(now + 0.13);
+                } else if (type === 'success') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(523.25, now);
+                    osc.frequency.setValueAtTime(659.25, now + 0.08);
+                    osc.frequency.setValueAtTime(783.99, now + 0.16);
+                    osc.frequency.setValueAtTime(1046.50, now + 0.24);
+                    gain.gain.setValueAtTime(0.25, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.45);
+                    osc.start(now);
+                    osc.stop(now + 0.46);
+                } else if (type === 'wrong') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(220, now);
+                    osc.frequency.exponentialRampToValueAtTime(160, now + 0.2);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+                    osc.start(now);
+                    osc.stop(now + 0.21);
+                }
+            } catch (err) {
+                // Audio graceful degradation
+            }
+        }
+
+        const colLeftEl = document.getElementById("col-left");
+        const colRightEl = document.getElementById("col-right");
+        const svgCanvas = document.getElementById("svg-canvas");
+        const matchedCountEl = document.getElementById("matched-count");
+        const feedbackBox = document.getElementById("feedback-box");
+
+        function renderColumns() {
+            colLeftEl.innerHTML = "";
+            colRightEl.innerHTML = "";
+
+            leftItemsData.forEach((item, index) => {
+                const card = document.createElement("div");
+                card.id = `card-${item.id}`;
+                card.className = "group relative flex items-center justify-between p-2.5 sm:p-3.5 bg-slate-50/80 hover:bg-sky-50 border border-slate-200/90 hover:border-sky-300 rounded-xl cursor-pointer transition-all duration-200 text-base sm:text-xl font-medium";
+                card.setAttribute("data-left-id", item.id);
+                
+                card.innerHTML = `
+                    <div class="flex items-center gap-2.5 sm:gap-4 pl-1">
+                        <span class="text-slate-500 font-semibold text-sm sm:text-lg min-w-[28px]">${item.code}</span>
+                        <span class="text-slate-900 font-semibold tracking-wide">${item.text}</span>
+                    </div>
+                    <div id="dot-${item.id}" class="dot-indicator w-4 h-4 rounded-full border-2 border-slate-300 bg-white group-hover:border-sky-500 flex items-center justify-center">
+                        <div class="w-1.5 h-1.5 rounded-full bg-transparent"></div>
+                    </div>
+                `;
+
+                card.addEventListener("click", () => handleLeftClick(item.id));
+                colLeftEl.appendChild(card);
+            });
+
+            rightItemsData.forEach((item) => {
+                const card = document.createElement("div");
+                card.id = `card-${item.id}`;
+                card.className = "group relative flex items-center justify-between p-2.5 sm:p-3.5 bg-slate-50/80 hover:bg-sky-50 border border-slate-200/90 hover:border-sky-300 rounded-xl cursor-pointer transition-all duration-200 text-base sm:text-xl font-medium";
+                card.setAttribute("data-right-id", item.id);
+
+                card.innerHTML = `
+                    <div id="dot-${item.id}" class="dot-indicator w-4 h-4 rounded-full border-2 border-slate-300 bg-white group-hover:border-sky-500 flex items-center justify-center">
+                        <div class="w-1.5 h-1.5 rounded-full bg-transparent"></div>
+                    </div>
+                    <div class="flex items-center gap-2.5 sm:gap-4 pr-1 text-right flex-row-reverse">
+                        <span class="text-slate-500 font-semibold text-sm sm:text-lg min-w-[28px]">${item.code}</span>
+                        <span class="text-slate-900 font-semibold tracking-wide">${item.text}</span>
+                    </div>
+                `;
+
+                card.addEventListener("click", () => handleRightClick(item.id));
+                colRightEl.appendChild(card);
+            });
+        }
+
+        function handleLeftClick(leftId) {
+            if (isEvaluated) clearEvaluationState();
+
+            if (activeSelectedLeft === leftId) {
+                // Deselect
+                activeSelectedLeft = null;
+            } else {
+                activeSelectedLeft = leftId;
+            }
+            updateStyles();
+        }
+
+        function handleRightClick(rightId) {
+            if (isEvaluated) clearEvaluationState();
+
+            if (activeSelectedLeft) {
+                // If this right item is already bound to another left item, remove previous binding
+                for (let k in matches) {
+                    if (matches[k] === rightId) {
+                        delete matches[k];
+                    }
+                }
+                // Connect
+                matches[activeSelectedLeft] = rightId;
+                playChime('connect');
+                activeSelectedLeft = null;
+                updateStyles();
+                drawLines();
+            } else {
+                // If user clicks a right item that has an active match, disconnect it
+                for (let k in matches) {
+                    if (matches[k] === rightId) {
+                        delete matches[k];
+                        playChime('wrong');
+                        break;
+                    }
+                }
+                updateStyles();
+                drawLines();
+            }
+        }
+
+        function clearEvaluationState() {
+            isEvaluated = false;
+            feedbackBox.innerHTML = "";
+            feedbackBox.className = "min-h-[48px] my-4 flex items-center justify-center text-center font-medium text-sm sm:text-base transition-all rounded-xl p-2.5";
+            updateStyles();
+            drawLines();
+        }
+
+        function getDotCenter(dotId) {
+            const dot = document.getElementById(dotId);
+            if (!dot) return null;
+            const containerRect = document.getElementById("board-container").getBoundingClientRect();
+            const dotRect = dot.getBoundingClientRect();
+
+            return {
+                x: dotRect.left + dotRect.width / 2 - containerRect.left,
+                y: dotRect.top + dotRect.height / 2 - containerRect.top
+            };
+        }
+
+        function drawLines() {
+            svgCanvas.innerHTML = "";
+
+            Object.entries(matches).forEach(([leftId, rightId], idx) => {
+                const start = getDotCenter(`dot-${leftId}`);
+                const end = getDotCenter(`dot-${rightId}`);
+
+                if (!start || !end) return;
+
+                const leftIndex = leftItemsData.findIndex(item => item.id === leftId);
+                const color = colorPalette[leftIndex % colorPalette.length];
+
+                // Create SVG curved cubic bezier line
+                const dx = (end.x - start.x) * 0.5;
+                const pathData = `M ${start.x} ${start.y} C ${start.x + dx} ${start.y}, ${end.x - dx} ${end.y}, ${end.x} ${end.y}`;
+
+                const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                path.setAttribute("d", pathData);
+                path.setAttribute("fill", "none");
+                path.setAttribute("stroke", color);
+                path.setAttribute("stroke-width", "3.5");
+                path.setAttribute("stroke-linecap", "round");
+                path.classList.add("connection-line", "pointer-events-auto");
+                path.title = "क्लिक करके मिलान हटाएं";
+
+                // Click line to remove
+                path.addEventListener("click", () => {
+                    delete matches[leftId];
+                    playChime('wrong');
+                    updateStyles();
+                    drawLines();
+                });
+
+                svgCanvas.appendChild(path);
+
+                // Small start/end decorative rings
+                const startCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                startCircle.setAttribute("cx", start.x);
+                startCircle.setAttribute("cy", start.y);
+                startCircle.setAttribute("r", "5");
+                startCircle.setAttribute("fill", color);
+                svgCanvas.appendChild(startCircle);
+
+                const endCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                endCircle.setAttribute("cx", end.x);
+                endCircle.setAttribute("cy", end.y);
+                endCircle.setAttribute("r", "5");
+                endCircle.setAttribute("fill", color);
+                svgCanvas.appendChild(endCircle);
+            });
+
+            matchedCountEl.textContent = Object.keys(matches).length;
+        }
+
+        function updateStyles() {
+            // Update left cards
+            leftItemsData.forEach((item, index) => {
+                const card = document.getElementById(`card-${item.id}`);
+                const dot = document.getElementById(`dot-${item.id}`);
+                const isSelected = activeSelectedLeft === item.id;
+                const isMatched = !!matches[item.id];
+                const color = colorPalette[index % colorPalette.length];
+
+                card.classList.remove("ring-2", "ring-sky-500", "bg-sky-50/90", "border-sky-400");
+                dot.style.backgroundColor = "white";
+                dot.style.borderColor = "";
+
+                if (isSelected) {
+                    card.classList.add("ring-2", "ring-sky-500", "bg-sky-50/90", "border-sky-400");
+                    dot.style.borderColor = "#0284c7";
+                    dot.style.backgroundColor = "#0284c7";
+                } else if (isMatched) {
+                    dot.style.borderColor = color;
+                    dot.style.backgroundColor = color;
+                }
+            });
+
+            // Update right cards
+            rightItemsData.forEach(item => {
+                const dot = document.getElementById(`dot-${item.id}`);
+                const matchedLeftId = Object.keys(matches).find(k => matches[k] === item.id);
+                
+                dot.style.backgroundColor = "white";
+                dot.style.borderColor = "";
+
+                if (matchedLeftId) {
+                    const leftIdx = leftItemsData.findIndex(l => l.id === matchedLeftId);
+                    const color = colorPalette[leftIdx % colorPalette.length];
+                    dot.style.borderColor = color;
+                    dot.style.backgroundColor = color;
+                }
+            });
+        }
+
+        function checkAnswers() {
+            const total = leftItemsData.length;
+            const matchedCount = Object.keys(matches).length;
+
+            if (matchedCount === 0) {
+                feedbackBox.className = "min-h-[48px] my-4 flex items-center justify-center text-center font-medium text-sm sm:text-base rounded-xl p-2.5 bg-amber-50 text-amber-800 border border-amber-200";
+                feedbackBox.innerHTML = "⚠️ कृपया पहले बाईं और दाईं ओर के शब्दों का मिलान करें!";
+                playChime('wrong');
+                return;
+            }
+
+            let correctCount = 0;
+            leftItemsData.forEach(item => {
+                if (matches[item.id] === item.targetId) {
+                    correctCount++;
+                }
+            });
+
+            isEvaluated = true;
+
+            if (correctCount === total) {
+                feedbackBox.className = "min-h-[48px] my-4 flex items-center justify-center text-center font-semibold text-sm sm:text-base rounded-xl p-2.5 bg-emerald-50 text-emerald-800 border border-emerald-300 shadow-sm";
+                feedbackBox.innerHTML = `🎉 बहुत बढ़िया! सभी ${total} मिलान बिल्कुल सही हैं! (5/5)`;
+                playChime('success');
+            } else {
+                feedbackBox.className = "min-h-[48px] my-4 flex items-center justify-center text-center font-semibold text-sm sm:text-base rounded-xl p-2.5 bg-rose-50 text-rose-800 border border-rose-300";
+                feedbackBox.innerHTML = `आपके ${correctCount}/${total} उत्तर सही हैं। गलत रेखा पर क्लिक करके उसे बदलें या 'फिर से करें'।`;
+                playChime('wrong');
+            }
+        }
+
+        function resetAll() {
+            matches = {};
+            activeSelectedLeft = null;
+            clearEvaluationState();
+            playChime('wrong');
+        }
+
+        function showSolutions() {
+            matches = {};
+            leftItemsData.forEach(item => {
+                matches[item.id] = item.targetId;
+            });
+            activeSelectedLeft = null;
+            isEvaluated = true;
+            updateStyles();
+            drawLines();
+            feedbackBox.className = "min-h-[48px] my-4 flex items-center justify-center text-center font-semibold text-sm sm:text-base rounded-xl p-2.5 bg-sky-50 text-sky-800 border border-sky-300";
+            feedbackBox.innerHTML = "📖 सभी सही उत्तर दिखा दिए गए हैं।";
+            playChime('connect');
+        }
+
+        document.getElementById("check-btn").addEventListener("click", checkAnswers);
+        document.getElementById("reset-btn").addEventListener("click", resetAll);
+        document.getElementById("show-ans-btn").addEventListener("click", showSolutions);
+        
+        document.getElementById("toggle-sound-btn").addEventListener("click", (e) => {
+            soundEnabled = !soundEnabled;
+            e.currentTarget.textContent = soundEnabled ? "🔊" : "🔇";
+            e.currentTarget.title = soundEnabled ? "ध्वनि बंद करें" : "ध्वनि चालू करें";
+        });
+
+        window.addEventListener("resize", () => {
+            drawLines();
+        });
+
+        // Initialize display
+        renderColumns();
+        updateStyles();
+        drawLines();
+    </script>
+</body>
+</html>

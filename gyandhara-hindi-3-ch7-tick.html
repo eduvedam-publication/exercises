@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>वचन के अनुसार सही या गलत - अभ्यास</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Yantramanav:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Yantramanav', sans-serif;
+    }
+    .sheet-title {
+      color: #0284c7; /* Sky blue matching image header */
+    }
+    .option-btn {
+      border: 2px solid #cbd5e1;
+      border-radius: 12px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      user-select: none;
+      font-weight: 700;
+    }
+    .option-btn:hover {
+      border-color: #94a3b8;
+      background-color: #f8fafc;
+      transform: translateY(-1px);
+    }
+    .option-btn.selected-right {
+      border-color: #10b981 !important;
+      background-color: #ecfdf5 !important;
+      color: #047857 !important;
+      box-shadow: 0 2px 6px -1px rgba(16, 185, 129, 0.3);
+    }
+    .option-btn.selected-wrong {
+      border-color: #e11d48 !important;
+      background-color: #fff1f2 !important;
+      color: #be123c !important;
+      box-shadow: 0 2px 6px -1px rgba(225, 29, 72, 0.3);
+    }
+    .option-btn.correct-eval {
+      border-color: #10b981 !important;
+      background-color: #10b981 !important;
+      color: #ffffff !important;
+    }
+    .option-btn.incorrect-eval {
+      border-color: #ef4444 !important;
+      background-color: #ef4444 !important;
+      color: #ffffff !important;
+    }
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+      body {
+        background: white !important;
+        padding: 0 !important;
+      }
+      .sheet-container {
+        box-shadow: none !important;
+        border: none !important;
+        padding: 16px 0 !important;
+        max-width: 100% !important;
+      }
+      .option-btn {
+        border: 2px solid #64748b !important;
+        background: transparent !important;
+        color: #334155 !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-100 min-h-screen text-slate-800 flex flex-col justify-between p-4 sm:p-8">
+
+  <!-- Top Action Controls Bar -->
+  <div class="max-w-3xl mx-auto w-full mb-6 no-print flex flex-wrap items-center justify-between gap-3 bg-white px-5 py-3.5 rounded-2xl shadow-sm border border-slate-200">
+    <div class="flex items-center gap-2">
+      <span class="inline-block w-3 h-3 rounded-full bg-sky-500"></span>
+      <span class="font-bold text-slate-700 text-sm sm:text-base">कार्यपत्रक अभ्यास (Worksheet)</span>
+    </div>
+    <div class="flex flex-wrap items-center gap-2">
+      <button onclick="checkAnswers()" class="px-4 py-2 bg-sky-600 hover:bg-sky-700 active:scale-95 text-white text-sm font-semibold rounded-xl shadow-sm transition">
+        उत्तर जाँचें (Check)
+      </button>
+      <button onclick="toggleAnswers()" id="toggle-ans-btn" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-xl transition">
+        उत्तर देखें (Show)
+      </button>
+      <button onclick="resetExercise()" class="px-3 py-2 bg-slate-100 hover:bg-rose-50 hover:text-rose-600 text-slate-600 text-sm font-semibold rounded-xl transition">
+        रीसेट
+      </button>
+      <button onclick="window.print()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-xl transition flex items-center gap-1.5">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+        </svg>
+        प्रिंट
+      </button>
+    </div>
+  </div>
+
+  <!-- Worksheet Paper Card -->
+  <main class="max-w-3xl mx-auto w-full sheet-container bg-white rounded-3xl shadow-lg border border-slate-200/80 p-6 sm:p-14 transition-all">
+    
+    <!-- Title / Heading matching the exact blue text from image -->
+    <div class="sheet-title text-2xl sm:text-3xl font-bold tracking-wide mb-8 select-text pb-4 border-b border-slate-100 flex items-center flex-wrap gap-2">
+      <span>वचन के अनुसार सही (<span class="text-emerald-600 font-bold">✓</span>) या गलत (<span class="text-rose-600 font-bold">✗</span>) का चिह्न लगाइए-</span>
+    </div>
+
+    <!-- Instructions helper note -->
+    <div class="no-print mb-6 text-sm text-slate-500 bg-sky-50 border border-sky-100 p-3 rounded-xl flex items-center gap-2">
+      <span class="text-base">💡</span>
+      <span>प्रत्येक वाक्य के सामने दिए गए दो विकल्पों में से सही (<strong class="text-emerald-600">✓</strong>) अथवा गलत (<strong class="text-rose-600">✗</strong>) पर क्लिक करें।</span>
+    </div>
+
+    <!-- Exercise Lines with Two Buttons per Row -->
+    <div class="space-y-6 text-slate-800 text-xl sm:text-2xl font-normal leading-relaxed">
+      
+      <!-- Row (क) -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-3 rounded-2xl hover:bg-slate-50/80 transition-colors border border-transparent hover:border-slate-100" data-row="ka" data-correct="wrong">
+        <div class="flex items-baseline gap-2">
+          <span class="w-10 font-semibold text-slate-600 shrink-0">(क)</span>
+          <span class="font-medium text-slate-900">आज दो बिल्ली पकड़ी गई।</span>
+        </div>
+        <div class="flex items-center gap-2.5 shrink-0 self-end sm:self-auto">
+          <button 
+            type="button" 
+            onclick="selectOption('ka', 'right')" 
+            id="btn-ka-right"
+            title="सही (✓)"
+            class="option-btn px-4 py-2 sm:px-5 sm:py-2.5 text-lg sm:text-xl text-emerald-700 flex items-center gap-1.5">
+            <span>✓</span>
+            <span class="text-sm font-semibold">सही</span>
+          </button>
+          <button 
+            type="button" 
+            onclick="selectOption('ka', 'wrong')" 
+            id="btn-ka-wrong"
+            title="गलत (✗)"
+            class="option-btn px-4 py-2 sm:px-5 sm:py-2.5 text-lg sm:text-xl text-rose-700 flex items-center gap-1.5">
+            <span>✗</span>
+            <span class="text-sm font-semibold">गलत</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Row (ख) -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-3 rounded-2xl hover:bg-slate-50/80 transition-colors border border-transparent hover:border-slate-100" data-row="kha" data-correct="wrong">
+        <div class="flex items-baseline gap-2">
+          <span class="w-10 font-semibold text-slate-600 shrink-0">(ख)</span>
+          <span class="font-medium text-slate-900">सामने वाला पहाड़ की ओर देखो।</span>
+        </div>
+        <div class="flex items-center gap-2.5 shrink-0 self-end sm:self-auto">
+          <button 
+            type="button" 
+            onclick="selectOption('kha', 'right')" 
+            id="btn-kha-right"
+            title="सही (✓)"
+            class="option-btn px-4 py-2 sm:px-5 sm:py-2.5 text-lg sm:text-xl text-emerald-700 flex items-center gap-1.5">
+            <span>✓</span>
+            <span class="text-sm font-semibold">सही</span>
+          </button>
+          <button 
+            type="button" 
+            onclick="selectOption('kha', 'wrong')" 
+            id="btn-kha-wrong"
+            title="गलत (✗)"
+            class="option-btn px-4 py-2 sm:px-5 sm:py-2.5 text-lg sm:text-xl text-rose-700 flex items-center gap-1.5">
+            <span>✗</span>
+            <span class="text-sm font-semibold">गलत</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Row (ग) -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-3 rounded-2xl hover:bg-slate-50/80 transition-colors border border-transparent hover:border-slate-100" data-row="ga" data-correct="right">
+        <div class="flex items-baseline gap-2">
+          <span class="w-10 font-semibold text-slate-600 shrink-0">(ग)</span>
+          <span class="font-medium text-slate-900">मेरी चार सहेलियाँ आ रही हैं।</span>
+        </div>
+        <div class="flex items-center gap-2.5 shrink-0 self-end sm:self-auto">
+          <button 
+            type="button" 
+            onclick="selectOption('ga', 'right')" 
+            id="btn-ga-right"
+            title="सही (✓)"
+            class="option-btn px-4 py-2 sm:px-5 sm:py-2.5 text-lg sm:text-xl text-emerald-700 flex items-center gap-1.5">
+            <span>✓</span>
+            <span class="text-sm font-semibold">सही</span>
+          </button>
+          <button 
+            type="button" 
+            onclick="selectOption('ga', 'wrong')" 
+            id="btn-ga-wrong"
+            title="गलत (✗)"
+            class="option-btn px-4 py-2 sm:px-5 sm:py-2.5 text-lg sm:text-xl text-rose-700 flex items-center gap-1.5">
+            <span>✗</span>
+            <span class="text-sm font-semibold">गलत</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Row (घ) -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-3 rounded-2xl hover:bg-slate-50/80 transition-colors border border-transparent hover:border-slate-100" data-row="gha" data-correct="right">
+        <div class="flex items-baseline gap-2">
+          <span class="w-10 font-semibold text-slate-600 shrink-0">(घ)</span>
+          <span class="font-medium text-slate-900">मेरे पास एक पुस्तक है।</span>
+        </div>
+        <div class="flex items-center gap-2.5 shrink-0 self-end sm:self-auto">
+          <button 
+            type="button" 
+            onclick="selectOption('gha', 'right')" 
+            id="btn-gha-right"
+            title="सही (✓)"
+            class="option-btn px-4 py-2 sm:px-5 sm:py-2.5 text-lg sm:text-xl text-emerald-700 flex items-center gap-1.5">
+            <span>✓</span>
+            <span class="text-sm font-semibold">सही</span>
+          </button>
+          <button 
+            type="button" 
+            onclick="selectOption('gha', 'wrong')" 
+            id="btn-gha-wrong"
+            title="गलत (✗)"
+            class="option-btn px-4 py-2 sm:px-5 sm:py-2.5 text-lg sm:text-xl text-rose-700 flex items-center gap-1.5">
+            <span>✗</span>
+            <span class="text-sm font-semibold">गलत</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Answer key explanation card (shown when user checks or requests view) -->
+    <div id="explanation-box" class="hidden mt-8 p-5 bg-slate-50 rounded-2xl border border-slate-200 text-sm sm:text-base text-slate-700 space-y-2">
+      <h3 class="font-bold text-slate-800 text-base mb-2">व्याकरणिक स्पष्टीकरण (Grammar Notes):</h3>
+      <ul class="space-y-1.5 list-disc list-inside">
+        <li><strong>(क) गलत (✗):</strong> संख्या 'दो' होने के कारण बहुवचन रूप <em>"दो बिल्लियाँ पकड़ी गईं"</em> होना चाहिए।</li>
+        <li><strong>(ख) गलत (✗):</strong> कारक चिह्न 'की' होने के कारण विकारी रूप <em>"सामने वाले पहाड़"</em> होना चाहिए।</li>
+        <li><strong>(ग) सही (✓):</strong> संख्या 'चार' के साथ बहुवचन रूप <em>"सहेलियाँ"</em> और सहायक क्रिया <em>"हैं"</em> शुद्ध है।</li>
+        <li><strong>(घ) सही (✓):</strong> संख्या 'एक' के साथ एकवचन रूप <em>"पुस्तक"</em> और <em>"है"</em> शुद्ध है।</li>
+      </ul>
+    </div>
+
+    <!-- Feedback Message Banner -->
+    <div id="result-message-box" class="hidden mt-6 p-4 rounded-2xl text-center text-sm sm:text-base font-semibold transition-all"></div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="max-w-3xl mx-auto w-full text-center text-xs text-slate-400 py-4 no-print">
+    अभ्यास कार्य • प्राथमिक हिन्दी व्याकरण (वचन)
+  </footer>
+
+  <script>
+    const rows = ['ka', 'kha', 'ga', 'gha'];
+    const userSelections = {
+      ka: null,
+      kha: null,
+      ga: null,
+      gha: null
+    };
+
+    const correctAnswers = {
+      ka: 'wrong',
+      kha: 'wrong',
+      ga: 'right',
+      gha: 'right'
+    };
+
+    function clearEvaluationStyles(row) {
+      const btnRight = document.getElementById(`btn-${row}-right`);
+      const btnWrong = document.getElementById(`btn-${row}-wrong`);
+      btnRight.classList.remove('correct-eval', 'incorrect-eval');
+      btnWrong.classList.remove('correct-eval', 'incorrect-eval');
+    }
+
+    function selectOption(row, value) {
+      userSelections[row] = value;
+      clearEvaluationStyles(row);
+
+      const btnRight = document.getElementById(`btn-${row}-right`);
+      const btnWrong = document.getElementById(`btn-${row}-wrong`);
+
+      if (value === 'right') {
+        btnRight.classList.add('selected-right');
+        btnWrong.classList.remove('selected-wrong');
+      } else if (value === 'wrong') {
+        btnWrong.classList.add('selected-wrong');
+        btnRight.classList.remove('selected-right');
+      }
+    }
+
+    function checkAnswers() {
+      let correctCount = 0;
+      let answeredCount = 0;
+
+      rows.forEach(row => {
+        clearEvaluationStyles(row);
+        const userVal = userSelections[row];
+        const correctVal = correctAnswers[row];
+        const btnRight = document.getElementById(`btn-${row}-right`);
+        const btnWrong = document.getElementById(`btn-${row}-wrong`);
+
+        if (userVal !== null) {
+          answeredCount++;
+          if (userVal === correctVal) {
+            correctCount++;
+            if (userVal === 'right') {
+              btnRight.classList.add('correct-eval');
+            } else {
+              btnWrong.classList.add('correct-eval');
+            }
+          } else {
+            if (userVal === 'right') {
+              btnRight.classList.add('incorrect-eval');
+            } else {
+              btnWrong.classList.add('incorrect-eval');
+            }
+          }
+        }
+      });
+
+      const msgBox = document.getElementById("result-message-box");
+      const expBox = document.getElementById("explanation-box");
+      msgBox.classList.remove("hidden");
+      expBox.classList.remove("hidden");
+
+      if (correctCount === rows.length) {
+        msgBox.className = "mt-6 p-4 rounded-2xl text-center text-sm sm:text-base font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300";
+        msgBox.innerHTML = "🎉 बहुत बढ़िया! आपके सभी उत्तर बिल्कुल सही हैं।";
+      } else {
+        msgBox.className = "mt-6 p-4 rounded-2xl text-center text-sm sm:text-base font-semibold bg-amber-50 text-amber-900 border border-amber-200";
+        msgBox.innerHTML = `आपने ${rows.length} में से <strong>${correctCount}</strong> उत्तर सही दिए हैं। 'उत्तर देखें' बटन दबाकर सही उत्तर देख सकते हैं।`;
+      }
+    }
+
+    let answersShown = false;
+    function toggleAnswers() {
+      answersShown = !answersShown;
+      const toggleBtn = document.getElementById("toggle-ans-btn");
+      const expBox = document.getElementById("explanation-box");
+
+      rows.forEach(row => {
+        clearEvaluationStyles(row);
+        const correctVal = correctAnswers[row];
+
+        if (answersShown) {
+          selectOption(row, correctVal);
+        } else {
+          userSelections[row] = null;
+          const btnRight = document.getElementById(`btn-${row}-right`);
+          const btnWrong = document.getElementById(`btn-${row}-wrong`);
+          btnRight.classList.remove('selected-right');
+          btnWrong.classList.remove('selected-wrong');
+        }
+      });
+
+      expBox.classList.toggle('hidden', !answersShown);
+      toggleBtn.textContent = answersShown ? "उत्तर छिपाएँ (Hide)" : "उत्तर देखें (Show)";
+      toggleBtn.classList.toggle("bg-sky-100", answersShown);
+      toggleBtn.classList.toggle("text-sky-800", answersShown);
+    }
+
+    function resetExercise() {
+      rows.forEach(row => {
+        userSelections[row] = null;
+        clearEvaluationStyles(row);
+        const btnRight = document.getElementById(`btn-${row}-right`);
+        const btnWrong = document.getElementById(`btn-${row}-wrong`);
+        btnRight.classList.remove('selected-right');
+        btnWrong.classList.remove('selected-wrong');
+      });
+
+      answersShown = false;
+      document.getElementById("toggle-ans-btn").textContent = "उत्तर देखें (Show)";
+      document.getElementById("toggle-ans-btn").classList.remove("bg-sky-100", "text-sky-800");
+
+      const msgBox = document.getElementById("result-message-box");
+      const expBox = document.getElementById("explanation-box");
+      msgBox.classList.add("hidden");
+      msgBox.innerHTML = "";
+      expBox.classList.add("hidden");
+    }
+  </script>
+</body>
+</html>

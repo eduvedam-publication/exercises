@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>वचन अभ्यास - रिक्त स्थान भरिए</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Yantramanav:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Yantramanav', sans-serif;
+    }
+    .sheet-title {
+      color: #0f766e;
+    }
+    .blank-input {
+      border-bottom: 2px solid #64748b;
+      background: transparent;
+      outline: none;
+      text-align: center;
+      transition: all 0.2s ease;
+      font-weight: 600;
+    }
+    .blank-input:focus {
+      border-bottom-color: #0f766e;
+      background-color: #f0fdfa;
+    }
+    .blank-input.correct {
+      border-bottom-color: #10b981 !important;
+      background-color: #ecfdf5 !important;
+      color: #065f46 !important;
+    }
+    .blank-input.incorrect {
+      border-bottom-color: #ef4444 !important;
+      background-color: #fef2f2 !important;
+      color: #991b1b !important;
+    }
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+      body {
+        background: white !important;
+        padding: 0 !important;
+      }
+      .sheet-container {
+        box-shadow: none !important;
+        border: none !important;
+        padding: 16px 0 !important;
+        max-width: 100% !important;
+      }
+      .blank-input {
+        border-bottom: 1.5px solid #334155 !important;
+        background: transparent !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-100 min-h-screen text-slate-800 flex flex-col justify-between p-4 sm:p-8">
+
+  <!-- Top Action Controls Bar -->
+  <div class="max-w-3xl mx-auto w-full mb-6 no-print flex flex-wrap items-center justify-between gap-3 bg-white px-5 py-3.5 rounded-2xl shadow-sm border border-slate-200">
+    <div class="flex items-center gap-2">
+      <span class="inline-block w-3 h-3 rounded-full bg-teal-600"></span>
+      <span class="font-bold text-slate-700 text-sm sm:text-base">कार्यपत्रक अभ्यास (Worksheet)</span>
+    </div>
+    <div class="flex flex-wrap items-center gap-2">
+      <button onclick="checkAnswers()" class="px-4 py-2 bg-teal-700 hover:bg-teal-800 active:scale-95 text-white text-sm font-semibold rounded-xl shadow-sm transition">
+        उत्तर जाँचें (Check)
+      </button>
+      <button onclick="toggleAnswers()" id="toggle-ans-btn" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-xl transition">
+        उत्तर देखें (Show)
+      </button>
+      <button onclick="resetExercise()" class="px-3 py-2 bg-slate-100 hover:bg-rose-50 hover:text-rose-600 text-slate-600 text-sm font-semibold rounded-xl transition">
+        रीसेट
+      </button>
+      <button onclick="window.print()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-xl transition flex items-center gap-1.5">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+        प्रिंट
+      </button>
+    </div>
+  </div>
+
+  <!-- Worksheet Paper Card -->
+  <main class="max-w-3xl mx-auto w-full sheet-container bg-white rounded-3xl shadow-lg border border-slate-200/80 p-6 sm:p-14 transition-all">
+    
+    <!-- Title / Heading -->
+    <div class="sheet-title text-2xl sm:text-3xl font-bold tracking-wide mb-8 select-text pb-3 border-b border-slate-100">
+      रिक्त स्थानों की पूर्ति कीजिए -
+    </div>
+
+    <!-- Exercise Lines (Exact Text from Image) -->
+    <div class="space-y-8 text-slate-800 text-xl sm:text-2xl font-normal leading-relaxed">
+      
+      <!-- Row (क) -->
+      <div class="flex flex-wrap items-baseline gap-y-2">
+        <span class="w-12 font-semibold text-slate-600 shrink-0">(क)</span>
+        <span class="mr-2">एक या अनेक का बोध कराने वाले संज्ञा शब्दों को</span>
+        <span class="relative inline-block mx-1">
+          <input type="text" id="ans-ka" class="blank-input w-28 sm:w-32 px-1 text-xl sm:text-2xl" placeholder="" autocomplete="off">
+          <span class="answer-hint hidden text-xs text-teal-700 font-bold block text-center absolute -bottom-5 w-full">वचन</span>
+        </span>
+        <span>कहते हैं।</span>
+      </div>
+
+      <!-- Row (ख) -->
+      <div class="flex flex-wrap items-baseline gap-y-2 pt-2">
+        <span class="w-12 font-semibold text-slate-600 shrink-0">(ख)</span>
+        <span class="mr-2">हिंदी में वचन के</span>
+        <span class="relative inline-block mx-1">
+          <input type="text" id="ans-kha" class="blank-input w-20 sm:w-24 px-1 text-xl sm:text-2xl" placeholder="" autocomplete="off">
+          <span class="answer-hint hidden text-xs text-teal-700 font-bold block text-center absolute -bottom-5 w-full">दो</span>
+        </span>
+        <span>भेद हैं।</span>
+      </div>
+
+      <!-- Row (ग) -->
+      <div class="flex flex-wrap items-baseline gap-y-2 pt-2">
+        <span class="w-12 font-semibold text-slate-600 shrink-0">(ग)</span>
+        <span class="relative inline-block mr-2">
+          <input type="text" id="ans-ga" class="blank-input w-28 sm:w-32 px-1 text-xl sm:text-2xl" placeholder="" autocomplete="off">
+          <span class="answer-hint hidden text-xs text-teal-700 font-bold block text-center absolute -bottom-5 w-full">आदर</span>
+        </span>
+        <span>देने के लिए सदैव बहुवचन का प्रयोग किया जाता है।</span>
+      </div>
+
+      <!-- Row (घ) -->
+      <div class="flex flex-wrap items-baseline gap-y-2 pt-2">
+        <span class="w-12 font-semibold text-slate-600 shrink-0">(घ)</span>
+        <span class="mr-2">भीड़ शब्द का प्रयोग सदा</span>
+        <span class="relative inline-block mx-1">
+          <input type="text" id="ans-gha" class="blank-input w-20 sm:w-24 px-1 text-xl sm:text-2xl" placeholder="" autocomplete="off">
+          <span class="answer-hint hidden text-xs text-teal-700 font-bold block text-center absolute -bottom-5 w-full">एक</span>
+        </span>
+        <span>वचन में किया जाता है।</span>
+      </div>
+
+    </div>
+
+    <!-- Feedback Message Banner -->
+    <div id="result-message-box" class="hidden mt-10 p-4 rounded-2xl text-center text-sm sm:text-base font-semibold transition-all"></div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="max-w-3xl mx-auto w-full text-center text-xs text-slate-400 py-4 no-print">
+    अभ्यास कार्य • प्राथमिक हिन्दी व्याकरण (वचन)
+  </footer>
+
+  <script>
+    function normalize(text) {
+      return text.trim().replace(/\s+/g, '');
+    }
+
+    // Accepted answers based on the underlined solutions
+    const correctData = {
+      "ans-ka": ["वचन"],
+      "ans-kha": ["दो", "2"],
+      "ans-ga": ["आदर", "सम्मान"],
+      "ans-gha": ["एक", "1"]
+    };
+
+    function checkAnswers() {
+      let correctCount = 0;
+      const keys = Object.keys(correctData);
+
+      keys.forEach(id => {
+        const input = document.getElementById(id);
+        const userVal = normalize(input.value);
+        input.classList.remove("correct", "incorrect");
+
+        if (correctData[id].includes(userVal)) {
+          input.classList.add("correct");
+          correctCount++;
+        } else if (userVal.length > 0) {
+          input.classList.add("incorrect");
+        }
+      });
+
+      const msgBox = document.getElementById("result-message-box");
+      msgBox.classList.remove("hidden");
+
+      if (correctCount === keys.length) {
+        msgBox.className = "mt-10 p-4 rounded-2xl text-center text-sm sm:text-base font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300";
+        msgBox.innerHTML = "🎉 बहुत बढ़िया! आपके सभी रिक्त स्थान बिल्कुल सही भरे गए हैं।";
+      } else {
+        msgBox.className = "mt-10 p-4 rounded-2xl text-center text-sm sm:text-base font-semibold bg-amber-50 text-amber-900 border border-amber-200";
+        msgBox.innerHTML = `आपने ${keys.length} में से <strong>${correctCount}</strong> रिक्त स्थान सही भरे हैं। 'उत्तर देखें' बटन दबाकर सही उत्तर देख सकते हैं।`;
+      }
+    }
+
+    let answersVisible = false;
+    function toggleAnswers() {
+      answersVisible = !answersVisible;
+      const hints = document.querySelectorAll(".answer-hint");
+      const toggleBtn = document.getElementById("toggle-ans-btn");
+
+      hints.forEach(hint => {
+        if (answersVisible) {
+          hint.classList.remove("hidden");
+        } else {
+          hint.classList.add("hidden");
+        }
+      });
+
+      toggleBtn.textContent = answersVisible ? "उत्तर छिपाएँ (Hide)" : "उत्तर देखें (Show)";
+      toggleBtn.classList.toggle("bg-teal-100", answersVisible);
+      toggleBtn.classList.toggle("text-teal-800", answersVisible);
+    }
+
+    function resetExercise() {
+      const inputs = document.querySelectorAll(".blank-input");
+      inputs.forEach(input => {
+        input.value = "";
+        input.classList.remove("correct", "incorrect");
+      });
+
+      const hints = document.querySelectorAll(".answer-hint");
+      hints.forEach(hint => hint.classList.add("hidden"));
+      answersVisible = false;
+      document.getElementById("toggle-ans-btn").textContent = "उत्तर देखें (Show)";
+      document.getElementById("toggle-ans-btn").classList.remove("bg-teal-100", "text-teal-800");
+
+      const msgBox = document.getElementById("result-message-box");
+      msgBox.classList.add("hidden");
+      msgBox.innerHTML = "";
+    }
+  </script>
+</body>
+</html>
