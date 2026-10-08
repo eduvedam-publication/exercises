@@ -1,1 +1,202 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Fill in the blanks.</title><style>*{box-sizing:border-box}body{margin:0;padding:14px;font-family:Arial;background:#eaf8ff;color:#292929}.w{max-width:1000px;margin:auto;background:#fff;border:5px solid #08b6e8;border-radius:25px;padding:22px}h1{color:#ff0878;font-size:24px}.c{background:#f9fcff;border:2px solid #c9efff;border-radius:18px;padding:14px 17px;margin:10px 0}.r{display:flex;align-items:center;gap:12px;font-size:17px;line-height:1.5}.g{flex:1}.s{text-align:center;color:#064bad;font-size:22px;font-weight:bold;margin:14px}.b{padding:10px 22px;border:0;border-radius:24px;background:#ff7b00;color:#fff;font-weight:bold;margin:4px}.a{text-align:center}input{padding:7px;border:2px solid #ff4fa0;border-radius:8px;font-size:16px;max-width:175px}.ok{background:#d8f6d8!important;border-color:#27843a!important}.bad{background:#ffdadd!important;border-color:#c62828!important}.sel{padding:8px;border:2px solid #ff4fa0;border-radius:8px;background:#fff;font-size:15px}@media(max-width:650px){.w{padding:12px}h1{font-size:19px}.r{font-size:14px;align-items:flex-start}.b{width:100%}input{max-width:125px}}</style></head><body><div class="w"><h1>Fill in the blanks.</h1><div id="x"></div><div id="s" class="s"></div><div class="a"><button class="b" onclick="check()">Check Answers</button><button class="b" onclick="load()">Reset</button></div></div><script>const R=[["1. Anger can ", "destroy", " your friendship with others."], ["2. Anger brings ", "hatred", " among each other."], ["3. When angry, we try to ", "hurt", " others or ", "destroy", " things which we will feel ", "sorry", " for later."], ["4. Anger can disturb our ", "peace", " of ", "mind", "."], ["5. Anger can ", "prevent", " a person from ", "learning", " new things and doing ", "good", " things."]];let A=[];function load(){A=[];x.innerHTML='';let n=0;R.forEach(p=>{let c=document.createElement('div');c.className='c r';let d=document.createElement('div');d.className='g';p.forEach((v,i)=>{if(i%2===0)d.append(document.createTextNode(v));else{let z=document.createElement('input');z.id='i'+n;A.push([z.id,v]);n++;d.append(z)}});c.append(d);x.append(c)});s.textContent='Score: 0 / '+A.length}function check(){let sc=0;A.forEach(([id,a])=>{let z=document.getElementById(id);z.classList.remove('ok','bad');if(z.value.trim().toLowerCase()===a.toLowerCase()){z.classList.add('ok');sc++}else z.classList.add('bad')});s.textContent='Score: '+sc+' / '+A.length}load();</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fill in the blanks.</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      padding: 14px;
+      font-family: Arial, sans-serif;
+      background: #eaf8ff;
+      color: #292929;
+    }
+    .w {
+      max-width: 1000px;
+      margin: auto;
+      background: #fff;
+      border: 5px solid #08b6e8;
+      border-radius: 25px;
+      padding: 22px;
+    }
+    h1 {
+      color: #ff0878;
+      font-size: 24px;
+      margin-top: 0;
+    }
+    .c {
+      background: #f9fcff;
+      border: 2px solid #c9efff;
+      border-radius: 18px;
+      padding: 14px 17px;
+      margin: 10px 0;
+    }
+    .r {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 17px;
+      line-height: 1.6;
+    }
+    .g {
+      flex: 1;
+    }
+    .s {
+      text-align: center;
+      color: #064bad;
+      font-size: 22px;
+      font-weight: bold;
+      margin: 14px;
+    }
+    .b {
+      padding: 10px 22px;
+      border: 0;
+      border-radius: 24px;
+      background: #ff7b00;
+      color: #fff;
+      font-weight: bold;
+      margin: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.2s;
+    }
+    .b:hover {
+      background: #e66f00;
+    }
+    .a {
+      text-align: center;
+    }
+    input {
+      padding: 7px;
+      border: 2px solid #ff4fa0;
+      border-radius: 8px;
+      font-size: 16px;
+      max-width: 175px;
+      margin: 0 4px;
+      outline: none;
+    }
+    .ok {
+      background: #d8f6d8 !important;
+      border-color: #27843a !important;
+    }
+    .bad {
+      background: #ffdadd !important;
+      border-color: #c62828 !important;
+    }
+    @media (max-width: 650px) {
+      .w {
+        padding: 12px;
+      }
+      h1 {
+        font-size: 19px;
+      }
+      .r {
+        font-size: 14px;
+        align-items: flex-start;
+      }
+      .b {
+        width: 100%;
+      }
+      input {
+        max-width: 125px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="w">
+    <h1>Fill in the blanks.</h1>
+    <div id="x"></div>
+    <div id="s" class="s">Score: 0 / 5</div>
+    <div class="a">
+      <button class="b" onclick="check()">Check Answers</button>
+      <button class="b" onclick="load()">Reset</button>
+    </div>
+  </div>
+
+  <script>
+    // Question text preserved exactly as specified
+    const R = [
+      ["1. Anger can ", "destroy", " your friendship with others."],
+      ["2. Anger brings ", "hatred", " among each other."],
+      ["3. When angry, we try to ", "hurt", " others or ", "destroy", " things which we will feel ", "sorry", " for later."],
+      ["4. Anger can disturb our ", "peace", " of ", "mind", "."],
+      ["5. Anger can ", "prevent", " a person from ", "learning", " new things and doing ", "good", " things."]
+    ];
+
+    let questionsData = [];
+
+    function load() {
+      questionsData = [];
+      const x = document.getElementById('x');
+      const s = document.getElementById('s');
+      x.innerHTML = '';
+      let n = 0;
+
+      R.forEach((p, qIndex) => {
+        const c = document.createElement('div');
+        c.className = 'c r';
+        const d = document.createElement('div');
+        d.className = 'g';
+
+        const qBlanks = [];
+
+        p.forEach((v, i) => {
+          if (i % 2 === 0) {
+            d.append(document.createTextNode(v));
+          } else {
+            const z = document.createElement('input');
+            z.id = 'i' + n;
+            z.autocomplete = 'off';
+            qBlanks.push({ id: z.id, answer: v });
+            n++;
+            d.append(z);
+          }
+        });
+
+        questionsData.push(qBlanks);
+        c.append(d);
+        x.append(c);
+      });
+
+      // Score displays out of 5 (1 point for each of the 5 numbered questions)
+      s.textContent = 'Score: 0 / ' + R.length;
+    }
+
+    function check() {
+      let score = 0;
+
+      questionsData.forEach((qBlanks) => {
+        let questionAllCorrect = true;
+
+        qBlanks.forEach(({ id, answer }) => {
+          const z = document.getElementById(id);
+          z.classList.remove('ok', 'bad');
+
+          if (z.value.trim().toLowerCase() === answer.toLowerCase()) {
+            z.classList.add('ok');
+          } else {
+            z.classList.add('bad');
+            questionAllCorrect = false;
+          }
+        });
+
+        // 1 point awarded per fully completed correct question
+        if (questionAllCorrect) {
+          score++;
+        }
+      });
+
+      const s = document.getElementById('s');
+      s.textContent = 'Score: ' + score + ' / ' + R.length;
+    }
+
+    // Initial load
+    load();
+  </script>
+</body>
+</html>
