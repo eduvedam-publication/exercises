@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>मिलान कीजिए - सुमेलन कौशल</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rozha+One&family=Yantramanav:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Yantramanav', sans-serif;
+            background-color: #f1f5f9;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .book-canvas {
+            background-color: #dbe8b8;
+            background-image: radial-gradient(#d3e1ac 1.5px, transparent 1.5px);
+            background-size: 24px 24px;
+        }
+
+        .heading-font {
+            font-family: 'Rozha One', 'Yantramanav', serif;
+        }
+
+        .connector-dot {
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s, box-shadow 0.2s;
+        }
+
+        .connector-dot:hover {
+            transform: scale(1.35);
+        }
+
+        .connector-dot.selected {
+            transform: scale(1.4);
+            box-shadow: 0 0 0 4px rgba(225, 29, 72, 0.4);
+        }
+
+        .interactive-row {
+            transition: background-color 0.2s, transform 0.15s;
+        }
+
+        .interactive-row:hover {
+            background-color: rgba(255, 255, 255, 0.35);
+        }
+
+        /* SVG overlay pointer behavior */
+        svg.connections-svg {
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-800 flex flex-col items-center justify-center p-3 sm:p-6 md:p-8">
+
+    <main class="w-full max-w-4xl bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-200">
+        
+        <!-- Header Bar -->
+        <header class="bg-emerald-700 text-white px-6 py-4 flex flex-wrap items-center justify-between gap-3 shadow-sm">
+            <div class="flex items-center space-x-3">
+                <span class="bg-emerald-600 text-white text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full border border-emerald-500">
+                    हिंदी व्याकरण अभ्यास
+                </span>
+                <span class="text-emerald-100 text-sm hidden sm:inline">रेखा खींचकर सही जोड़े मिलाएँ</span>
+            </div>
+            
+            <div class="flex items-center space-x-2">
+                <button id="audio-toggle" class="px-3 py-1.5 rounded-lg bg-emerald-800/80 hover:bg-emerald-800 text-xs font-medium text-emerald-100 transition flex items-center gap-1.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
+                    <span>ध्वनि: ऑन</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Textbook Sheet Area -->
+        <div id="exercise-sheet" class="book-canvas relative p-6 sm:p-10 md:p-14 min-h-[480px]">
+            
+            <!-- SVG Canvas for Drawing Connecting Lines -->
+            <svg id="connections-svg" class="connections-svg absolute inset-0 w-full h-full z-20">
+                <defs>
+                    <!-- Marker for line arrows -->
+                    <marker id="arrow-pink" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 1 L 9 5 L 0 9 z" fill="#d9247e" />
+                    </marker>
+                    <marker id="arrow-green" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 1 L 9 5 L 0 9 z" fill="#16a34a" />
+                    </marker>
+                    <marker id="arrow-blue" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 1 L 9 5 L 0 9 z" fill="#2563eb" />
+                    </marker>
+                    <marker id="arrow-amber" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 1 L 9 5 L 0 9 z" fill="#d97706" />
+                    </marker>
+                    <marker id="arrow-default" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 1 L 9 5 L 0 9 z" fill="#e11d48" />
+                    </marker>
+                </defs>
+                <!-- Rendered lines will go here -->
+                <g id="permanent-lines"></g>
+                <path id="temp-line" d="" stroke="#e11d48" stroke-width="3" stroke-dasharray="4,4" fill="none" class="hidden" />
+            </svg>
+
+            <div class="mb-8 sm:mb-12 relative z-10">
+                <!-- Main Header Exactly as in Image -->
+                <h1 class="text-3xl sm:text-4xl md:text-[42px] font-bold text-[#d9247e] heading-font tracking-wide">
+                    मिलान कीजिए-
+                </h1>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-y-6 md:gap-y-10 md:gap-x-12 relative z-10">
+                
+                <!-- Left Column (प्रश्न पक्ष) -->
+                <div class="space-y-4 sm:space-y-6" id="left-column">
+                    
+                    <!-- Item (क) -->
+                    <div data-id="ka" class="interactive-row flex items-center justify-between p-2.5 sm:p-3 rounded-xl border border-transparent hover:border-black/10 cursor-pointer transition">
+                        <div class="flex items-baseline space-x-3 sm:space-x-4">
+                            <span class="text-xl sm:text-2xl font-bold text-slate-900 select-none">(क)</span>
+                            <span class="text-xl sm:text-2xl font-medium text-slate-900 select-none">रात में सोने से पहले</span>
+                        </div>
+                        <button type="button" aria-label="जोड़ें (क)" data-left="ka" class="connector-dot left-dot flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[#d9247e] border-2 border-white shadow-md cursor-pointer ml-3 focus:outline-none"></button>
+                    </div>
+
+                    <!-- Item (ख) -->
+                    <div data-id="kha" class="interactive-row flex items-center justify-between p-2.5 sm:p-3 rounded-xl border border-transparent hover:border-black/10 cursor-pointer transition">
+                        <div class="flex items-baseline space-x-3 sm:space-x-4">
+                            <span class="text-xl sm:text-2xl font-bold text-slate-900 select-none">(ख)</span>
+                            <span class="text-xl sm:text-2xl font-medium text-slate-900 select-none">अधिक टॉफ़ी और चॉकलेट खाने से</span>
+                        </div>
+                        <button type="button" aria-label="जोड़ें (ख)" data-left="kha" class="connector-dot left-dot flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[#d9247e] border-2 border-white shadow-md cursor-pointer ml-3 focus:outline-none"></button>
+                    </div>
+
+                    <!-- Item (ग) -->
+                    <div data-id="ga" class="interactive-row flex items-center justify-between p-2.5 sm:p-3 rounded-xl border border-transparent hover:border-black/10 cursor-pointer transition">
+                        <div class="flex items-baseline space-x-3 sm:space-x-4">
+                            <span class="text-xl sm:text-2xl font-bold text-slate-900 select-none">(ग)</span>
+                            <span class="text-xl sm:text-2xl font-medium text-slate-900 select-none">राजू सिसक-सिसककर</span>
+                        </div>
+                        <button type="button" aria-label="जोड़ें (ग)" data-left="ga" class="connector-dot left-dot flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[#d9247e] border-2 border-white shadow-md cursor-pointer ml-3 focus:outline-none"></button>
+                    </div>
+
+                    <!-- Item (घ) -->
+                    <div data-id="gha" class="interactive-row flex items-center justify-between p-2.5 sm:p-3 rounded-xl border border-transparent hover:border-black/10 cursor-pointer transition">
+                        <div class="flex items-baseline space-x-3 sm:space-x-4">
+                            <span class="text-xl sm:text-2xl font-bold text-slate-900 select-none">(घ)</span>
+                            <span class="text-xl sm:text-2xl font-medium text-slate-900 select-none">डॉक्टर ने बताया कि</span>
+                        </div>
+                        <button type="button" aria-label="जोड़ें (घ)" data-left="gha" class="connector-dot left-dot flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[#d9247e] border-2 border-white shadow-md cursor-pointer ml-3 focus:outline-none"></button>
+                    </div>
+
+                </div>
+
+                <!-- Right Column (उत्तर पक्ष) -->
+                <div class="space-y-4 sm:space-y-6" id="right-column">
+                    
+                    <!-- Right Item 1 -->
+                    <div data-id="1" class="interactive-row flex items-center p-2.5 sm:p-3 rounded-xl border border-transparent hover:border-black/10 cursor-pointer transition">
+                        <button type="button" aria-label="जोड़ें उत्तर 1" data-right="1" class="connector-dot right-dot flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[#0284c7] border-2 border-white shadow-md cursor-pointer mr-3 sm:mr-4 focus:outline-none"></button>
+                        <span class="text-xl sm:text-2xl font-medium text-slate-900 select-none">दाँत सड़ जाते हैं।</span>
+                    </div>
+
+                    <!-- Right Item 2 -->
+                    <div data-id="2" class="interactive-row flex items-center p-2.5 sm:p-3 rounded-xl border border-transparent hover:border-black/10 cursor-pointer transition">
+                        <button type="button" aria-label="जोड़ें उत्तर 2" data-right="2" class="connector-dot right-dot flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[#0284c7] border-2 border-white shadow-md cursor-pointer mr-3 sm:mr-4 focus:outline-none"></button>
+                        <span class="text-xl sm:text-2xl font-medium text-slate-900 select-none">मंजन करना चाहिए।</span>
+                    </div>
+
+                    <!-- Right Item 3 -->
+                    <div data-id="3" class="interactive-row flex items-center p-2.5 sm:p-3 rounded-xl border border-transparent hover:border-black/10 cursor-pointer transition">
+                        <button type="button" aria-label="जोड़ें उत्तर 3" data-right="3" class="connector-dot right-dot flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[#0284c7] border-2 border-white shadow-md cursor-pointer mr-3 sm:mr-4 focus:outline-none"></button>
+                        <span class="text-xl sm:text-2xl font-medium text-slate-900 select-none">इसके दाँत में कीड़े लग रहे हैं।</span>
+                    </div>
+
+                    <!-- Right Item 4 -->
+                    <div data-id="4" class="interactive-row flex items-center p-2.5 sm:p-3 rounded-xl border border-transparent hover:border-black/10 cursor-pointer transition">
+                        <button type="button" aria-label="जोड़ें उत्तर 4" data-right="4" class="connector-dot right-dot flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[#0284c7] border-2 border-white shadow-md cursor-pointer mr-3 sm:mr-4 focus:outline-none"></button>
+                        <span class="text-xl sm:text-2xl font-medium text-slate-900 select-none">रो रहा था।</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Hint notification box -->
+            <div id="instruction-hint" class="mt-8 text-center text-sm sm:text-base text-slate-700/80 bg-white/60 backdrop-blur-sm py-2 px-4 rounded-xl border border-black/5 shadow-sm inline-block mx-auto flex items-center justify-center gap-2">
+                <span>💡 बाएँ बिंदु पर क्लिक करें या खींचकर दाएँ के सही बिंदु से जोड़ें।</span>
+            </div>
+        </div>
+
+        <footer class="bg-slate-50 border-t border-slate-200 px-6 py-5 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center space-x-2">
+                <span id="score-badge" class="px-3.5 py-1.5 rounded-lg bg-slate-200 text-slate-700 font-bold text-sm">
+                    मिलाए गए: 0 / 4
+                </span>
+                <span id="result-message" class="text-sm font-semibold text-slate-600"></span>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2.5">
+                <button id="btn-example" class="px-4 py-2 rounded-xl text-sm font-bold bg-pink-100 text-pink-700 hover:bg-pink-200 transition active:scale-95">
+                    उदाहरण देखें (क ➔ मंजन...)
+                </button>
+                <button id="btn-reset" class="px-4 py-2 rounded-xl text-sm font-bold bg-slate-200 text-slate-700 hover:bg-slate-300 transition active:scale-95">
+                    दोबारा करें (Reset)
+                </button>
+                <button id="btn-check" class="px-6 py-2 rounded-xl text-sm font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-md transition active:scale-95 flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                    उत्तर जाँचें (Check)
+                </button>
+            </div>
+        </footer>
+
+    </main>
+
+    <script>
+        // Correct answers map according to the context and original exercise
+        // (क) रात में सोने से पहले -> 2 (मंजन करना चाहिए।)
+        // (ख) अधिक टॉफ़ी और चॉकलेट खाने से -> 1 (दाँत सड़ जाते हैं।)
+        // (ग) राजू सिसक-सिसककर -> 4 (रो रहा था।)
+        // (घ) डॉक्टर ने बताया कि -> 3 (इसके दाँत में कीड़े लग रहे हैं।)
+        const SOLUTION = {
+            'ka': '2',
+            'kha': '1',
+            'ga': '4',
+            'gha': '3'
+        };
+
+        const PAIR_COLORS = {
+            'ka': '#d9247e', // Matches pink example line in textbook
+            'kha': '#16a34a',
+            'ga': '#2563eb',
+            'gha': '#d97706'
+        };
+
+        const PAIR_MARKERS = {
+            'ka': 'url(#arrow-pink)',
+            'kha': 'url(#arrow-green)',
+            'ga': 'url(#arrow-blue)',
+            'gha': 'url(#arrow-amber)'
+        };
+
+        // State variables
+        let userMatches = {}; // { 'ka': '2', ... }
+        let selectedLeftId = null;
+        let isAudioMuted = false;
+        let isDragging = false;
+        let dragSource = null;
+
+        // Tone.js Sound FX Setup
+        let synth = null;
+        function initAudio() {
+            if (!synth) {
+                synth = new Tone.PolySynth(Tone.Synth, {
+                    oscillator: { type: 'sine' },
+                    envelope: { attack: 0.01, decay: 0.1, sustain: 0.1, release: 0.5 }
+                }).toDestination();
+                synth.volume.value = -6;
+            }
+        }
+
+        function playSound(type) {
+            if (isAudioMuted) return;
+            try {
+                Tone.start();
+                initAudio();
+                if (type === 'connect') {
+                    synth.triggerAttackRelease(['E5', 'B5'], '16n');
+                } else if (type === 'correct') {
+                    synth.triggerAttackRelease(['C5', 'E5', 'G5', 'C6'], '8n');
+                } else if (type === 'wrong') {
+                    synth.triggerAttackRelease(['Db4', 'C4'], '8n');
+                } else if (type === 'select') {
+                    synth.triggerAttackRelease('A4', '32n');
+                }
+            } catch (e) {
+                console.warn('Audio could not be played', e);
+            }
+        }
+
+        // DOM elements
+        const sheet = document.getElementById('exercise-sheet');
+        const svgCanvas = document.getElementById('connections-svg');
+        const permanentLinesGroup = document.getElementById('permanent-lines');
+        const tempLine = document.getElementById('temp-line');
+        const scoreBadge = document.getElementById('score-badge');
+        const resultMessage = document.getElementById('result-message');
+        const btnCheck = document.getElementById('btn-check');
+        const btnReset = document.getElementById('btn-reset');
+        const btnExample = document.getElementById('btn-example');
+        const audioToggleBtn = document.getElementById('audio-toggle');
+
+        function getDotCenter(element) {
+            const rect = element.getBoundingClientRect();
+            const sheetRect = sheet.getBoundingClientRect();
+            return {
+                x: rect.left + rect.width / 2 - sheetRect.left,
+                y: rect.top + rect.height / 2 - sheetRect.top
+            };
+        }
+
+        function renderAllLines() {
+            permanentLinesGroup.innerHTML = '';
+            
+            Object.entries(userMatches).forEach(([leftId, rightId]) => {
+                const leftDot = document.querySelector(`button[data-left="${leftId}"]`);
+                const rightDot = document.querySelector(`button[data-right="${rightId}"]`);
+
+                if (leftDot && rightDot) {
+                    const start = getDotCenter(leftDot);
+                    const end = getDotCenter(rightDot);
+
+                    // Compute smooth curved or straight path
+                    const dx = end.x - start.x;
+                    const pathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    
+                    // Slightly curved cubic bezier curve
+                    const curvature = Math.min(Math.abs(dx) * 0.3, 80);
+                    const cp1x = start.x + curvature;
+                    const cp1y = start.y;
+                    const cp2x = end.x - curvature;
+                    const cp2y = end.y;
+
+                    const d = `M ${start.x} ${start.y} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${end.x} ${end.y}`;
+                    const strokeColor = PAIR_COLORS[leftId] || '#d9247e';
+                    const marker = PAIR_MARKERS[leftId] || 'url(#arrow-default)';
+
+                    pathEl.setAttribute('d', d);
+                    pathEl.setAttribute('stroke', strokeColor);
+                    pathEl.setAttribute('stroke-width', '3.5');
+                    pathEl.setAttribute('fill', 'none');
+                    pathEl.setAttribute('marker-end', marker);
+                    pathEl.setAttribute('stroke-linecap', 'round');
+                    pathEl.classList.add('transition-all', 'duration-300');
+
+                    // Allow clicking line to remove connection
+                    pathEl.style.cursor = 'pointer';
+                    pathEl.style.pointerEvents = 'stroke';
+                    pathEl.addEventListener('click', () => {
+                        delete userMatches[leftId];
+                        updateUI();
+                        renderAllLines();
+                    });
+
+                    permanentLinesGroup.appendChild(pathEl);
+                }
+            });
+
+            updateUI();
+        }
+
+        // Update score badge and UI state
+        function updateUI() {
+            const count = Object.keys(userMatches).length;
+            scoreBadge.textContent = `मिलाए गए: ${count} / 4`;
+            
+            // Highlight connected dots
+            document.querySelectorAll('.connector-dot').forEach(dot => {
+                dot.classList.remove('ring-4', 'ring-emerald-400', 'selected');
+            });
+
+            Object.entries(userMatches).forEach(([leftId, rightId]) => {
+                const lDot = document.querySelector(`button[data-left="${leftId}"]`);
+                const rDot = document.querySelector(`button[data-right="${rightId}"]`);
+                if (lDot) lDot.classList.add('ring-4', 'ring-emerald-400');
+                if (rDot) rDot.classList.add('ring-4', 'ring-emerald-400');
+            });
+
+            if (selectedLeftId) {
+                const activeDot = document.querySelector(`button[data-left="${selectedLeftId}"]`);
+                if (activeDot) activeDot.classList.add('selected');
+            }
+        }
+
+        function handleLeftSelect(leftId) {
+            playSound('select');
+            selectedLeftId = leftId;
+            updateUI();
+        }
+
+        function handleRightSelect(rightId) {
+            if (!selectedLeftId) {
+                // If user clicked right item first, check if it's already connected to remove it
+                const existingLeft = Object.keys(userMatches).find(k => userMatches[k] === rightId);
+                if (existingLeft) {
+                    delete userMatches[existingLeft];
+                    renderAllLines();
+                }
+                return;
+            }
+
+            // Remove any existing connection that already points to this right item
+            Object.keys(userMatches).forEach(key => {
+                if (userMatches[key] === rightId) {
+                    delete userMatches[key];
+                }
+            });
+
+            // Set the new pair
+            userMatches[selectedLeftId] = rightId;
+            playSound('connect');
+            selectedLeftId = null;
+            resultMessage.textContent = '';
+            renderAllLines();
+        }
+
+        // Attach listeners to left dots and rows
+        document.querySelectorAll('#left-column .interactive-row').forEach(row => {
+            const id = row.getAttribute('data-id');
+            row.addEventListener('click', (e) => {
+                handleLeftSelect(id);
+            });
+        });
+
+        // Attach listeners to right dots and rows
+        document.querySelectorAll('#right-column .interactive-row').forEach(row => {
+            const id = row.getAttribute('data-id');
+            row.addEventListener('click', (e) => {
+                handleRightSelect(id);
+            });
+        });
+
+        function startDrag(e, leftId) {
+            e.stopPropagation();
+            isDragging = true;
+            dragSource = leftId;
+            selectedLeftId = leftId;
+            updateUI();
+            tempLine.classList.remove('hidden');
+            updateDragLine(e);
+        }
+
+        function updateDragLine(e) {
+            if (!isDragging || !dragSource) return;
+            const leftDot = document.querySelector(`button[data-left="${dragSource}"]`);
+            if (!leftDot) return;
+
+            const start = getDotCenter(leftDot);
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            const sheetRect = sheet.getBoundingClientRect();
+            
+            const currentX = clientX - sheetRect.left;
+            const currentY = clientY - sheetRect.top;
+
+            const d = `M ${start.x} ${start.y} L ${currentX} ${currentY}`;
+            tempLine.setAttribute('d', d);
+        }
+
+        function stopDrag(e) {
+            if (!isDragging) return;
+            isDragging = false;
+            tempLine.classList.add('hidden');
+
+            const clientX = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
+            const clientY = e.changedTouches ? e.changedTouches[0].clientY : e.clientY;
+
+            // Check if dropped over a right-column item
+            const elementsUnder = document.elementsFromPoint(clientX, clientY);
+            let targetRightId = null;
+
+            for (let el of elementsUnder) {
+                if (el.getAttribute && el.getAttribute('data-right')) {
+                    targetRightId = el.getAttribute('data-right');
+                    break;
+                }
+                const row = el.closest && el.closest('#right-column .interactive-row');
+                if (row) {
+                    targetRightId = row.getAttribute('data-id');
+                    break;
+                }
+            }
+
+            if (targetRightId && dragSource) {
+                userMatches[dragSource] = targetRightId;
+                playSound('connect');
+            }
+
+            selectedLeftId = null;
+            dragSource = null;
+            renderAllLines();
+        }
+
+        // Add mouse / touch listeners for dragging on left dots
+        document.querySelectorAll('.left-dot').forEach(dot => {
+            const id = dot.getAttribute('data-left');
+            dot.addEventListener('mousedown', (e) => startDrag(e, id));
+            dot.addEventListener('touchstart', (e) => startDrag(e, id), { passive: false });
+        });
+
+        window.addEventListener('mousemove', updateDragLine);
+        window.addEventListener('touchmove', updateDragLine, { passive: true });
+        window.addEventListener('mouseup', stopDrag);
+        window.addEventListener('touchend', stopDrag);
+
+        btnCheck.addEventListener('click', () => {
+            const userKeys = Object.keys(userMatches);
+            if (userKeys.length === 0) {
+                resultMessage.textContent = 'कृपया पहले रेखा खींचकर जोड़ें मिलाएँ।';
+                resultMessage.className = 'text-sm font-semibold text-amber-600';
+                return;
+            }
+
+            let correctCount = 0;
+            userKeys.forEach(k => {
+                if (userMatches[k] === SOLUTION[k]) {
+                    correctCount++;
+                }
+            });
+
+            if (correctCount === 4) {
+                resultMessage.textContent = '🎉 शाबाश! सभी मिलान बिल्कुल सही हैं।';
+                resultMessage.className = 'text-sm font-bold text-emerald-600';
+                playSound('correct');
+                
+                // Trigger celebratory confetti
+                try {
+                    confetti({
+                        particleCount: 75,
+                        spread: 60,
+                        origin: { y: 0.7 }
+                    });
+                } catch (e) {}
+            } else {
+                resultMessage.textContent = `${correctCount}/4 सही हैं। गलत रेखा पर क्लिक करके बदलें।`;
+                resultMessage.className = 'text-sm font-bold text-rose-600';
+                playSound('wrong');
+            }
+        });
+
+        // Reset button
+        btnReset.addEventListener('click', () => {
+            userMatches = {};
+            selectedLeftId = null;
+            resultMessage.textContent = '';
+            renderAllLines();
+        });
+
+        // Example button loads the textbook example (क -> 2)
+        btnExample.addEventListener('click', () => {
+            userMatches = { 'ka': '2' };
+            selectedLeftId = null;
+            resultMessage.textContent = 'पाठ्यपुस्तक का उदाहरण दिखाया गया है।';
+            resultMessage.className = 'text-sm font-semibold text-pink-700';
+            playSound('select');
+            renderAllLines();
+        });
+
+        // Audio toggle
+        audioToggleBtn.addEventListener('click', () => {
+            isAudioMuted = !isAudioMuted;
+            audioToggleBtn.querySelector('span').textContent = isAudioMuted ? 'ध्वनि: बंद' : 'ध्वनि: ऑन';
+            audioToggleBtn.classList.toggle('opacity-70', isAudioMuted);
+        });
+
+        // Load textbook example on startup to mirror the initial image
+        window.addEventListener('load', () => {
+            userMatches = { 'ka': '2' };
+            renderAllLines();
+        });
+
+        // Re-render lines on window resize to ensure precision
+        window.addEventListener('resize', () => {
+            renderAllLines();
+        });
+    </script>
+</body>
+</html>

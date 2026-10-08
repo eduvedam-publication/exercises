@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>'कर' जोड़कर शब्द बनाइए-</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for crisp Hindi Devanagari typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&family=Yatra+One&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Mukta', sans-serif;
+        }
+        .exercise-title {
+            color: #b80d6b;
+            font-weight: 700;
+        }
+        .underline-input {
+            border-bottom: 2px solid #94a3b8;
+            outline: none;
+            transition: all 0.25s ease;
+            background: transparent;
+        }
+        .underline-input:focus {
+            border-bottom-color: #b80d6b;
+            background-color: #fdf2f8;
+        }
+        .underline-input.correct {
+            border-bottom-color: #16a34a;
+            color: #15803d;
+            background-color: #f0fdf4;
+        }
+        .underline-input.incorrect {
+            border-bottom-color: #dc2626;
+            color: #b91c1c;
+            background-color: #fef2f2;
+        }
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            .worksheet-card {
+                box-shadow: none !important;
+                border: 1px solid #e2e8f0 !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-amber-50 via-rose-50 to-slate-100 min-h-screen py-8 px-4 sm:px-6 lg:px-8 text-gray-800 flex flex-col justify-between">
+
+    <main class="max-w-3xl mx-auto w-full">
+        <!-- Exercise Card -->
+        <div class="worksheet-card bg-white rounded-2xl shadow-xl border border-pink-100 p-6 sm:p-10 mb-6 transition-all duration-300">
+            
+            <!-- Top Controls (Print, Reset, Score) -->
+            <div class="flex items-center justify-between border-b border-gray-100 pb-4 mb-8 no-print">
+                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-pink-100 text-pink-700">
+                    <i class="fa-solid fa-graduation-cap"></i> व्याकरण अभ्यास (Hindi Grammar)
+                </span>
+                <div class="flex items-center gap-2">
+                    <button id="printBtn" type="button" class="px-3 py-1.5 text-xs sm:text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors flex items-center gap-1.5" title="प्रिंट करें">
+                        <i class="fa-solid fa-print"></i> प्रिंट
+                    </button>
+                    <button id="resetBtn" type="button" class="px-3 py-1.5 text-xs sm:text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors flex items-center gap-1.5" title="रीसेट करें">
+                        <i class="fa-solid fa-rotate-right"></i> रीसेट
+                    </button>
+                </div>
+            </div>
+
+            <!-- Exact Heading from user prompt image -->
+            <div class="mb-8">
+                <h1 class="exercise-title text-2xl sm:text-3xl md:text-4xl tracking-wide select-none">
+                    ‘कर’ जोड़कर शब्द बनाइए-
+                </h1>
+            </div>
+
+            <!-- Exercise Items (Exact structure matching the original prompt image) -->
+            <div class="space-y-6 sm:space-y-8 text-lg sm:text-2xl md:text-3xl text-gray-800 leading-relaxed font-medium">
+                
+                <!-- (क) Completed example -->
+                <div class="flex flex-wrap items-center gap-2 sm:gap-4 pb-2 border-b border-dashed border-gray-200">
+                    <span class="w-12 text-gray-600 font-semibold">(क)</span>
+                    <span class="w-16 sm:w-20 font-semibold text-gray-800">लौट</span>
+                    <span class="text-gray-400 font-bold">+</span>
+                    <span class="w-24 sm:w-32 text-center font-semibold text-gray-800">कर</span>
+                    <span class="text-gray-400 font-bold">–</span>
+                    <span class="font-bold text-gray-900 px-3 py-0.5 rounded-lg bg-pink-50 text-pink-800">लौटकर</span>
+                    <span class="ml-auto text-xs sm:text-sm text-emerald-600 font-normal no-print flex items-center gap-1">
+                        <i class="fa-solid fa-circle-check"></i> उदाहरण
+                    </span>
+                </div>
+
+                <!-- (ख) देख + ___________ – ___________ -->
+                <div class="flex flex-wrap items-center gap-2 sm:gap-4 pb-2 border-b border-dashed border-gray-200">
+                    <span class="w-12 text-gray-600 font-semibold">(ख)</span>
+                    <span class="w-16 sm:w-20 font-semibold text-gray-800">देख</span>
+                    <span class="text-gray-400 font-bold">+</span>
+                    
+                    <div class="relative inline-block">
+                        <input 
+                            type="text" 
+                            id="blank-kh-1" 
+                            data-correct="कर" 
+                            placeholder="___________" 
+                            autocomplete="off" 
+                            spellcheck="false"
+                            class="underline-input w-28 sm:w-36 text-center text-lg sm:text-2xl font-bold py-1 px-2 rounded-t placeholder-gray-300"
+                        />
+                        <span id="badge-kh-1" class="absolute -right-2 -top-2 hidden text-xs"></span>
+                    </div>
+
+                    <span class="text-gray-400 font-bold">–</span>
+
+                    <div class="relative inline-block">
+                        <input 
+                            type="text" 
+                            id="blank-kh-2" 
+                            data-correct="देखकर" 
+                            placeholder="___________" 
+                            autocomplete="off" 
+                            spellcheck="false"
+                            class="underline-input w-36 sm:w-48 text-center text-lg sm:text-2xl font-bold py-1 px-2 rounded-t placeholder-gray-300"
+                        />
+                        <span id="badge-kh-2" class="absolute -right-2 -top-2 hidden text-xs"></span>
+                    </div>
+                </div>
+
+                <!-- (ग) सो + ___________ – ___________ -->
+                <div class="flex flex-wrap items-center gap-2 sm:gap-4 pb-2 border-b border-dashed border-gray-200">
+                    <span class="w-12 text-gray-600 font-semibold">(ग)</span>
+                    <span class="w-16 sm:w-20 font-semibold text-gray-800">सो</span>
+                    <span class="text-gray-400 font-bold">+</span>
+                    
+                    <div class="relative inline-block">
+                        <input 
+                            type="text" 
+                            id="blank-g-1" 
+                            data-correct="कर" 
+                            placeholder="___________" 
+                            autocomplete="off" 
+                            spellcheck="false"
+                            class="underline-input w-28 sm:w-36 text-center text-lg sm:text-2xl font-bold py-1 px-2 rounded-t placeholder-gray-300"
+                        />
+                        <span id="badge-g-1" class="absolute -right-2 -top-2 hidden text-xs"></span>
+                    </div>
+
+                    <span class="text-gray-400 font-bold">–</span>
+
+                    <div class="relative inline-block">
+                        <input 
+                            type="text" 
+                            id="blank-g-2" 
+                            data-correct="सोकर" 
+                            placeholder="___________" 
+                            autocomplete="off" 
+                            spellcheck="false"
+                            class="underline-input w-36 sm:w-48 text-center text-lg sm:text-2xl font-bold py-1 px-2 rounded-t placeholder-gray-300"
+                        />
+                        <span id="badge-g-2" class="absolute -right-2 -top-2 hidden text-xs"></span>
+                    </div>
+                </div>
+
+                <!-- (घ) नहा + ___________ – ___________ -->
+                <div class="flex flex-wrap items-center gap-2 sm:gap-4 pb-2 border-b border-dashed border-gray-200">
+                    <span class="w-12 text-gray-600 font-semibold">(घ)</span>
+                    <span class="w-16 sm:w-20 font-semibold text-gray-800">नहा</span>
+                    <span class="text-gray-400 font-bold">+</span>
+                    
+                    <div class="relative inline-block">
+                        <input 
+                            type="text" 
+                            id="blank-gh-1" 
+                            data-correct="कर" 
+                            placeholder="___________" 
+                            autocomplete="off" 
+                            spellcheck="false"
+                            class="underline-input w-28 sm:w-36 text-center text-lg sm:text-2xl font-bold py-1 px-2 rounded-t placeholder-gray-300"
+                        />
+                        <span id="badge-gh-1" class="absolute -right-2 -top-2 hidden text-xs"></span>
+                    </div>
+
+                    <span class="text-gray-400 font-bold">–</span>
+
+                    <div class="relative inline-block">
+                        <input 
+                            type="text" 
+                            id="blank-gh-2" 
+                            data-correct="नहाकर" 
+                            placeholder="___________" 
+                            autocomplete="off" 
+                            spellcheck="false"
+                            class="underline-input w-36 sm:w-48 text-center text-lg sm:text-2xl font-bold py-1 px-2 rounded-t placeholder-gray-300"
+                        />
+                        <span id="badge-gh-2" class="absolute -right-2 -top-2 hidden text-xs"></span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Quick Input Assist for users typing on English keyboard -->
+            <div class="mt-8 pt-6 border-t border-gray-100 no-print">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-sm text-gray-600 mb-4">
+                    <span class="font-medium flex items-center gap-1.5 text-gray-700">
+                        <i class="fa-regular fa-keyboard text-pink-600"></i> कीबोर्ड सहायता (सुविधा हेतु टैप करें):
+                    </span>
+                    <span class="text-xs text-gray-500">सक्रिय बॉक्स में शब्द भरने हेतु क्लिक करें</span>
+                </div>
+                
+                <div class="flex flex-wrap gap-2.5">
+                    <button type="button" class="quick-word-btn px-4 py-2 bg-pink-50 hover:bg-pink-100 border border-pink-200 text-pink-700 font-semibold rounded-lg text-lg transition-transform active:scale-95 shadow-sm" data-word="कर">
+                        + कर
+                    </button>
+                    <button type="button" class="quick-word-btn px-4 py-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 font-semibold rounded-lg text-lg transition-transform active:scale-95 shadow-sm" data-word="देखकर">
+                        देखकर
+                    </button>
+                    <button type="button" class="quick-word-btn px-4 py-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 font-semibold rounded-lg text-lg transition-transform active:scale-95 shadow-sm" data-word="सोकर">
+                        सोकर
+                    </button>
+                    <button type="button" class="quick-word-btn px-4 py-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 font-semibold rounded-lg text-lg transition-transform active:scale-95 shadow-sm" data-word="नहाकर">
+                        नहाकर
+                    </button>
+                    <button type="button" id="clearFocusedBtn" class="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-600 text-sm font-medium rounded-lg transition-colors ml-auto" title="चयनित बॉक्स साफ करें">
+                        <i class="fa-solid fa-delete-left"></i> साफ करें
+                    </button>
+                </div>
+            </div>
+
+            <!-- Action Buttons & Feedback Message -->
+            <div class="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-6 border-t border-gray-100 no-print">
+                <div class="flex items-center gap-3">
+                    <button id="checkBtn" type="button" class="px-6 py-3 bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-700 hover:to-rose-700 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-check-double"></i> उत्तर जाँचें (Check)
+                    </button>
+                    <button id="showAnswersBtn" type="button" class="px-5 py-3 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold rounded-xl shadow-sm transition-all flex items-center justify-center gap-2">
+                        <i class="fa-regular fa-eye"></i> उत्तर देखें
+                    </button>
+                </div>
+
+                <!-- Live Score and Feedback banner -->
+                <div id="resultMessage" class="hidden px-4 py-2.5 rounded-xl text-base font-semibold flex items-center gap-2">
+                    <!-- Populated via JavaScript -->
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Instructional Note Card -->
+        <div class="bg-amber-50/80 border border-amber-200 rounded-xl p-4 text-amber-900 text-sm no-print flex items-start gap-3 shadow-sm">
+            <i class="fa-solid fa-lightbulb text-amber-600 text-lg mt-0.5"></i>
+            <div>
+                <p class="font-bold mb-1">पूर्वकालिक क्रिया ('कर' प्रत्यय का प्रयोग):</p>
+                <p class="text-amber-800 text-xs sm:text-sm">धातु (क्रिया के मूल रूप) में <strong>'कर'</strong> जोड़ने से पूर्वकालिक क्रिया बनती है, जैसे— <em>लौट + कर = लौटकर</em>, <em>देख + कर = देखकर</em>।</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputs = Array.from(document.querySelectorAll('.underline-input'));
+            const checkBtn = document.getElementById('checkBtn');
+            const showAnswersBtn = document.getElementById('showAnswersBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const printBtn = document.getElementById('printBtn');
+            const resultMsg = document.getElementById('resultMessage');
+            const quickWordButtons = document.querySelectorAll('.quick-word-btn');
+            const clearFocusedBtn = document.getElementById('clearFocusedBtn');
+
+            let lastFocusedInput = inputs[0];
+
+            // Track active input for quick word inserting
+            inputs.forEach(input => {
+                input.addEventListener('focus', () => {
+                    lastFocusedInput = input;
+                });
+
+                // Clear styling on input change
+                input.addEventListener('input', () => {
+                    input.classList.remove('correct', 'incorrect');
+                    resultMsg.classList.add('hidden');
+                });
+
+                // Allow Enter key to move to next input or check answers
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        const currentIndex = inputs.indexOf(input);
+                        if (currentIndex < inputs.length - 1) {
+                            inputs[currentIndex + 1].focus();
+                        } else {
+                            checkAnswers();
+                        }
+                    }
+                });
+            });
+
+            // Quick word assist buttons
+            quickWordButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    if (lastFocusedInput) {
+                        lastFocusedInput.value = btn.getAttribute('data-word');
+                        lastFocusedInput.classList.remove('correct', 'incorrect');
+                        lastFocusedInput.focus();
+                        
+                        // Advance to the next blank input automatically for smooth UX
+                        const currentIndex = inputs.indexOf(lastFocusedInput);
+                        if (currentIndex < inputs.length - 1) {
+                            setTimeout(() => {
+                                inputs[currentIndex + 1].focus();
+                            }, 100);
+                        }
+                    }
+                });
+            });
+
+            // Clear focused box button
+            if (clearFocusedBtn) {
+                clearFocusedBtn.addEventListener('click', () => {
+                    if (lastFocusedInput) {
+                        lastFocusedInput.value = '';
+                        lastFocusedInput.classList.remove('correct', 'incorrect');
+                        lastFocusedInput.focus();
+                    }
+                });
+            }
+
+            // Function to normalize Hindi text strings (trim spaces, ignore trailing punct)
+            function normalizeHindiText(text) {
+                return (text || '').trim().replace(/[\u200B-\u200D\uFEFF]/g, '');
+            }
+
+            // Check answers function
+            function checkAnswers() {
+                let correctCount = 0;
+                let emptyCount = 0;
+
+                inputs.forEach(input => {
+                    const userVal = normalizeHindiText(input.value);
+                    const expectedVal = normalizeHindiText(input.getAttribute('data-correct'));
+
+                    if (!userVal) {
+                        emptyCount++;
+                        input.classList.remove('correct');
+                        input.classList.add('incorrect');
+                    } else if (userVal === expectedVal) {
+                        correctCount++;
+                        input.classList.add('correct');
+                        input.classList.remove('incorrect');
+                    } else {
+                        input.classList.remove('correct');
+                        input.classList.add('incorrect');
+                    }
+                });
+
+                // Display Feedback
+                resultMsg.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-800', 'bg-amber-100', 'text-amber-800', 'bg-rose-100', 'text-rose-800');
+
+                if (correctCount === inputs.length) {
+                    resultMsg.className = 'px-4 py-2.5 rounded-xl text-base font-semibold flex items-center gap-2 bg-emerald-100 text-emerald-800 border border-emerald-300';
+                    resultMsg.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600"></i> शाबाश! सभी उत्तर बिल्कुल सही हैं (${correctCount}/${inputs.length})`;
+                } else if (emptyCount === inputs.length) {
+                    resultMsg.className = 'px-4 py-2.5 rounded-xl text-base font-semibold flex items-center gap-2 bg-amber-100 text-amber-800 border border-amber-300';
+                    resultMsg.innerHTML = `<i class="fa-solid fa-circle-exclamation text-amber-600"></i> कृपया पहले रिक्त स्थान भरें।`;
+                } else {
+                    resultMsg.className = 'px-4 py-2.5 rounded-xl text-base font-semibold flex items-center gap-2 bg-rose-100 text-rose-800 border border-rose-300';
+                    resultMsg.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-600"></i> ${correctCount}/${inputs.length} सही। लाल बॉक्स में सुधार करें।`;
+                }
+            }
+
+            // Show all correct answers
+            function showAnswers() {
+                inputs.forEach(input => {
+                    input.value = input.getAttribute('data-correct');
+                    input.classList.add('correct');
+                    input.classList.remove('incorrect');
+                });
+                resultMsg.className = 'px-4 py-2.5 rounded-xl text-base font-semibold flex items-center gap-2 bg-pink-100 text-pink-800 border border-pink-300';
+                resultMsg.innerHTML = `<i class="fa-solid fa-info-circle text-pink-600"></i> सभी सही उत्तर दिखाए गए हैं।`;
+                resultMsg.classList.remove('hidden');
+            }
+
+            // Reset worksheet
+            function resetWorksheet() {
+                inputs.forEach(input => {
+                    input.value = '';
+                    input.classList.remove('correct', 'incorrect');
+                });
+                resultMsg.classList.add('hidden');
+                if (inputs.length > 0) {
+                    inputs[0].focus();
+                }
+            }
+
+            // Event Listeners
+            checkBtn.addEventListener('click', checkAnswers);
+            showAnswersBtn.addEventListener('click', showAnswers);
+            resetBtn.addEventListener('click', resetWorksheet);
+            printBtn.addEventListener('click', () => {
+                window.print();
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="hi" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>विलोम शब्दों के जोड़े बनाएँ - Interactive Hindi Exercise</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tone.js for clean synthesized audio feedback -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
+  <!-- Google Fonts for crisp Hindi typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            hindi: ['Noto Sans Devanagari', 'sans-serif'],
+            display: ['Baloo 2', 'Noto Sans Devanagari', 'cursive'],
+          },
+          colors: {
+            brand: {
+              50: '#fdf2f8',
+              100: '#fce7f3',
+              500: '#ec4899',
+              600: '#db2777',
+              700: '#be185d',
+              800: '#9d174d'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Noto Sans Devanagari', sans-serif;
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    
+    .bubble-float {
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .pulse-subtle {
+      animation: pulseGlow 2s infinite;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(219, 39, 119, 0.4); }
+      50% { box-shadow: 0 0 0 10px rgba(219, 39, 119, 0); }
+    }
+
+    /* SVG Connecting Lines */
+    .connection-line {
+      transition: stroke 0.3s ease, stroke-width 0.2s ease;
+      stroke-linecap: round;
+    }
+
+    .card-touch-point {
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    .card-touch-point:hover {
+      transform: scale(1.35);
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 min-h-screen text-slate-800 flex flex-col justify-between selection:bg-pink-200">
+  
+  <!-- Canvas for celebration confetti -->
+  <canvas id="confettiCanvas" class="fixed inset-0 pointer-events-none z-50 w-full h-full"></canvas>
+
+  <div class="max-w-4xl mx-auto w-full px-4 py-6 md:py-8 flex-1 flex flex-col">
+    
+    <!-- Top Bar with Audio & Settings -->
+    <header class="flex items-center justify-between mb-4">
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center justify-center w-10 h-10 rounded-2xl bg-pink-600 text-white shadow-md shadow-pink-200 font-bold text-lg">
+          क
+        </span>
+        <div>
+          <span class="text-xs uppercase font-bold tracking-wider text-pink-600">हिंदी व्याकरण अभ्यास</span>
+          <p class="text-xs text-slate-500">कक्षा अभ्यास • विलोम शब्द (Antonyms)</p>
+        </div>
+      </div>
+      
+      <!-- Audio & Reset Quick Buttons -->
+      <div class="flex items-center gap-2">
+        <button id="soundToggleBtn" class="px-3 py-1.5 rounded-xl bg-white border border-pink-200 text-slate-700 hover:bg-pink-50 transition shadow-sm text-sm flex items-center gap-1.5 font-medium" title="ध्वनि चालू/बंद करें">
+          <span id="soundIcon">🔊</span>
+          <span class="hidden sm:inline text-xs">ध्वनि</span>
+        </button>
+        <button id="resetHeaderBtn" class="px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition shadow-sm text-xs font-semibold flex items-center gap-1">
+          🔄 दोबारा शुरू करें
+        </button>
+      </div>
+    </header>
+
+    <!-- Exercise Title Card (matching the exact book styling from image) -->
+    <div class="bg-white/90 backdrop-blur-md rounded-3xl p-5 md:p-6 shadow-xl border border-pink-100 mb-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-pink-100 pb-4">
+        <div>
+          <h1 class="font-display text-2xl sm:text-3xl md:text-4xl font-extrabold text-pink-700 tracking-tight flex items-center gap-2">
+            <span>विलोम शब्दों के जोड़े बनाएँ-</span>
+          </h1>
+          <p class="text-sm md:text-base text-slate-600 mt-1">
+            बाईं ओर के शब्द को दाईं ओर के उसके सही उल्टे (विपरीत) अर्थ वाले शब्द से मिलाइए।
+          </p>
+        </div>
+        
+        <!-- Score & Progress Pill -->
+        <div class="flex items-center gap-3 self-start sm:self-center bg-pink-50/80 px-4 py-2.5 rounded-2xl border border-pink-200">
+          <div class="text-center">
+            <span class="block text-[11px] font-bold uppercase text-pink-600">अंक / Score</span>
+            <span id="scoreText" class="font-display text-xl font-bold text-slate-800">0 / 4</span>
+          </div>
+          <div class="h-7 w-[1px] bg-pink-200"></div>
+          <div class="flex gap-1" id="starContainer">
+            <span class="text-slate-300 text-lg">★</span>
+            <span class="text-slate-300 text-lg">★</span>
+            <span class="text-slate-300 text-lg">★</span>
+            <span class="text-slate-300 text-lg">★</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mode Selector -->
+      <div class="flex flex-wrap items-center justify-between gap-2 pt-3 text-xs md:text-sm">
+        <div class="flex items-center gap-1.5 text-slate-600">
+          <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+          <span>निर्देश: <strong>क्लिक करके</strong> या <strong>लाइन खींचकर</strong> जोड़ें।</span>
+        </div>
+        
+        <div class="flex gap-2">
+          <button id="speakAllBtn" class="px-2.5 py-1 rounded-lg bg-pink-100/70 hover:bg-pink-100 text-pink-700 font-medium transition flex items-center gap-1 text-xs">
+            🗣️ सभी शब्द सुनें
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Match Container -->
+    <div class="relative bg-white rounded-3xl p-4 sm:p-8 shadow-2xl border border-slate-100 flex-1 flex flex-col justify-center">
+      
+      <!-- SVG Canvas for connecting lines -->
+      <svg id="linesSvg" class="absolute inset-0 w-full h-full pointer-events-none z-10 overflow-visible"></svg>
+
+      <div class="grid grid-cols-2 gap-8 sm:gap-16 md:gap-24 relative z-20">
+        
+        <!-- Column 1: Left Words (क, ख, ग, घ) -->
+        <div class="flex flex-col justify-around gap-4 md:gap-6">
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1 px-2 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-pink-500"></span> शब्द (Word)
+          </div>
+
+          <!-- Item (क) आशा -->
+          <div id="left-item-1" data-id="1" data-match="3" data-name="आशा" data-label="(क)"
+               class="word-card group flex items-center justify-between p-3 sm:p-4 rounded-2xl border-2 border-slate-200 bg-slate-50/60 hover:bg-pink-50/50 hover:border-pink-300 transition-all duration-200 cursor-pointer shadow-sm active:scale-95">
+            <div class="flex items-center gap-3">
+              <span class="font-display font-semibold text-slate-400 group-hover:text-pink-600 text-base sm:text-lg">(क)</span>
+              <span class="text-xl sm:text-2xl font-bold text-slate-800">आशा</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <button class="speak-btn text-slate-400 hover:text-pink-600 transition text-sm p-1 rounded-full hover:bg-white" data-speak="आशा" title="उच्चारण">🔊</button>
+              <div class="connect-dot w-4 h-4 rounded-full border-2 border-pink-400 bg-white group-hover:bg-pink-500 transition-all card-touch-point shadow-sm"></div>
+            </div>
+          </div>
+
+          <!-- Item (ख) भय -->
+          <div id="left-item-2" data-id="2" data-match="4" data-name="भय" data-label="(ख)"
+               class="word-card group flex items-center justify-between p-3 sm:p-4 rounded-2xl border-2 border-slate-200 bg-slate-50/60 hover:bg-pink-50/50 hover:border-pink-300 transition-all duration-200 cursor-pointer shadow-sm active:scale-95">
+            <div class="flex items-center gap-3">
+              <span class="font-display font-semibold text-slate-400 group-hover:text-pink-600 text-base sm:text-lg">(ख)</span>
+              <span class="text-xl sm:text-2xl font-bold text-slate-800">भय</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <button class="speak-btn text-slate-400 hover:text-pink-600 transition text-sm p-1 rounded-full hover:bg-white" data-speak="भय" title="उच्चारण">🔊</button>
+              <div class="connect-dot w-4 h-4 rounded-full border-2 border-pink-400 bg-white group-hover:bg-pink-500 transition-all card-touch-point shadow-sm"></div>
+            </div>
+          </div>
+
+          <!-- Item (ग) बाहर -->
+          <div id="left-item-3" data-id="3" data-match="2" data-name="बाहर" data-label="(ग)"
+               class="word-card group flex items-center justify-between p-3 sm:p-4 rounded-2xl border-2 border-slate-200 bg-slate-50/60 hover:bg-pink-50/50 hover:border-pink-300 transition-all duration-200 cursor-pointer shadow-sm active:scale-95">
+            <div class="flex items-center gap-3">
+              <span class="font-display font-semibold text-slate-400 group-hover:text-pink-600 text-base sm:text-lg">(ग)</span>
+              <span class="text-xl sm:text-2xl font-bold text-slate-800">बाहर</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <button class="speak-btn text-slate-400 hover:text-pink-600 transition text-sm p-1 rounded-full hover:bg-white" data-speak="बाहर" title="उच्चारण">🔊</button>
+              <div class="connect-dot w-4 h-4 rounded-full border-2 border-pink-400 bg-white group-hover:bg-pink-500 transition-all card-touch-point shadow-sm"></div>
+            </div>
+          </div>
+
+          <!-- Item (घ) विशाल -->
+          <div id="left-item-4" data-id="4" data-match="1" data-name="विशाल" data-label="(घ)"
+               class="word-card group flex items-center justify-between p-3 sm:p-4 rounded-2xl border-2 border-slate-200 bg-slate-50/60 hover:bg-pink-50/50 hover:border-pink-300 transition-all duration-200 cursor-pointer shadow-sm active:scale-95">
+            <div class="flex items-center gap-3">
+              <span class="font-display font-semibold text-slate-400 group-hover:text-pink-600 text-base sm:text-lg">(घ)</span>
+              <span class="text-xl sm:text-2xl font-bold text-slate-800">विशाल</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <button class="speak-btn text-slate-400 hover:text-pink-600 transition text-sm p-1 rounded-full hover:bg-white" data-speak="विशाल" title="उच्चारण">🔊</button>
+              <div class="connect-dot w-4 h-4 rounded-full border-2 border-pink-400 bg-white group-hover:bg-pink-500 transition-all card-touch-point shadow-sm"></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Column 2: Right Antonyms (अ, ब, स, द) -->
+        <div class="flex flex-col justify-around gap-4 md:gap-6">
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1 px-2 flex items-center gap-1.5 justify-end">
+            विलोम शब्द (Opposite) <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+          </div>
+
+          <!-- Item (अ) लघु -->
+          <div id="right-item-1" data-id="1" data-name="लघु" data-label="(अ)"
+               class="word-card group flex items-center justify-between p-3 sm:p-4 rounded-2xl border-2 border-slate-200 bg-slate-50/60 hover:bg-indigo-50/50 hover:border-indigo-300 transition-all duration-200 cursor-pointer shadow-sm active:scale-95">
+            <div class="flex items-center gap-2">
+              <div class="connect-dot w-4 h-4 rounded-full border-2 border-indigo-400 bg-white group-hover:bg-indigo-500 transition-all card-touch-point shadow-sm"></div>
+              <button class="speak-btn text-slate-400 hover:text-indigo-600 transition text-sm p-1 rounded-full hover:bg-white" data-speak="लघु" title="उच्चारण">🔊</button>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-xl sm:text-2xl font-bold text-slate-800">लघु</span>
+              <span class="font-display font-semibold text-slate-400 group-hover:text-indigo-600 text-base sm:text-lg">(अ)</span>
+            </div>
+          </div>
+
+          <!-- Item (ब) अंदर -->
+          <div id="right-item-2" data-id="2" data-name="अंदर" data-label="(ब)"
+               class="word-card group flex items-center justify-between p-3 sm:p-4 rounded-2xl border-2 border-slate-200 bg-slate-50/60 hover:bg-indigo-50/50 hover:border-indigo-300 transition-all duration-200 cursor-pointer shadow-sm active:scale-95">
+            <div class="flex items-center gap-2">
+              <div class="connect-dot w-4 h-4 rounded-full border-2 border-indigo-400 bg-white group-hover:bg-indigo-500 transition-all card-touch-point shadow-sm"></div>
+              <button class="speak-btn text-slate-400 hover:text-indigo-600 transition text-sm p-1 rounded-full hover:bg-white" data-speak="अंदर" title="उच्चारण">🔊</button>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-xl sm:text-2xl font-bold text-slate-800">अंदर</span>
+              <span class="font-display font-semibold text-slate-400 group-hover:text-indigo-600 text-base sm:text-lg">(ब)</span>
+            </div>
+          </div>
+
+          <!-- Item (स) निराशा -->
+          <div id="right-item-3" data-id="3" data-name="निराशा" data-label="(स)"
+               class="word-card group flex items-center justify-between p-3 sm:p-4 rounded-2xl border-2 border-slate-200 bg-slate-50/60 hover:bg-indigo-50/50 hover:border-indigo-300 transition-all duration-200 cursor-pointer shadow-sm active:scale-95">
+            <div class="flex items-center gap-2">
+              <div class="connect-dot w-4 h-4 rounded-full border-2 border-indigo-400 bg-white group-hover:bg-indigo-500 transition-all card-touch-point shadow-sm"></div>
+              <button class="speak-btn text-slate-400 hover:text-indigo-600 transition text-sm p-1 rounded-full hover:bg-white" data-speak="निराशा" title="उच्चारण">🔊</button>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-xl sm:text-2xl font-bold text-slate-800">निराशा</span>
+              <span class="font-display font-semibold text-slate-400 group-hover:text-indigo-600 text-base sm:text-lg">(स)</span>
+            </div>
+          </div>
+
+          <!-- Item (द) साहस -->
+          <div id="right-item-4" data-id="4" data-name="साहस" data-label="(द)"
+               class="word-card group flex items-center justify-between p-3 sm:p-4 rounded-2xl border-2 border-slate-200 bg-slate-50/60 hover:bg-indigo-50/50 hover:border-indigo-300 transition-all duration-200 cursor-pointer shadow-sm active:scale-95">
+            <div class="flex items-center gap-2">
+              <div class="connect-dot w-4 h-4 rounded-full border-2 border-indigo-400 bg-white group-hover:bg-indigo-500 transition-all card-touch-point shadow-sm"></div>
+              <button class="speak-btn text-slate-400 hover:text-indigo-600 transition text-sm p-1 rounded-full hover:bg-white" data-speak="साहस" title="उच्चारण">🔊</button>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-xl sm:text-2xl font-bold text-slate-800">साहस</span>
+              <span class="font-display font-semibold text-slate-400 group-hover:text-indigo-600 text-base sm:text-lg">(द)</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Live User Hint Message Box -->
+      <div id="hintToast" class="mt-6 py-2.5 px-4 rounded-xl text-center text-sm font-semibold transition-all duration-300 bg-pink-50 border border-pink-200 text-pink-800">
+        👉 बाईं ओर से एक शब्द चुनें और दाईं ओर उसके विलोम से मिलाएँ!
+      </div>
+    </div>
+
+    <!-- Action Controls -->
+    <div class="flex flex-wrap items-center justify-center gap-3 mt-6">
+      <button id="checkBtn" class="px-6 py-3 rounded-2xl bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-700 hover:to-rose-700 text-white font-bold text-base shadow-lg shadow-pink-300 active:scale-95 transition-all flex items-center gap-2">
+        <span>✓</span> उत्तर जाँचें (Check Answer)
+      </button>
+
+      <button id="solveBtn" class="px-5 py-3 rounded-2xl bg-white border border-indigo-200 hover:bg-indigo-50 text-indigo-700 font-bold text-base shadow-sm active:scale-95 transition-all flex items-center gap-2">
+        <span>💡</span> सही हल देखें (Show Solution)
+      </button>
+
+      <button id="clearBtn" class="px-5 py-3 rounded-2xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 font-bold text-base shadow-sm active:scale-95 transition-all flex items-center gap-2">
+        <span>🔄</span> साफ़ करें (Clear)
+      </button>
+    </div>
+
+    <!-- Educational Word Explanations and Vocabulary Section -->
+    <div class="mt-8 bg-white/80 backdrop-blur rounded-2xl p-5 border border-pink-100 shadow-md">
+      <h3 class="font-bold text-base text-slate-800 flex items-center gap-2 mb-3">
+        <span>📖</span> शब्दों के अर्थ और व्याख्या (Vocabulary Meaning):
+      </h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs md:text-sm">
+        <div class="p-3 rounded-xl bg-pink-50/50 border border-pink-100 flex items-start gap-2">
+          <span class="font-bold text-pink-700">१. आशा ↔ निराशा:</span>
+          <span class="text-slate-600">आशा (उम्मीद / Hope) का उल्टा निराशा (उम्मीद खोना / Despair) होता है।</span>
+        </div>
+        <div class="p-3 rounded-xl bg-pink-50/50 border border-pink-100 flex items-start gap-2">
+          <span class="font-bold text-pink-700">२. भय ↔ साहस:</span>
+          <span class="text-slate-600">भय (डर / Fear) का विपरीत भाव साहस (हिम्मत / Courage) है।</span>
+        </div>
+        <div class="p-3 rounded-xl bg-pink-50/50 border border-pink-100 flex items-start gap-2">
+          <span class="font-bold text-pink-700">३. बाहर ↔ अंदर:</span>
+          <span class="text-slate-600">बाहर (Outside) का विपरीत स्थान अंदर (Inside) होता है।</span>
+        </div>
+        <div class="p-3 rounded-xl bg-pink-50/50 border border-pink-100 flex items-start gap-2">
+          <span class="font-bold text-pink-700">४. विशाल ↔ लघु:</span>
+          <span class="text-slate-600">विशाल (बहुत बड़ा / Huge) का विपरीत आकार लघु (छोटा / Small) है।</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="py-3 text-center text-xs text-slate-500 border-t border-slate-200/60 bg-white/40">
+    विलोम शब्द अभ्यास पत्रक • इंटरैक्टिव शिक्षण मॉड्यूल
+  </footer>
+
+  <!-- JavaScript Logic -->
+  <script>
+    // Audio synthesizer helper using Tone.js / Web Audio API
+    let soundEnabled = true;
+    let synth = null;
+
+    function initAudio() {
+      try {
+        if (!synth && window.Tone) {
+          synth = new Tone.PolySynth(Tone.Synth, {
+            oscillator: { type: "triangle" },
+            envelope: { attack: 0.005, decay: 0.1, sustain: 0.3, release: 0.5 }
+          }).toDestination();
+        }
+      } catch (e) {
+        console.warn("Audio init deferred", e);
+      }
+    }
+
+    function playTone(type) {
+      if (!soundEnabled) return;
+      initAudio();
+      try {
+        if (Tone.context.state !== 'running') {
+          Tone.context.resume();
+        }
+        if (type === 'select') {
+          synth.triggerAttackRelease("E5", "16n");
+        } else if (type === 'connect') {
+          synth.triggerAttackRelease("G5", "16n");
+        } else if (type === 'success') {
+          synth.triggerAttackRelease(["C5", "E5", "G5", "C6"], "8n");
+        } else if (type === 'wrong') {
+          synth.triggerAttackRelease(["Eb3", "D3"], "8n");
+        } else if (type === 'celebrate') {
+          synth.triggerAttackRelease(["C5", "E5", "G5", "B5", "D6"], "4n");
+        }
+      } catch(err) {
+        // Fallback or mute quietly
+      }
+    }
+
+    // Speech Synthesis for Hindi Pronunciation
+    function speakHindi(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'hi-IN';
+        utterance.rate = 0.85; // gently slower for clear learning
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+
+    // State management
+    const state = {
+      // Left item ID -> Right item ID
+      // Correct matches:
+      // (क) आशा (1) -> (स) निराशा (3)
+      // (ख) भय (2) -> (द) साहस (4)
+      // (ग) बाहर (3) -> (ब) अंदर (2)
+      // (घ) विशाल (4) -> (अ) लघु (1)
+      correctPairs: {
+        1: 3,
+        2: 4,
+        3: 2,
+        4: 1
+      },
+      currentPairs: {}, // leftId -> rightId
+      selectedLeft: null,
+      selectedRight: null,
+      isChecked: false
+    };
+
+    const leftCards = document.querySelectorAll('[id^="left-item-"]');
+    const rightCards = document.querySelectorAll('[id^="right-item-"]');
+    const svg = document.getElementById('linesSvg');
+    const toast = document.getElementById('hintToast');
+    const scoreText = document.getElementById('scoreText');
+    const starContainer = document.getElementById('starContainer');
+
+    // Color palette for connection lines
+    const lineColors = {
+      1: '#ec4899', // Pink (आशा)
+      2: '#f59e0b', // Amber (भय)
+      3: '#10b981', // Emerald (बाहर)
+      4: '#6366f1'  // Indigo (विशाल)
+    };
+
+    function showHint(message, type = 'info') {
+      toast.textContent = message;
+      toast.className = 'mt-6 py-2.5 px-4 rounded-xl text-center text-sm font-semibold transition-all duration-300 shadow-sm ';
+      if (type === 'error') {
+        toast.className += 'bg-red-50 border border-red-200 text-red-700 animate-shake';
+      } else if (type === 'success') {
+        toast.className += 'bg-emerald-50 border border-emerald-200 text-emerald-800';
+      } else if (type === 'congrats') {
+        toast.className += 'bg-gradient-to-r from-amber-100 to-pink-100 border border-amber-300 text-amber-900';
+      } else {
+        toast.className += 'bg-pink-50 border border-pink-200 text-pink-800';
+      }
+    }
+
+    // Calculate dot centers and render connection SVG lines
+    function getDotCenter(cardElement, isLeft) {
+      const dot = cardElement.querySelector('.connect-dot');
+      const rect = dot.getBoundingClientRect();
+      const svgRect = svg.getBoundingClientRect();
+      
+      return {
+        x: rect.left + rect.width / 2 - svgRect.left,
+        y: rect.top + rect.height / 2 - svgRect.top
+      };
+    }
+
+    function renderLines() {
+      // Clear current paths
+      svg.innerHTML = '';
+      
+      Object.keys(state.currentPairs).forEach(leftId => {
+        const rightId = state.currentPairs[leftId];
+        const leftEl = document.getElementById(`left-item-${leftId}`);
+        const rightEl = document.getElementById(`right-item-${rightId}`);
+
+        if (leftEl && rightEl) {
+          const start = getDotCenter(leftEl, true);
+          const end = getDotCenter(rightEl, false);
+          
+          // Compute smooth cubic bezier control points
+          const dx = end.x - start.x;
+          const cp1x = start.x + dx * 0.45;
+          const cp1y = start.y;
+          const cp2x = end.x - dx * 0.45;
+          const cp2y = end.y;
+
+          const pathD = `M ${start.x} ${start.y} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${end.x} ${end.y}`;
+          
+          let strokeColor = lineColors[leftId] || '#ec4899';
+          let strokeWidth = '3.5';
+
+          if (state.isChecked) {
+            const isCorrect = state.correctPairs[leftId] == rightId;
+            strokeColor = isCorrect ? '#10b981' : '#ef4444'; // Green or Red
+            strokeWidth = isCorrect ? '4' : '3';
+          }
+
+          const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          path.setAttribute('d', pathD);
+          path.setAttribute('stroke', strokeColor);
+          path.setAttribute('stroke-width', strokeWidth);
+          path.setAttribute('fill', 'none');
+          path.setAttribute('class', 'connection-line cursor-pointer');
+          path.setAttribute('stroke-linecap', 'round');
+          path.setAttribute('title', 'जोड़ा हटाने के लिए क्लिक करें');
+
+          // Clicking a line removes the pairing
+          path.addEventListener('click', () => {
+            delete state.currentPairs[leftId];
+            state.isChecked = false;
+            updateCardStyles();
+            renderLines();
+            showHint('जोड़ा हटा दिया गया। नया जोड़ा चुनें।', 'info');
+          });
+
+          svg.appendChild(path);
+        }
+      });
+    }
+
+    function updateCardStyles() {
+      // Left cards
+      leftCards.forEach(card => {
+        const id = card.dataset.id;
+        const isPaired = !!state.currentPairs[id];
+        const isSelected = state.selectedLeft === id;
+
+        card.classList.remove('border-pink-500', 'bg-pink-100/70', 'ring-2', 'ring-pink-400', 'border-emerald-500', 'bg-emerald-50', 'border-red-400', 'bg-red-50');
+        
+        if (state.isChecked && isPaired) {
+          const isCorrect = state.correctPairs[id] == state.currentPairs[id];
+          if (isCorrect) {
+            card.classList.add('border-emerald-500', 'bg-emerald-50');
+          } else {
+            card.classList.add('border-red-400', 'bg-red-50');
+          }
+        } else if (isSelected) {
+          card.classList.add('border-pink-500', 'bg-pink-100', 'ring-2', 'ring-pink-400');
+        } else if (isPaired) {
+          card.classList.add('border-pink-400', 'bg-pink-50/40');
+        }
+      });
+
+      // Right cards
+      rightCards.forEach(card => {
+        const id = card.dataset.id;
+        // Check if this rightId is paired with any leftId
+        const pairedLeftId = Object.keys(state.currentPairs).find(lId => state.currentPairs[lId] == id);
+        const isPaired = !!pairedLeftId;
+        const isSelected = state.selectedRight === id;
+
+        card.classList.remove('border-indigo-500', 'bg-indigo-100/70', 'ring-2', 'ring-indigo-400', 'border-emerald-500', 'bg-emerald-50', 'border-red-400', 'bg-red-50');
+
+        if (state.isChecked && isPaired) {
+          const isCorrect = state.correctPairs[pairedLeftId] == id;
+          if (isCorrect) {
+            card.classList.add('border-emerald-500', 'bg-emerald-50');
+          } else {
+            card.classList.add('border-red-400', 'bg-red-50');
+          }
+        } else if (isSelected) {
+          card.classList.add('border-indigo-500', 'bg-indigo-100', 'ring-2', 'ring-indigo-400');
+        } else if (isPaired) {
+          card.classList.add('border-indigo-400', 'bg-indigo-50/40');
+        }
+      });
+    }
+
+    // Try linking active selections
+    function tryConnect() {
+      if (state.selectedLeft && state.selectedRight) {
+        // Disconnect existing pairings with this right item
+        Object.keys(state.currentPairs).forEach(lId => {
+          if (state.currentPairs[lId] === state.selectedRight) {
+            delete state.currentPairs[lId];
+          }
+        });
+
+        // Set pair
+        state.currentPairs[state.selectedLeft] = state.selectedRight;
+        playTone('connect');
+        
+        const leftEl = document.getElementById(`left-item-${state.selectedLeft}`);
+        const rightEl = document.getElementById(`right-item-${state.selectedRight}`);
+        showHint(`जोड़ा बना: ${leftEl.dataset.name} ↔ ${rightEl.dataset.name}`, 'info');
+
+        // Reset current selection
+        state.selectedLeft = null;
+        state.selectedRight = null;
+        state.isChecked = false;
+
+        updateCardStyles();
+        renderLines();
+
+        // Check if all 4 are linked
+        if (Object.keys(state.currentPairs).length === 4) {
+          showHint('चारों जोड़े तैयार हैं! "उत्तर जाँचें" बटन दबाएँ।', 'info');
+        }
+      }
+    }
+
+    // Left card click
+    leftCards.forEach(card => {
+      card.addEventListener('click', (e) => {
+        if (e.target.closest('.speak-btn')) return;
+        const id = card.dataset.id;
+        
+        if (state.selectedLeft === id) {
+          state.selectedLeft = null;
+        } else {
+          state.selectedLeft = id;
+          playTone('select');
+        }
+        updateCardStyles();
+        tryConnect();
+      });
+    });
+
+    // Right card click
+    rightCards.forEach(card => {
+      card.addEventListener('click', (e) => {
+        if (e.target.closest('.speak-btn')) return;
+        const id = card.dataset.id;
+        
+        if (state.selectedRight === id) {
+          state.selectedRight = null;
+        } else {
+          state.selectedRight = id;
+          playTone('select');
+        }
+        updateCardStyles();
+        tryConnect();
+      });
+    });
+
+    // Audio Pronunciation buttons
+    document.querySelectorAll('.speak-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const word = btn.dataset.speak;
+        speakHindi(word);
+      });
+    });
+
+    document.getElementById('speakAllBtn').addEventListener('click', () => {
+      speakHindi("आशा, निराशा. भय, साहस. बाहर, अंदर. विशाल, लघु.");
+    });
+
+    function checkAnswers() {
+      const pairedCount = Object.keys(state.currentPairs).length;
+      if (pairedCount === 0) {
+        showHint('कृपया पहले शब्दों के जोड़े बनाएँ!', 'error');
+        playTone('wrong');
+        return;
+      }
+
+      state.isChecked = true;
+      let correctCount = 0;
+
+      for (let leftId in state.correctPairs) {
+        if (state.currentPairs[leftId] && state.currentPairs[leftId] == state.correctPairs[leftId]) {
+          correctCount++;
+        }
+      }
+
+      // Update score display
+      scoreText.textContent = `${correctCount} / 4`;
+
+      // Update star rating
+      const stars = starContainer.querySelectorAll('span');
+      stars.forEach((star, idx) => {
+        if (idx < correctCount) {
+          star.className = 'text-amber-400 text-lg transition-transform duration-300 scale-125';
+        } else {
+          star.className = 'text-slate-300 text-lg';
+        }
+      });
+
+      updateCardStyles();
+      renderLines();
+
+      if (correctCount === 4) {
+        playTone('celebrate');
+        showHint('🎉 शाबाश! आपने सभी ४ विलोम शब्द बिल्कुल सही मिलाए हैं!', 'congrats');
+        triggerConfetti();
+      } else if (correctCount > 0) {
+        playTone('connect');
+        showHint(`आपने ${correctCount} सही जोड़े बनाए हैं। बाकी को पुनः मिलाएँ!`, 'info');
+      } else {
+        playTone('wrong');
+        showHint('कोई भी जोड़ा सही नहीं है। दोबारा कोशिश कीजिए!', 'error');
+      }
+    }
+
+    // Auto solve / Show answer key
+    function showSolution() {
+      state.currentPairs = { ...state.correctPairs };
+      state.selectedLeft = null;
+      state.selectedRight = null;
+      state.isChecked = true;
+      scoreText.textContent = '4 / 4';
+      
+      const stars = starContainer.querySelectorAll('span');
+      stars.forEach(star => {
+        star.className = 'text-amber-400 text-lg';
+      });
+
+      updateCardStyles();
+      renderLines();
+      playTone('success');
+      showHint('सही हल प्रदर्शित कर दिया गया है।', 'success');
+    }
+
+    // Reset everything
+    function resetExercise() {
+      state.currentPairs = {};
+      state.selectedLeft = null;
+      state.selectedRight = null;
+      state.isChecked = false;
+      scoreText.textContent = '0 / 4';
+      
+      const stars = starContainer.querySelectorAll('span');
+      stars.forEach(star => {
+        star.className = 'text-slate-300 text-lg';
+      });
+
+      updateCardStyles();
+      renderLines();
+      showHint('👉 बाईं ओर से एक शब्द चुनें और दाईं ओर उसके विलोम से मिलाएँ!', 'info');
+    }
+
+    document.getElementById('checkBtn').addEventListener('click', checkAnswers);
+    document.getElementById('solveBtn').addEventListener('click', showSolution);
+    document.getElementById('clearBtn').addEventListener('click', resetExercise);
+    document.getElementById('resetHeaderBtn').addEventListener('click', resetExercise);
+
+    // Audio Toggle
+    const soundToggleBtn = document.getElementById('soundToggleBtn');
+    const soundIcon = document.getElementById('soundIcon');
+    soundToggleBtn.addEventListener('click', () => {
+      soundEnabled = !soundEnabled;
+      soundIcon.textContent = soundEnabled ? '🔊' : '🔇';
+      soundToggleBtn.classList.toggle('bg-pink-100', soundEnabled);
+    });
+
+    // Lightweight canvas confetti engine
+    const canvas = document.getElementById('confettiCanvas');
+    const ctx = canvas.getContext('2d');
+    let confettiParticles = [];
+    let animationFrameId = null;
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      renderLines();
+    }
+    window.addEventListener('resize', resizeCanvas);
+
+    function triggerConfetti() {
+      confettiParticles = [];
+      const colors = ['#ec4899', '#db2777', '#8b5cf6', '#3b82f6', '#10b981', '#f59e0b', '#ef4444'];
+      for (let i = 0; i < 90; i++) {
+        confettiParticles.push({
+          x: canvas.width / 2,
+          y: canvas.height / 2,
+          vx: (Math.random() - 0.5) * 16,
+          vy: (Math.random() - 0.7) * 18,
+          size: Math.random() * 8 + 4,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          rotation: Math.random() * 360,
+          vRot: (Math.random() - 0.5) * 10,
+          opacity: 1
+        });
+      }
+
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      animateConfetti();
+    }
+
+    function animateConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      confettiParticles.forEach((p, index) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.35; // gravity
+        p.rotation += p.vRot;
+        p.opacity -= 0.009;
+
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate((p.rotation * Math.PI) / 180);
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = Math.max(0, p.opacity);
+        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 1.4);
+        ctx.restore();
+
+        if (p.opacity <= 0) {
+          confettiParticles.splice(index, 1);
+        }
+      });
+
+      if (confettiParticles.length > 0) {
+        animationFrameId = requestAnimationFrame(animateConfetti);
+      } else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    }
+
+    // Window Load initializer
+    window.onload = function() {
+      resizeCanvas();
+      renderLines();
+    };
+  </script>
+</body>
+</html>

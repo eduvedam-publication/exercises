@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>‘कौन’ लगाकर प्रश्न बनाइए- | हिंदी अभ्यास</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Noto Sans Devanagari & Baloo 2 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tone.js for kid-friendly audio feedback -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+  <!-- Canvas Confetti for accomplishment celebration -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Noto Sans Devanagari', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: radial-gradient(circle at 10% 20%, #fefcfb 0%, #f0f4f8 95%);
+      min-height: 100vh;
+    }
+
+    .hindi-heading {
+      font-family: 'Noto Sans Devanagari', sans-serif;
+      color: #c02677; /* Textbook magenta color */
+    }
+
+    .hindi-text {
+      font-family: 'Noto Sans Devanagari', sans-serif;
+      letter-spacing: 0.015em;
+    }
+
+    /* Textbook lined fill-in style */
+    .worksheet-line {
+      border-bottom: 2px solid #94a3b8;
+      background: transparent;
+      transition: all 0.2s ease;
+    }
+
+    .worksheet-line:focus {
+      outline: none;
+      border-bottom-color: #c02677;
+      background-color: rgba(254, 242, 242, 0.4);
+    }
+
+    .worksheet-line.correct {
+      border-bottom-color: #16a34a !important;
+      background-color: #f0fdf4 !important;
+      color: #15803d;
+    }
+
+    .worksheet-line.incorrect {
+      border-bottom-color: #dc2626 !important;
+      background-color: #fef2f2 !important;
+    }
+
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+      body {
+        background: white !important;
+      }
+      .worksheet-card {
+        box-shadow: none !important;
+        border: none !important;
+        padding: 0 !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="text-slate-800 flex flex-col justify-between py-6 px-3 sm:px-6">
+
+  <!-- Header Section -->
+  <header class="max-w-4xl mx-auto w-full mb-6 text-center no-print">
+    <div class="inline-flex items-center gap-2 px-3.5 py-1 bg-pink-100 text-pink-900 border border-pink-200 rounded-full text-xs sm:text-sm font-semibold mb-2 shadow-sm">
+      <span>✏️ हिंदी व्याकरण अभ्यास</span>
+      <span class="w-1.5 h-1.5 rounded-full bg-pink-500"></span>
+      <span>प्रश्न निर्माण</span>
+    </div>
+    <h1 class="text-xl sm:text-2xl font-bold text-slate-800 tracking-tight">वाक्यों को प्रश्नवाचक वाक्य में बदलिए</h1>
+    <p class="text-xs sm:text-sm text-slate-500 mt-1">दिए गए वाक्यों के आगे ‘कौन’ शब्द जोड़कर प्रश्न बनाइए और ‘?’ लगाइए।</p>
+  </header>
+
+  <!-- Main Worksheet Card -->
+  <main class="max-w-4xl mx-auto w-full bg-white rounded-3xl shadow-xl border border-slate-200/90 overflow-hidden relative worksheet-card">
+    
+    <!-- Top Decorative Line -->
+    <div class="h-2.5 w-full bg-gradient-to-r from-pink-500 via-rose-500 to-amber-500 no-print"></div>
+
+    <div class="p-6 sm:p-12 relative">
+
+      <!-- Worksheet Title (Exact text from image) -->
+      <div class="flex items-center justify-between mb-8 pb-3 border-b border-slate-100">
+        <h2 class="text-2xl sm:text-3xl font-bold hindi-heading tracking-wide">
+          ‘कौन’ लगाकर प्रश्न बनाइए-
+        </h2>
+        <span class="no-print text-xs font-semibold bg-rose-50 text-rose-700 px-3 py-1 rounded-full border border-rose-200">
+          अभ्यास पत्र
+        </span>
+      </div>
+
+      <!-- Exercise Content: 2-column layout matching the original image -->
+      <form id="exerciseForm" onsubmit="event.preventDefault(); checkAnswers();" class="grid grid-cols-1 md:grid-cols-2 gap-y-10 gap-x-12 hindi-text text-xl sm:text-2xl text-slate-800">
+
+        <!-- ================= LEFT COLUMN ================= -->
+        <div class="flex flex-col space-y-10">
+          
+          <!-- ITEM (क) - Solved Example as shown in image -->
+          <div class="exercise-item">
+            <div class="flex items-baseline space-x-3 mb-2 font-medium">
+              <span class="text-slate-500 font-semibold w-8">(क)</span>
+              <span>दाना चुगकर लाती है।</span>
+            </div>
+            
+            <!-- Answer line shown as solved example in image -->
+            <div class="flex items-baseline space-x-3 pl-8 text-slate-700 font-normal">
+              <span class="text-pink-600 font-medium">कौन दाना चुगकर लाती है?</span>
+              <span class="no-print text-xs text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 ml-2 font-sans font-medium">
+                (उदाहरण)
+              </span>
+            </div>
+          </div>
+
+          <!-- ITEM (ग) -->
+          <div class="exercise-item" id="item-ga">
+            <div class="flex items-baseline space-x-3 mb-2 font-medium">
+              <span class="text-slate-500 font-semibold w-8">(ग)</span>
+              <span>मीठे-मीठे गान सुनाती है।</span>
+            </div>
+
+            <!-- Answer blank line -->
+            <div class="pl-8 pt-1">
+              <div class="relative">
+                <input 
+                  type="text" 
+                  id="input-ga"
+                  name="ga"
+                  autocomplete="off"
+                  spellcheck="false"
+                  placeholder="यहाँ प्रश्न लिखिए..." 
+                  class="worksheet-line w-full pb-1 text-lg sm:text-xl text-slate-800 font-medium transition duration-200 placeholder:text-slate-300 placeholder:text-base"
+                />
+                <button 
+                  type="button" 
+                  onclick="quickInsert('input-ga')" 
+                  title="‘कौन’ जोड़ें" 
+                  class="no-print absolute right-0 top-1 text-xs px-2 py-0.5 bg-pink-50 text-pink-700 hover:bg-pink-100 rounded border border-pink-200 font-sans">
+                  + ‘कौन’
+                </button>
+              </div>
+              <p id="feedback-ga" class="text-xs sm:text-sm mt-1.5 min-h-[1.25rem]"></p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ================= RIGHT COLUMN ================= -->
+        <div class="flex flex-col space-y-10">
+
+          <!-- ITEM (ख) -->
+          <div class="exercise-item" id="item-kha">
+            <div class="flex items-baseline space-x-3 mb-2 font-medium">
+              <span class="text-slate-500 font-semibold w-8">(ख)</span>
+              <span>बच्चों के मन को भाती है।</span>
+            </div>
+
+            <!-- Answer blank line -->
+            <div class="pl-8 pt-1">
+              <div class="relative">
+                <input 
+                  type="text" 
+                  id="input-kha"
+                  name="kha"
+                  autocomplete="off"
+                  spellcheck="false"
+                  placeholder="यहाँ प्रश्न लिखिए..." 
+                  class="worksheet-line w-full pb-1 text-lg sm:text-xl text-slate-800 font-medium transition duration-200 placeholder:text-slate-300 placeholder:text-base"
+                />
+                <button 
+                  type="button" 
+                  onclick="quickInsert('input-kha')" 
+                  title="‘कौन’ जोड़ें" 
+                  class="no-print absolute right-0 top-1 text-xs px-2 py-0.5 bg-pink-50 text-pink-700 hover:bg-pink-100 rounded border border-pink-200 font-sans">
+                  + ‘कौन’
+                </button>
+              </div>
+              <p id="feedback-kha" class="text-xs sm:text-sm mt-1.5 min-h-[1.25rem]"></p>
+            </div>
+          </div>
+
+          <!-- ITEM (घ) -->
+          <div class="exercise-item" id="item-gha">
+            <div class="flex items-baseline space-x-3 mb-2 font-medium">
+              <span class="text-slate-500 font-semibold w-8">(घ)</span>
+              <span>फुदक-फुदककर चलती है।</span>
+            </div>
+
+            <!-- Answer blank line -->
+            <div class="pl-8 pt-1">
+              <div class="relative">
+                <input 
+                  type="text" 
+                  id="input-gha"
+                  name="gha"
+                  autocomplete="off"
+                  spellcheck="false"
+                  placeholder="यहाँ प्रश्न लिखिए..." 
+                  class="worksheet-line w-full pb-1 text-lg sm:text-xl text-slate-800 font-medium transition duration-200 placeholder:text-slate-300 placeholder:text-base"
+                />
+                <button 
+                  type="button" 
+                  onclick="quickInsert('input-gha')" 
+                  title="‘कौन’ जोड़ें" 
+                  class="no-print absolute right-0 top-1 text-xs px-2 py-0.5 bg-pink-50 text-pink-700 hover:bg-pink-100 rounded border border-pink-200 font-sans">
+                  + ‘कौन’
+                </button>
+              </div>
+              <p id="feedback-gha" class="text-xs sm:text-sm mt-1.5 min-h-[1.25rem]"></p>
+            </div>
+          </div>
+
+        </div>
+
+      </form>
+
+      <!-- Helper Word Assist Bar (No Print) -->
+      <div class="no-print mt-10 p-3 bg-slate-50 border border-slate-200/80 rounded-2xl flex flex-wrap items-center justify-between gap-3 text-xs sm:text-sm">
+        <div class="flex items-center gap-1.5 text-slate-600 font-medium">
+          <span>💡 सहायक शब्द और चिह्न:</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-1.5">
+          <button type="button" onclick="insertSymbol('कौन ')" class="px-3 py-1 bg-white hover:bg-pink-50 border border-slate-200 hover:border-pink-300 rounded-lg font-bold text-pink-700 active:scale-95 transition shadow-sm">
+            कौन
+          </button>
+          <button type="button" onclick="insertSymbol('?')" class="px-3 py-1 bg-white hover:bg-indigo-50 border border-slate-200 hover:border-indigo-300 rounded-lg font-bold text-indigo-700 active:scale-95 transition shadow-sm text-base">
+            ?
+          </button>
+          <button type="button" onclick="insertSymbol('मीठे-मीठे ')" class="px-2.5 py-1 bg-white hover:bg-slate-100 border border-slate-200 rounded-lg text-slate-700 active:scale-95 transition shadow-sm">
+            मीठे-मीठे
+          </button>
+          <button type="button" onclick="insertSymbol('फुदक-फुदककर ')" class="px-2.5 py-1 bg-white hover:bg-slate-100 border border-slate-200 rounded-lg text-slate-700 active:scale-95 transition shadow-sm">
+            फुदक-फुदककर
+          </button>
+          <button type="button" onclick="insertSymbol('बच्चों ')" class="px-2.5 py-1 bg-white hover:bg-slate-100 border border-slate-200 rounded-lg text-slate-700 active:scale-95 transition shadow-sm">
+            बच्चों
+          </button>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="no-print mt-8 flex flex-wrap items-center justify-center gap-3">
+        <button 
+          type="button" 
+          onclick="checkAnswers()" 
+          class="px-6 py-2.5 bg-gradient-to-r from-pink-600 to-rose-600 text-white font-medium rounded-xl shadow-md shadow-pink-500/20 hover:from-pink-700 hover:to-rose-700 active:scale-95 transition flex items-center gap-2">
+          <span>✓</span>
+          <span>उत्तर जाँचें</span>
+        </button>
+
+        <button 
+          type="button" 
+          onclick="showAnswers()" 
+          class="px-5 py-2.5 bg-rose-50 border border-rose-200 text-rose-700 font-medium rounded-xl hover:bg-rose-100 active:scale-95 transition flex items-center gap-1.5">
+          <span>📖</span>
+          <span>सही उत्तर देखें</span>
+        </button>
+
+        <button 
+          type="button" 
+          onclick="resetExercise()" 
+          class="px-5 py-2.5 bg-slate-100 text-slate-700 font-medium rounded-xl hover:bg-slate-200 active:scale-95 transition flex items-center gap-1.5">
+          <span>↺</span>
+          <span>पुनः प्रयास करें</span>
+        </button>
+
+        <button 
+          type="button" 
+          onclick="window.print()" 
+          class="px-5 py-2.5 bg-slate-100 text-slate-700 font-medium rounded-xl hover:bg-slate-200 active:scale-95 transition flex items-center gap-1.5">
+          <span>🖨️</span>
+          <span>प्रिंट करें</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Footer Reference Box -->
+    <div class="bg-slate-50 px-6 py-4 border-t border-slate-100 text-xs sm:text-sm text-slate-500 flex flex-col sm:flex-row justify-between items-center gap-2 no-print">
+      <div class="flex items-center gap-2">
+        <span class="font-semibold text-slate-600">नियम:</span>
+        <span>वाक्य के शुरू में ‘कौन’ लगाएँ और अंत में प्रश्नवाचक चिह्न (?) लगाएँ।</span>
+      </div>
+      <button id="soundToggle" onclick="toggleSound()" class="text-xs text-slate-500 hover:text-pink-600 flex items-center gap-1 focus:outline-none">
+        <span id="soundIcon">🔊</span> ध्वनी प्रभाव चालू
+      </button>
+    </div>
+
+  </main>
+
+  <footer class="text-center text-xs text-slate-400 mt-6 no-print">
+    प्राथमिक हिंदी कार्यपुस्तिका • अभ्यास पत्र
+  </footer>
+
+  <!-- Toast Notification -->
+  <div id="toastNotification" class="fixed bottom-6 right-6 transform translate-y-20 opacity-0 transition duration-300 pointer-events-none z-50 bg-slate-900 text-white text-sm px-4 py-3 rounded-2xl shadow-2xl flex items-center space-x-3">
+    <span id="toastIcon"></span>
+    <span id="toastMessage"></span>
+  </div>
+
+  <script>
+    // Audio synthesis setup using Tone.js
+    let synth = null;
+    let soundEnabled = true;
+
+    function initAudio() {
+      try {
+        if (!synth) {
+          synth = new Tone.PolySynth(Tone.Synth, {
+            oscillator: { type: "triangle" },
+            envelope: { attack: 0.02, decay: 0.1, sustain: 0.2, release: 0.4 }
+          }).toDestination();
+          synth.volume.value = -6;
+        }
+      } catch (e) {
+        console.warn("Audio unavailable:", e);
+      }
+    }
+
+    function playTone(type) {
+      if (!soundEnabled) return;
+      initAudio();
+      try {
+        Tone.start();
+        if (type === 'success') {
+          synth.triggerAttackRelease(["C5", "E5", "G5", "C6"], "8n");
+        } else if (type === 'partial') {
+          synth.triggerAttackRelease(["A4", "C5"], "8n");
+        } else if (type === 'tap') {
+          synth.triggerAttackRelease(["E5"], "16n");
+        } else if (type === 'reset') {
+          synth.triggerAttackRelease(["D4"], "16n");
+        }
+      } catch (e) {}
+    }
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      const soundIcon = document.getElementById('soundIcon');
+      const soundText = document.getElementById('soundToggle');
+      soundIcon.textContent = soundEnabled ? '🔊' : '🔇';
+      soundText.childNodes[2].textContent = soundEnabled ? ' ध्वनी प्रभाव चालू' : ' ध्वनी प्रभाव बंद';
+    }
+
+    // Toast modal
+    function showToast(message, icon = "ℹ️") {
+      const toast = document.getElementById('toastNotification');
+      const toastMsg = document.getElementById('toastMessage');
+      const toastIco = document.getElementById('toastIcon');
+      toastMsg.textContent = message;
+      toastIco.textContent = icon;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+        toast.classList.remove('translate-y-0', 'opacity-100');
+      }, 3000);
+    }
+
+    // Expected target answers
+    const EXERCISE_DATA = {
+      kha: {
+        id: 'input-kha',
+        feedbackId: 'feedback-kha',
+        baseSentence: 'बच्चों के मन को भाती है',
+        expected: 'कौन बच्चों के मन को भाती है?'
+      },
+      ga: {
+        id: 'input-ga',
+        feedbackId: 'feedback-ga',
+        baseSentence: 'मीठे-मीठे गान सुनाती है',
+        expected: 'कौन मीठे-मीठे गान सुनाती है?'
+      },
+      gha: {
+        id: 'input-gha',
+        feedbackId: 'feedback-gha',
+        baseSentence: 'फुदक-फुदककर चलती है',
+        expected: 'कौन फुदक-फुदककर चलती है?'
+      }
+    };
+
+    // Tracking active focused input
+    let currentFocusedInput = document.getElementById('input-kha');
+    ['input-kha', 'input-ga', 'input-gha'].forEach(id => {
+      const el = document.getElementById(id);
+      el.addEventListener('focus', () => {
+        currentFocusedInput = el;
+      });
+    });
+
+    // Helper to insert quick prefix
+    function quickInsert(inputId) {
+      const input = document.getElementById(inputId);
+      let val = input.value.trim();
+      if (!val.startsWith('कौन')) {
+        input.value = 'कौन ' + val;
+      }
+      if (!input.value.endsWith('?') && !input.value.endsWith('।')) {
+        input.value = input.value + '?';
+      }
+      input.focus();
+      playTone('tap');
+    }
+
+    // Insert word chip into current focused input
+    function insertSymbol(symbol) {
+      if (!currentFocusedInput) {
+        currentFocusedInput = document.getElementById('input-kha');
+      }
+      currentFocusedInput.focus();
+      
+      const start = currentFocusedInput.selectionStart;
+      const end = currentFocusedInput.selectionEnd;
+      const text = currentFocusedInput.value;
+
+      currentFocusedInput.value = text.substring(0, start) + symbol + text.substring(end);
+      currentFocusedInput.selectionStart = currentFocusedInput.selectionEnd = start + symbol.length;
+      playTone('tap');
+    }
+
+    // Normalization helper for checking Devanagari text
+    function normalizeHindi(str) {
+      return str
+        .trim()
+        .replace(/\s+/g, ' ')
+        .replace(/।/g, '') // strip purnaviram if accidentally used
+        .replace(/\?/g, '') // compare root words first
+        .trim();
+    }
+
+    // Validate student answers
+    function checkAnswers() {
+      let allFilled = true;
+      let totalCorrect = 0;
+
+      Object.entries(EXERCISE_DATA).forEach(([key, item]) => {
+        const input = document.getElementById(item.id);
+        const feedback = document.getElementById(item.feedbackId);
+        const val = input.value.trim();
+
+        if (!val) {
+          allFilled = false;
+          input.className = 'worksheet-line w-full pb-1 text-lg sm:text-xl text-slate-800 font-medium placeholder:text-slate-300';
+          feedback.textContent = 'कृपया उत्तर लिखें।';
+          feedback.className = 'text-xs sm:text-sm mt-1.5 text-amber-600 font-medium';
+          return;
+        }
+
+        const normalizedInput = normalizeHindi(val);
+        const expectedNormalized = normalizeHindi(item.expected);
+        const hasQuestionMark = val.includes('?');
+
+        if (normalizedInput === expectedNormalized) {
+          if (hasQuestionMark) {
+            input.className = 'worksheet-line correct w-full pb-1 text-lg sm:text-xl font-semibold';
+            feedback.textContent = '✓ बिल्कुल सही उत्तर!';
+            feedback.className = 'text-xs sm:text-sm mt-1.5 text-emerald-600 font-semibold';
+            totalCorrect++;
+          } else {
+            // Right words, but missing question mark (?)
+            input.className = 'worksheet-line incorrect w-full pb-1 text-lg sm:text-xl text-amber-800 font-medium';
+            feedback.textContent = 'वाक्य सही है, परंतु अंत में प्रश्नवाचक चिह्न (?) लगाइए।';
+            feedback.className = 'text-xs sm:text-sm mt-1.5 text-amber-600 font-medium';
+          }
+        } else {
+          input.className = 'worksheet-line incorrect w-full pb-1 text-lg sm:text-xl text-rose-800 font-medium';
+          feedback.textContent = '✗ पुनः प्रयास करें (शुरू में ‘कौन’ लगाएँ)।';
+          feedback.className = 'text-xs sm:text-sm mt-1.5 text-rose-600 font-medium';
+        }
+      });
+
+      if (!allFilled) {
+        showToast("कृपया सभी रिक्त स्थान भरें।", "✍️");
+        return;
+      }
+
+      if (totalCorrect === 3) {
+        playTone('success');
+        confetti({
+          particleCount: 110,
+          spread: 75,
+          origin: { y: 0.6 }
+        });
+        showToast("शाबाश! सभी उत्तर बिल्कुल सही हैं! 🎉", "🌟");
+      } else {
+        playTone('partial');
+        showToast(`${totalCorrect}/3 उत्तर सही हैं। सुधार करें।`, "💡");
+      }
+    }
+
+    // Show solutions
+    function showAnswers() {
+      Object.entries(EXERCISE_DATA).forEach(([key, item]) => {
+        const input = document.getElementById(item.id);
+        const feedback = document.getElementById(item.feedbackId);
+        input.value = item.expected;
+        input.className = 'worksheet-line correct w-full pb-1 text-lg sm:text-xl font-semibold';
+        feedback.textContent = '✓ सही उत्तर दर्शाया गया है';
+        feedback.className = 'text-xs sm:text-sm mt-1.5 text-emerald-600 font-semibold';
+      });
+      playTone('success');
+      showToast("सभी सही उत्तर भरे गए!", "📖");
+    }
+
+    // Reset worksheet
+    function resetExercise() {
+      Object.entries(EXERCISE_DATA).forEach(([key, item]) => {
+        const input = document.getElementById(item.id);
+        const feedback = document.getElementById(item.feedbackId);
+        input.value = '';
+        input.className = 'worksheet-line w-full pb-1 text-lg sm:text-xl text-slate-800 font-medium placeholder:text-slate-300';
+        feedback.textContent = '';
+      });
+      playTone('reset');
+      showToast("अभ्यास पुनः प्रारंभ किया गया", "↺");
+    }
+  </script>
+</body>
+</html>
