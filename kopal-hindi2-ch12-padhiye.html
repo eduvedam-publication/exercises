@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>क्रिया रूप अभ्यास (रिक्त स्थान भरिए)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for authentic Devanagari typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Confetti JS for celebratory reward -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Mukta', sans-serif;
+        }
+        .heading-font {
+            font-family: 'Mukta', sans-serif;
+            letter-spacing: 0.5px;
+        }
+        /* Style for worksheet dashed underlines */
+        .worksheet-input {
+            border-bottom: 2px dashed #9ca3af;
+            background: transparent;
+            outline: none;
+            transition: all 0.2s ease-in-out;
+        }
+        .worksheet-input:focus {
+            border-bottom: 2px solid #be185d;
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+        .correct-input {
+            border-bottom: 2px solid #16a34a !important;
+            color: #15803d !important;
+            font-weight: 700;
+            background-color: rgba(220, 252, 231, 0.6) !important;
+        }
+        .incorrect-input {
+            border-bottom: 2px solid #dc2626 !important;
+            color: #b91c1c !important;
+            font-weight: 700;
+            background-color: rgba(254, 226, 226, 0.6) !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-[#f7faf4] flex flex-col items-center justify-center p-3 sm:p-6 text-slate-800">
+
+    <main class="w-full max-w-3xl bg-white/95 border-2 border-stone-200 rounded-3xl p-6 sm:p-10 shadow-xl transition-all relative overflow-hidden">
+        
+        <!-- Header Section -->
+        <header class="mb-8 border-b-2 border-stone-100 pb-5">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <div>
+                    <h1 class="text-3xl sm:text-4xl font-extrabold text-[#be185d] tracking-wide heading-font select-none">
+                        कोष्ठक में दिए गए शब्द से सही रूप लिखिए
+                    </h1>
+                    <p class="text-xs sm:text-sm text-stone-500 mt-1 font-medium">
+                        वाक्य को पूरा करने के लिए कोष्ठक में दी गई क्रिया का सही रूप खाली स्थान में भरिए।
+                    </p>
+                </div>
+                
+                <!-- Score badge -->
+                <div class="flex items-center gap-2 bg-emerald-50 px-4 py-1.5 rounded-full border border-emerald-300 shadow-sm text-sm font-semibold shrink-0">
+                    <span class="text-slate-600">अंक (Score):</span>
+                    <span id="scoreBadge" class="text-emerald-700 text-lg font-bold">0 / 3</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Sentences Form Section -->
+        <form id="quizForm" onsubmit="event.preventDefault(); checkAnswers();" class="space-y-6 sm:space-y-7 text-xl sm:text-2xl font-semibold">
+            
+            <!-- (क) बादल गरजता है। (गरज) - Example row -->
+            <div class="p-3.5 sm:p-4 rounded-2xl bg-amber-50/70 border border-amber-200/80 flex flex-wrap items-center justify-between gap-y-2">
+                <div class="flex items-center gap-3 flex-wrap">
+                    <span class="text-stone-700 min-w-[2.5rem] select-none">(क)</span>
+                    <span class="text-slate-900 tracking-wide">बादल</span>
+                    <span class="px-3 py-0.5 font-bold text-emerald-800 bg-white/90 rounded-md underline underline-offset-4 decoration-2 decoration-stone-800 select-none">
+                        गरजता
+                    </span>
+                    <span class="text-slate-900">है।</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-bold uppercase tracking-wider text-amber-800 bg-amber-100 px-2 py-0.5 rounded">उदाहरण</span>
+                    <span class="text-stone-600 font-medium text-lg sm:text-xl select-none">(गरज)</span>
+                </div>
+            </div>
+
+            <!-- (ख) बिजली ________ है। (चमक) -->
+            <div class="p-3.5 sm:p-4 rounded-2xl bg-stone-50/60 border border-stone-200/70 flex flex-wrap items-center justify-between gap-y-2 group transition-colors focus-within:bg-stone-50">
+                <div class="flex items-center gap-3 flex-1 min-w-[240px]">
+                    <span class="text-stone-700 min-w-[2.5rem] select-none">(ख)</span>
+                    <span class="text-slate-900 tracking-wide min-w-[3.8rem]">बिजली</span>
+                    <div class="flex-1 max-w-[240px] relative">
+                        <input type="text" id="ans_kha" 
+                            class="worksheet-input w-full px-3 py-1 text-slate-900 rounded-t-md text-lg sm:text-xl font-medium text-center" 
+                            placeholder="यहाँ लिखें..." autocomplete="off">
+                        <span id="feedback_kha" class="absolute -bottom-5 left-1 text-xs font-bold transition-opacity opacity-0"></span>
+                    </div>
+                    <span class="text-slate-900">है।</span>
+                </div>
+                <div class="text-stone-600 font-medium text-lg sm:text-xl select-none pl-2">
+                    (चमक)
+                </div>
+            </div>
+
+            <!-- (ग) पानी ________ है। (बरस) -->
+            <div class="p-3.5 sm:p-4 rounded-2xl bg-stone-50/60 border border-stone-200/70 flex flex-wrap items-center justify-between gap-y-2 group transition-colors focus-within:bg-stone-50">
+                <div class="flex items-center gap-3 flex-1 min-w-[240px]">
+                    <span class="text-stone-700 min-w-[2.5rem] select-none">(ग)</span>
+                    <span class="text-slate-900 tracking-wide min-w-[3.8rem]">पानी</span>
+                    <div class="flex-1 max-w-[240px] relative">
+                        <input type="text" id="ans_ga" 
+                            class="worksheet-input w-full px-3 py-1 text-slate-900 rounded-t-md text-lg sm:text-xl font-medium text-center" 
+                            placeholder="यहाँ लिखें..." autocomplete="off">
+                        <span id="feedback_ga" class="absolute -bottom-5 left-1 text-xs font-bold transition-opacity opacity-0"></span>
+                    </div>
+                    <span class="text-slate-900">है।</span>
+                </div>
+                <div class="text-stone-600 font-medium text-lg sm:text-xl select-none pl-2">
+                    (बरस)
+                </div>
+            </div>
+
+            <!-- (घ) बच्चे ________ हैं। (खेल) -->
+            <div class="p-3.5 sm:p-4 rounded-2xl bg-stone-50/60 border border-stone-200/70 flex flex-wrap items-center justify-between gap-y-2 group transition-colors focus-within:bg-stone-50">
+                <div class="flex items-center gap-3 flex-1 min-w-[240px]">
+                    <span class="text-stone-700 min-w-[2.5rem] select-none">(घ)</span>
+                    <span class="text-slate-900 tracking-wide min-w-[3.8rem]">बच्चे</span>
+                    <div class="flex-1 max-w-[240px] relative">
+                        <input type="text" id="ans_gha" 
+                            class="worksheet-input w-full px-3 py-1 text-slate-900 rounded-t-md text-lg sm:text-xl font-medium text-center" 
+                            placeholder="यहाँ लिखें..." autocomplete="off">
+                        <span id="feedback_gha" class="absolute -bottom-5 left-1 text-xs font-bold transition-opacity opacity-0"></span>
+                    </div>
+                    <span class="text-slate-900">हैं।</span>
+                </div>
+                <div class="text-stone-600 font-medium text-lg sm:text-xl select-none pl-2">
+                    (खेल)
+                </div>
+            </div>
+        </form>
+
+        <!-- Word Bank / Helper Tray -->
+        <section class="mt-8 pt-5 border-t border-stone-200">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3 gap-2">
+                <span class="text-sm font-bold text-stone-700 flex items-center gap-1.5">
+                    <svg class="w-4 h-4 text-[#be185d]" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>
+                    सहायक शब्द (Word Bank - क्लिक करके भरें):
+                </span>
+                <span class="text-xs text-stone-500">खाली बॉक्स चुनें, फिर सही उत्तर पर क्लिक करें</span>
+            </div>
+            
+            <div class="flex flex-wrap gap-2.5" id="wordBank">
+                <!-- Dynamically populated buttons -->
+            </div>
+        </section>
+
+        <!-- Action Footer -->
+        <footer class="mt-8 flex flex-wrap items-center justify-between gap-3 pt-5 border-t border-stone-200">
+            <div class="flex flex-wrap gap-2.5">
+                <button type="button" onclick="checkAnswers()" 
+                    class="bg-[#be185d] hover:bg-[#9d174d] text-white font-bold py-2.5 px-6 rounded-xl shadow-md transition duration-200 active:scale-95 flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                    जाँचें (Check)
+                </button>
+                <button type="button" onclick="showAnswersModal()" 
+                    class="bg-stone-100 hover:bg-stone-200 text-slate-800 font-bold py-2.5 px-5 rounded-xl border border-stone-300 shadow-sm transition active:scale-95">
+                    उत्तर देखें (Show Answers)
+                </button>
+                <button type="button" onclick="resetForm()" 
+                    class="bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold py-2.5 px-4 rounded-xl shadow-sm transition active:scale-95">
+                    फिर से करें (Reset)
+                </button>
+            </div>
+
+            <!-- In-page Status Alert Box -->
+            <div id="statusMessage" class="hidden text-sm font-bold px-4 py-2 rounded-xl transition duration-300"></div>
+        </footer>
+    </main>
+
+    <!-- Modal for Solutions -->
+    <div id="solutionModal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-stone-200 transform transition-all">
+            <div class="flex justify-between items-center border-b pb-3 mb-4">
+                <h3 class="text-2xl font-bold text-[#be185d]">सही उत्तर (Solutions)</h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 text-3xl font-bold leading-none">&times;</button>
+            </div>
+            <ul class="space-y-3.5 text-base sm:text-lg font-semibold text-slate-800">
+                <li class="p-3 bg-amber-50/70 rounded-xl border border-amber-200">
+                    <span class="text-xs text-amber-800 font-bold block mb-0.5">उदाहरण (Example)</span>
+                    <div class="flex justify-between">
+                        <span>(क) बादल <u>गरजता</u> है।</span>
+                        <span class="text-stone-500 font-normal">(गरज)</span>
+                    </div>
+                </li>
+                <li class="p-3 bg-stone-50 rounded-xl border border-stone-200 flex justify-between items-center">
+                    <div>
+                        <span class="text-stone-700">(ख) बिजली </span>
+                        <span class="text-emerald-700 font-bold underline">चमकती</span>
+                        <span class="text-stone-700"> है।</span>
+                    </div>
+                    <span class="text-stone-500 font-normal text-sm">(चमक)</span>
+                </li>
+                <li class="p-3 bg-stone-50 rounded-xl border border-stone-200 flex justify-between items-center">
+                    <div>
+                        <span class="text-stone-700">(ग) पानी </span>
+                        <span class="text-emerald-700 font-bold underline">बरसता</span>
+                        <span class="text-stone-700"> है।</span>
+                    </div>
+                    <span class="text-stone-500 font-normal text-sm">(बरस)</span>
+                </li>
+                <li class="p-3 bg-stone-50 rounded-xl border border-stone-200 flex justify-between items-center">
+                    <div>
+                        <span class="text-stone-700">(घ) बच्चे </span>
+                        <span class="text-emerald-700 font-bold underline">खेलते</span>
+                        <span class="text-stone-700"> हैं।</span>
+                    </div>
+                    <span class="text-stone-500 font-normal text-sm">(खेल)</span>
+                </li>
+            </ul>
+            <div class="mt-6 flex justify-end">
+                <button onclick="closeModal()" class="bg-[#be185d] text-white px-6 py-2 rounded-xl font-bold hover:bg-[#9d174d] transition">
+                    बंद करें (Close)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        /* Questions configuration for the interactive blanks (ख, ग, घ) */
+        const questions = [
+            {
+                id: 'ans_kha',
+                feedbackId: 'feedback_kha',
+                validAnswers: ['चमकती'],
+                expected: 'चमकती'
+            },
+            {
+                id: 'ans_ga',
+                feedbackId: 'feedback_ga',
+                validAnswers: ['बरसता'],
+                expected: 'बरसता'
+            },
+            {
+                id: 'ans_gha',
+                feedbackId: 'feedback_gha',
+                validAnswers: ['खेलते'],
+                expected: 'खेलते'
+            }
+        ];
+
+        /* Word Bank options */
+        const bankWords = ['चमकती', 'बरसता', 'खेलते', 'गरजता', 'चमकते', 'खेलती'];
+
+        let activeInputId = 'ans_kha';
+
+        /* Populate interactive word bank chips */
+        function initializeWordBank() {
+            const container = document.getElementById('wordBank');
+            container.innerHTML = '';
+            
+            bankWords.forEach(word => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.textContent = word;
+                btn.className = 'bg-stone-50 hover:bg-[#be185d] hover:text-white text-stone-800 font-bold px-4 py-2 rounded-xl border border-stone-300 text-base shadow-sm transition active:scale-95 duration-150';
+                btn.onclick = () => insertWord(word);
+                container.appendChild(btn);
+            });
+        }
+
+        /* Bind focus and Enter key listeners */
+        questions.forEach(q => {
+            const input = document.getElementById(q.id);
+            input.addEventListener('focus', () => {
+                activeInputId = q.id;
+            });
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    checkAnswers();
+                }
+            });
+            input.addEventListener('input', () => {
+                clearFeedback(q.id);
+            });
+        });
+
+        /* Insert selected word into active or next unfilled input */
+        function insertWord(word) {
+            let target = document.getElementById(activeInputId);
+            if (!target || target.value.trim() !== '') {
+                const emptyItem = questions.find(q => document.getElementById(q.id).value.trim() === '');
+                if (emptyItem) {
+                    target = document.getElementById(emptyItem.id);
+                    activeInputId = emptyItem.id;
+                }
+            }
+            if (target) {
+                target.value = word;
+                target.focus();
+                clearFeedback(target.id);
+
+                // Auto-advance to next empty field
+                const nextEmpty = questions.find(q => document.getElementById(q.id).value.trim() === '');
+                if (nextEmpty) {
+                    activeInputId = nextEmpty.id;
+                }
+            }
+        }
+
+        function cleanString(str) {
+            return str ? str.trim().normalize('NFC').replace(/\s+/g, ' ') : '';
+        }
+
+        /* Verification and evaluation logic */
+        function checkAnswers() {
+            let score = 0;
+
+            questions.forEach(q => {
+                const input = document.getElementById(q.id);
+                const feedback = document.getElementById(q.feedbackId);
+                const userVal = cleanString(input.value);
+
+                input.classList.remove('correct-input', 'incorrect-input');
+                feedback.classList.remove('opacity-0', 'text-emerald-700', 'text-red-700', 'text-amber-700');
+
+                if (userVal === '') {
+                    feedback.textContent = 'खाली है';
+                    feedback.classList.add('text-amber-700', 'opacity-100');
+                    return;
+                }
+
+                const isMatch = q.validAnswers.some(ans => cleanString(ans) === userVal);
+
+                if (isMatch) {
+                    score++;
+                    input.classList.add('correct-input');
+                    feedback.textContent = '✓ सही';
+                    feedback.classList.add('text-emerald-700', 'opacity-100');
+                } else {
+                    input.classList.add('incorrect-input');
+                    feedback.textContent = `✗ (${q.expected})`;
+                    feedback.classList.add('text-red-700', 'opacity-100');
+                }
+            });
+
+            // Update score badge
+            const scoreBadge = document.getElementById('scoreBadge');
+            scoreBadge.textContent = `${score} / ${questions.length}`;
+
+            // Update in-page status message
+            const statusEl = document.getElementById('statusMessage');
+            statusEl.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-800', 'bg-amber-100', 'text-amber-800', 'bg-rose-100', 'text-rose-800');
+
+            if (score === questions.length) {
+                statusEl.textContent = 'शाबाश! सभी उत्तर बिल्कुल सही हैं! (3/3) 🎉';
+                statusEl.classList.add('bg-emerald-100', 'text-emerald-800');
+                if (typeof confetti === 'function') {
+                    confetti({
+                        particleCount: 110,
+                        spread: 75,
+                        origin: { y: 0.6 }
+                    });
+                }
+            } else if (score > 0) {
+                statusEl.textContent = `आपने ${score} / ${questions.length} अंक प्राप्त किए। गलत उत्तरों को सुधारें!`;
+                statusEl.classList.add('bg-amber-100', 'text-amber-800');
+            } else {
+                statusEl.textContent = 'कृपया खाली स्थानों में सही क्रिया भरें और जाँचें!';
+                statusEl.classList.add('bg-rose-100', 'text-rose-800');
+            }
+        }
+
+        /* Clear feedback formatting */
+        function clearFeedback(inputId) {
+            const q = questions.find(item => item.id === inputId);
+            if (!q) return;
+            const input = document.getElementById(q.id);
+            const feedback = document.getElementById(q.feedbackId);
+            input.classList.remove('correct-input', 'incorrect-input');
+            feedback.classList.add('opacity-0');
+        }
+
+        /* Reset all fields to initial state */
+        function resetForm() {
+            questions.forEach(q => {
+                const input = document.getElementById(q.id);
+                const feedback = document.getElementById(q.feedbackId);
+                input.value = '';
+                input.classList.remove('correct-input', 'incorrect-input');
+                feedback.classList.add('opacity-0');
+                feedback.textContent = '';
+            });
+            document.getElementById('scoreBadge').textContent = `0 / ${questions.length}`;
+            const statusEl = document.getElementById('statusMessage');
+            statusEl.classList.add('hidden');
+            activeInputId = 'ans_kha';
+        }
+
+        /* Modal open and close controllers */
+        function showAnswersModal() {
+            document.getElementById('solutionModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('solutionModal').classList.add('hidden');
+        }
+
+        /* Initialize when window loads */
+        window.onload = function() {
+            initializeWordBank();
+        };
+    </script>
+</body>
+</html>

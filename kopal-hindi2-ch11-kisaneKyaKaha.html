@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>किसने, किससे कहा?</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for authentic Devanagari typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Confetti JS for celebratory reward -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Mukta', sans-serif;
+        }
+        .heading-font {
+            font-family: 'Mukta', sans-serif;
+            letter-spacing: 0.5px;
+        }
+        /* Style for worksheet dashed underlines */
+        .worksheet-input {
+            border-bottom: 2px dashed #8b997c;
+            background: transparent;
+            outline: none;
+            transition: all 0.2s ease-in-out;
+        }
+        .worksheet-input:focus {
+            border-bottom: 2px solid #db2777;
+            background-color: rgba(255, 255, 255, 0.45);
+        }
+        .correct-input {
+            border-bottom: 2px solid #16a34a !important;
+            color: #15803d !important;
+            font-weight: 700;
+            background-color: rgba(220, 252, 231, 0.6) !important;
+        }
+        .incorrect-input {
+            border-bottom: 2px solid #dc2626 !important;
+            color: #b91c1c !important;
+            font-weight: 700;
+            background-color: rgba(254, 226, 226, 0.6) !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-[#cfe5b5] flex flex-col items-center justify-center p-3 sm:p-6 text-slate-800">
+
+    <main class="w-full max-w-4xl bg-[#d5e9bd]/95 backdrop-blur-sm border-2 border-[#b5d393] rounded-3xl p-5 sm:p-9 shadow-xl transition-all relative overflow-hidden">
+        
+        <!-- Header Section -->
+        <header class="mb-6 sm:mb-8 border-b-2 border-[#b8d697] pb-4">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <h1 class="text-3xl sm:text-4xl font-extrabold text-[#c0266f] tracking-wide heading-font select-none">
+                    किसने, किससे कहा?
+                </h1>
+                
+                <!-- Score badge -->
+                <div class="flex items-center gap-2 bg-white/80 px-4 py-1.5 rounded-full border border-emerald-300 shadow-sm text-sm font-semibold">
+                    <span class="text-slate-600">अंक (Score):</span>
+                    <span id="scoreBadge" class="text-emerald-700 text-lg font-bold">0 / 4</span>
+                </div>
+            </div>
+            <p class="text-xs sm:text-sm text-stone-700 mt-2 font-medium">
+                कहानी के आधार पर लिखिए कि प्रत्येक वाक्य <strong>किसने</strong> और <strong>किससे</strong> कहा।
+            </p>
+        </header>
+
+        <!-- Column Headers for the two blanks -->
+        <div class="hidden md:grid grid-cols-12 gap-3 mb-2 px-3 text-sm font-bold text-stone-700 uppercase tracking-wider">
+            <div class="col-span-6">वाक्य / कथन</div>
+            <div class="col-span-3 text-center bg-white/40 py-1 rounded-lg border border-emerald-200/60">किसने कहा?</div>
+            <div class="col-span-3 text-center bg-white/40 py-1 rounded-lg border border-emerald-200/60">किससे कहा?</div>
+        </div>
+
+        <form id="quizForm" onsubmit="event.preventDefault(); checkAnswers();" class="space-y-5 sm:space-y-6">
+            
+            <!-- (क) “तुम डाल पर क्या कर रहे हो?” -->
+            <div class="bg-white/40 md:bg-transparent p-4 md:p-0 rounded-2xl border border-emerald-200/60 md:border-none grid grid-cols-1 md:grid-cols-12 gap-3 sm:gap-4 items-center">
+                <div class="md:col-span-6 flex items-start sm:items-center gap-2">
+                    <span class="text-stone-800 font-bold min-w-[2.2rem] text-lg sm:text-xl select-none">(क)</span>
+                    <span class="text-slate-900 font-bold text-lg sm:text-xl leading-snug">“तुम डाल पर क्या कर रहे हो?”</span>
+                </div>
+                <!-- किसने -->
+                <div class="md:col-span-3 relative">
+                    <div class="md:hidden text-xs text-stone-600 font-bold mb-1">किसने कहा:</div>
+                    <input type="text" id="ans_ka_who" 
+                        class="worksheet-input w-full px-3 py-1.5 text-slate-900 rounded-t-md text-base sm:text-lg font-semibold text-center placeholder:text-stone-400" 
+                        placeholder="किसने कहा..." autocomplete="off">
+                    <span id="feedback_ka_who" class="absolute -bottom-5 left-0 right-0 text-center text-xs font-bold transition-opacity opacity-0"></span>
+                </div>
+                <!-- किससे -->
+                <div class="md:col-span-3 relative">
+                    <div class="md:hidden text-xs text-stone-600 font-bold mb-1">किससे कहा:</div>
+                    <input type="text" id="ans_ka_whom" 
+                        class="worksheet-input w-full px-3 py-1.5 text-slate-900 rounded-t-md text-base sm:text-lg font-semibold text-center placeholder:text-stone-400" 
+                        placeholder="किससे कहा..." autocomplete="off">
+                    <span id="feedback_ka_whom" class="absolute -bottom-5 left-0 right-0 text-center text-xs font-bold transition-opacity opacity-0"></span>
+                </div>
+            </div>
+
+            <!-- (ख) “अब कोई किसी पर हमला नहीं करेगा।” -->
+            <div class="bg-white/40 md:bg-transparent p-4 md:p-0 rounded-2xl border border-emerald-200/60 md:border-none grid grid-cols-1 md:grid-cols-12 gap-3 sm:gap-4 items-center">
+                <div class="md:col-span-6 flex items-start sm:items-center gap-2">
+                    <span class="text-stone-800 font-bold min-w-[2.2rem] text-lg sm:text-xl select-none">(ख)</span>
+                    <span class="text-slate-900 font-bold text-lg sm:text-xl leading-snug">“अब कोई किसी पर हमला नहीं करेगा।”</span>
+                </div>
+                <!-- किसने -->
+                <div class="md:col-span-3 relative">
+                    <div class="md:hidden text-xs text-stone-600 font-bold mb-1">किसने कहा:</div>
+                    <input type="text" id="ans_kha_who" 
+                        class="worksheet-input w-full px-3 py-1.5 text-slate-900 rounded-t-md text-base sm:text-lg font-semibold text-center placeholder:text-stone-400" 
+                        placeholder="किसने कहा..." autocomplete="off">
+                    <span id="feedback_kha_who" class="absolute -bottom-5 left-0 right-0 text-center text-xs font-bold transition-opacity opacity-0"></span>
+                </div>
+                <!-- किससे -->
+                <div class="md:col-span-3 relative">
+                    <div class="md:hidden text-xs text-stone-600 font-bold mb-1">किससे कहा:</div>
+                    <input type="text" id="ans_kha_whom" 
+                        class="worksheet-input w-full px-3 py-1.5 text-slate-900 rounded-t-md text-base sm:text-lg font-semibold text-center placeholder:text-stone-400" 
+                        placeholder="किससे कहा..." autocomplete="off">
+                    <span id="feedback_kha_whom" class="absolute -bottom-5 left-0 right-0 text-center text-xs font-bold transition-opacity opacity-0"></span>
+                </div>
+            </div>
+
+            <!-- (ग) “अरे! तुम घबरा क्यों गईं?” -->
+            <div class="bg-white/40 md:bg-transparent p-4 md:p-0 rounded-2xl border border-emerald-200/60 md:border-none grid grid-cols-1 md:grid-cols-12 gap-3 sm:gap-4 items-center">
+                <div class="md:col-span-6 flex items-start sm:items-center gap-2">
+                    <span class="text-stone-800 font-bold min-w-[2.2rem] text-lg sm:text-xl select-none">(ग)</span>
+                    <span class="text-slate-900 font-bold text-lg sm:text-xl leading-snug">“अरे! तुम घबरा क्यों गईं?”</span>
+                </div>
+                <!-- किसने -->
+                <div class="md:col-span-3 relative">
+                    <div class="md:hidden text-xs text-stone-600 font-bold mb-1">किसने कहा:</div>
+                    <input type="text" id="ans_ga_who" 
+                        class="worksheet-input w-full px-3 py-1.5 text-slate-900 rounded-t-md text-base sm:text-lg font-semibold text-center placeholder:text-stone-400" 
+                        placeholder="किसने कहा..." autocomplete="off">
+                    <span id="feedback_ga_who" class="absolute -bottom-5 left-0 right-0 text-center text-xs font-bold transition-opacity opacity-0"></span>
+                </div>
+                <!-- किससे -->
+                <div class="md:col-span-3 relative">
+                    <div class="md:hidden text-xs text-stone-600 font-bold mb-1">किससे कहा:</div>
+                    <input type="text" id="ans_ga_whom" 
+                        class="worksheet-input w-full px-3 py-1.5 text-slate-900 rounded-t-md text-base sm:text-lg font-semibold text-center placeholder:text-stone-400" 
+                        placeholder="किससे कहा..." autocomplete="off">
+                    <span id="feedback_ga_whom" class="absolute -bottom-5 left-0 right-0 text-center text-xs font-bold transition-opacity opacity-0"></span>
+                </div>
+            </div>
+
+            <!-- (घ) “लगता है कुत्तों ने यह समाचार नहीं सुना है।” -->
+            <div class="bg-white/40 md:bg-transparent p-4 md:p-0 rounded-2xl border border-emerald-200/60 md:border-none grid grid-cols-1 md:grid-cols-12 gap-3 sm:gap-4 items-center">
+                <div class="md:col-span-6 flex items-start sm:items-center gap-2">
+                    <span class="text-stone-800 font-bold min-w-[2.2rem] text-lg sm:text-xl select-none">(घ)</span>
+                    <span class="text-slate-900 font-bold text-lg sm:text-xl leading-snug">“लगता है कुत्तों ने यह समाचार नहीं सुना है।”</span>
+                </div>
+                <!-- किसने -->
+                <div class="md:col-span-3 relative">
+                    <div class="md:hidden text-xs text-stone-600 font-bold mb-1">किसने कहा:</div>
+                    <input type="text" id="ans_gha_who" 
+                        class="worksheet-input w-full px-3 py-1.5 text-slate-900 rounded-t-md text-base sm:text-lg font-semibold text-center placeholder:text-stone-400" 
+                        placeholder="किसने कहा..." autocomplete="off">
+                    <span id="feedback_gha_who" class="absolute -bottom-5 left-0 right-0 text-center text-xs font-bold transition-opacity opacity-0"></span>
+                </div>
+                <!-- किससे -->
+                <div class="md:col-span-3 relative">
+                    <div class="md:hidden text-xs text-stone-600 font-bold mb-1">किससे कहा:</div>
+                    <input type="text" id="ans_gha_whom" 
+                        class="worksheet-input w-full px-3 py-1.5 text-slate-900 rounded-t-md text-base sm:text-lg font-semibold text-center placeholder:text-stone-400" 
+                        placeholder="किससे कहा..." autocomplete="off">
+                    <span id="feedback_gha_whom" class="absolute -bottom-5 left-0 right-0 text-center text-xs font-bold transition-opacity opacity-0"></span>
+                </div>
+            </div>
+        </form>
+
+        <section class="mt-8 pt-5 border-t border-[#b8d697]">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3 gap-2">
+                <span class="text-sm font-bold text-stone-800 flex items-center gap-1.5">
+                    <svg class="w-4 h-4 text-emerald-800" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>
+                    सहायक शब्द (Word Bank - क्लिक करके भरें):
+                </span>
+                <span class="text-xs text-stone-600 font-medium">खाली बॉक्स चुनें, फिर सही उत्तर पर क्लिक करें</span>
+            </div>
+            
+            <div class="flex flex-wrap gap-2.5" id="wordBank">
+                <!-- Dynamically populated buttons -->
+            </div>
+        </section>
+
+        <footer class="mt-8 flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-[#b8d697]">
+            <div class="flex flex-wrap gap-2.5">
+                <button type="button" onclick="checkAnswers()" 
+                    class="bg-[#be185d] hover:bg-[#9d174d] text-white font-bold py-2.5 px-6 rounded-xl shadow-md transition duration-200 active:scale-95 flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                    जाँचें (Check)
+                </button>
+                <button type="button" onclick="showAnswersModal()" 
+                    class="bg-white/80 hover:bg-white text-slate-800 font-bold py-2.5 px-5 rounded-xl border border-stone-300 shadow-sm transition active:scale-95">
+                    उत्तर देखें (Show Answers)
+                </button>
+                <button type="button" onclick="resetForm()" 
+                    class="bg-stone-200/80 hover:bg-stone-300/80 text-stone-700 font-bold py-2.5 px-4 rounded-xl shadow-sm transition active:scale-95">
+                    फिर से करें (Reset)
+                </button>
+            </div>
+
+            <!-- In-page message box -->
+            <div id="statusMessage" class="hidden text-sm font-bold px-4 py-2 rounded-xl transition duration-300"></div>
+        </footer>
+    </main>
+
+    <div id="solutionModal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-2xl border border-stone-200 transform transition-all">
+            <div class="flex justify-between items-center border-b pb-3 mb-4">
+                <h3 class="text-2xl font-bold text-[#c0266f]">सही उत्तर (Solutions)</h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 text-3xl font-bold leading-none">&times;</button>
+            </div>
+            <div class="space-y-3.5 text-base sm:text-lg font-semibold text-slate-800">
+                <div class="p-3 bg-stone-50 rounded-xl border border-stone-200">
+                    <p class="text-sm text-stone-600 font-bold mb-1">(क) “तुम डाल पर क्या कर रहे हो?”</p>
+                    <div class="flex justify-between items-center text-emerald-800 font-bold">
+                        <span>किसने: <strong>लोमड़ी ने</strong></span>
+                        <span>किससे: <strong>मुर्गे से</strong></span>
+                    </div>
+                </div>
+                <div class="p-3 bg-stone-50 rounded-xl border border-stone-200">
+                    <p class="text-sm text-stone-600 font-bold mb-1">(ख) “अब कोई किसी पर हमला नहीं करेगा।”</p>
+                    <div class="flex justify-between items-center text-emerald-800 font-bold">
+                        <span>किसने: <strong>लोमड़ी ने</strong></span>
+                        <span>किससे: <strong>मुर्गे से</strong></span>
+                    </div>
+                </div>
+                <div class="p-3 bg-stone-50 rounded-xl border border-stone-200">
+                    <p class="text-sm text-stone-600 font-bold mb-1">(ग) “अरे! तुम घबरा क्यों गईं?”</p>
+                    <div class="flex justify-between items-center text-emerald-800 font-bold">
+                        <span>किसने: <strong>मुर्गे ने</strong></span>
+                        <span>किससे: <strong>लोमड़ी से</strong></span>
+                    </div>
+                </div>
+                <div class="p-3 bg-stone-50 rounded-xl border border-stone-200">
+                    <p class="text-sm text-stone-600 font-bold mb-1">(घ) “लगता है कुत्तों ने यह समाचार नहीं सुना है।”</p>
+                    <div class="flex justify-between items-center text-emerald-800 font-bold">
+                        <span>किसने: <strong>लोमड़ी ने</strong></span>
+                        <span>किससे: <strong>मुर्गे से</strong></span>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-6 flex justify-end">
+                <button onclick="closeModal()" class="bg-[#be185d] text-white px-6 py-2 rounded-xl font-bold hover:bg-[#9d174d] transition">
+                    बंद करें (Close)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* Questions definition with accepted variants */
+        const questions = [
+            {
+                id: 'ans_ka_who',
+                feedbackId: 'feedback_ka_who',
+                validAnswers: ['लोमड़ी ने', 'लोमड़ी ने', 'लोमड़ी', 'लोमड़ी'],
+                expected: 'लोमड़ी ने'
+            },
+            {
+                id: 'ans_ka_whom',
+                feedbackId: 'feedback_ka_whom',
+                validAnswers: ['मुर्गे से', 'मुर्गा से', 'मुर्गे को'],
+                expected: 'मुर्गे से'
+            },
+            {
+                id: 'ans_kha_who',
+                feedbackId: 'feedback_kha_who',
+                validAnswers: ['लोमड़ी ने', 'लोमड़ी ने', 'लोमड़ी', 'लोमड़ी'],
+                expected: 'लोमड़ी ने'
+            },
+            {
+                id: 'ans_kha_whom',
+                feedbackId: 'feedback_kha_whom',
+                validAnswers: ['मुर्गे से', 'मुर्गा से', 'मुर्गे को'],
+                expected: 'मुर्गे से'
+            },
+            {
+                id: 'ans_ga_who',
+                feedbackId: 'feedback_ga_who',
+                validAnswers: ['मुर्गे ने', 'मुर्गे', 'मुर्गा ने'],
+                expected: 'मुर्गे ने'
+            },
+            {
+                id: 'ans_ga_whom',
+                feedbackId: 'feedback_ga_whom',
+                validAnswers: ['लोमड़ी से', 'लोमड़ी से', 'लोमड़ी को', 'लोमड़ी को'],
+                expected: 'लोमड़ी से'
+            },
+            {
+                id: 'ans_gha_who',
+                feedbackId: 'feedback_gha_who',
+                validAnswers: ['लोमड़ी ने', 'लोमड़ी ने', 'लोमड़ी', 'लोमड़ी'],
+                expected: 'लोमड़ी ने'
+            },
+            {
+                id: 'ans_gha_whom',
+                feedbackId: 'feedback_gha_whom',
+                validAnswers: ['मुर्गे से', 'मुर्गा से', 'मुर्गे को'],
+                expected: 'मुर्गे से'
+            }
+        ];
+
+        /* Word Bank options */
+        const bankWords = ['लोमड़ी ने', 'मुर्गे से', 'मुर्गे ने', 'लोमड़ी से'];
+
+        let activeInputId = 'ans_ka_who';
+
+        function initializeWordBank() {
+            const container = document.getElementById('wordBank');
+            container.innerHTML = '';
+            
+            bankWords.forEach(word => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.textContent = word;
+                btn.className = 'bg-white/80 hover:bg-emerald-600 hover:text-white text-emerald-950 font-bold px-4 py-2 rounded-xl border border-emerald-300 text-base shadow-sm transition active:scale-95 duration-150';
+                btn.onclick = () => insertWord(word);
+                container.appendChild(btn);
+            });
+        }
+
+        // Attach event listeners for input focus and Enter key
+        questions.forEach(q => {
+            const input = document.getElementById(q.id);
+            input.addEventListener('focus', () => {
+                activeInputId = q.id;
+            });
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    checkAnswers();
+                }
+            });
+        });
+
+        // Insert word into current focused or next empty input
+        function insertWord(word) {
+            let target = document.getElementById(activeInputId);
+            if (!target || target.value.trim() !== '') {
+                const emptyItem = questions.find(q => document.getElementById(q.id).value.trim() === '');
+                if (emptyItem) {
+                    target = document.getElementById(emptyItem.id);
+                    activeInputId = emptyItem.id;
+                }
+            }
+            if (target) {
+                target.value = word;
+                target.focus();
+                clearFeedback(target.id);
+                // Move forward to the next empty input for smooth filling
+                const nextEmpty = questions.find(q => document.getElementById(q.id).value.trim() === '');
+                if (nextEmpty) {
+                    activeInputId = nextEmpty.id;
+                }
+            }
+        }
+
+        function cleanString(str) {
+            return str ? str.trim().normalize('NFC').replace(/\s+/g, ' ') : '';
+        }
+
+        function checkAnswers() {
+            let correctCount = 0;
+
+            questions.forEach(q => {
+                const input = document.getElementById(q.id);
+                const feedback = document.getElementById(q.feedbackId);
+                const userVal = cleanString(input.value);
+
+                input.classList.remove('correct-input', 'incorrect-input');
+                feedback.classList.remove('opacity-0', 'text-emerald-700', 'text-red-700', 'text-amber-700');
+
+                if (userVal === '') {
+                    feedback.textContent = 'खाली है';
+                    feedback.classList.add('text-amber-700', 'opacity-100');
+                    return;
+                }
+
+                const isMatch = q.validAnswers.some(ans => cleanString(ans) === userVal);
+
+                if (isMatch) {
+                    correctCount++;
+                    input.classList.add('correct-input');
+                    feedback.textContent = '✓ सही';
+                    feedback.classList.add('text-emerald-700', 'opacity-100');
+                } else {
+                    input.classList.add('incorrect-input');
+                    feedback.textContent = `✗ (${q.expected})`;
+                    feedback.classList.add('text-red-700', 'opacity-100');
+                }
+            });
+
+            // Calculate total score out of 4 (0.5 marks per blank across 4 questions)
+            const totalScore = 4;
+            const score = correctCount * 0.5;
+            const formattedScore = Number.isInteger(score) ? score : score.toFixed(1);
+
+            // Update score
+            const scoreBadge = document.getElementById('scoreBadge');
+            scoreBadge.textContent = `${formattedScore} / ${totalScore}`;
+
+            // Show status notification
+            const statusEl = document.getElementById('statusMessage');
+            statusEl.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-800', 'bg-amber-100', 'text-amber-800', 'bg-rose-100', 'text-rose-800');
+
+            if (correctCount === questions.length) {
+                statusEl.textContent = 'शाबाश! सभी 4 प्रश्नों के उत्तर बिल्कुल सही हैं! (4/4) 🎉';
+                statusEl.classList.add('bg-emerald-100', 'text-emerald-800');
+                if (typeof confetti === 'function') {
+                    confetti({
+                        particleCount: 110,
+                        spread: 75,
+                        origin: { y: 0.6 }
+                    });
+                }
+            } else if (score > 0) {
+                statusEl.textContent = `आपने ${formattedScore} / ${totalScore} अंक प्राप्त किए। गलत उत्तरों को दोबारा सुधारें!`;
+                statusEl.classList.add('bg-amber-100', 'text-amber-800');
+            } else {
+                statusEl.textContent = 'कृपया दोनों खानों में उत्तर भरें और दोबारा जाँचें!';
+                statusEl.classList.add('bg-rose-100', 'text-rose-800');
+            }
+        }
+
+        function clearFeedback(inputId) {
+            const q = questions.find(item => item.id === inputId);
+            if (!q) return;
+            const input = document.getElementById(q.id);
+            const feedback = document.getElementById(q.feedbackId);
+            input.classList.remove('correct-input', 'incorrect-input');
+            feedback.classList.add('opacity-0');
+        }
+
+        function resetForm() {
+            questions.forEach(q => {
+                const input = document.getElementById(q.id);
+                const feedback = document.getElementById(q.feedbackId);
+                input.value = '';
+                input.classList.remove('correct-input', 'incorrect-input');
+                feedback.classList.add('opacity-0');
+                feedback.textContent = '';
+            });
+            document.getElementById('scoreBadge').textContent = '0 / 4';
+            const statusEl = document.getElementById('statusMessage');
+            statusEl.classList.add('hidden');
+            activeInputId = 'ans_ka_who';
+        }
+
+        function showAnswersModal() {
+            document.getElementById('solutionModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('solutionModal').classList.add('hidden');
+        }
+
+        // Initialize word bank on window load
+        window.onload = function() {
+            initializeWordBank();
+        };
+    </script>
+</body>
+</html>

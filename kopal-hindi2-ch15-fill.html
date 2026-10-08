@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>मिलान कीजिए - अभ्यास</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts for authentic Hindi typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Confetti library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'book-bg': '#d6ebbe',
+            'book-header': '#c2185b',
+            'item-text': '#242b35'
+          },
+          fontFamily: {
+            hindi: ['"Noto Sans Devanagari"', 'sans-serif'],
+            baloo: ['"Baloo 2"', 'cursive']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Noto Sans Devanagari', sans-serif;
+      background-color: #f1f4ed;
+      user-select: none;
+    }
+    .worksheet-card {
+      background-color: #d6ebbe;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+      background-image: 
+        radial-gradient(#bedea2 0.75px, transparent 0.75px),
+        radial-gradient(#bedea2 0.75px, #d6ebbe 0.75px);
+      background-size: 32px 32px;
+      background-position: 0 0, 16px 16px;
+    }
+    .match-item {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .match-item:hover {
+      background: rgba(255, 255, 255, 0.6);
+      transform: translateY(-1px);
+    }
+    .match-item.selected {
+      background: #ffffff !important;
+      border-color: #c2185b !important;
+      box-shadow: 0 0 0 3px rgba(194, 24, 91, 0.25);
+    }
+    .match-item.correct {
+      background: #dcfce7 !important;
+      border-color: #16a34a !important;
+      color: #14532d !important;
+    }
+    .match-item.incorrect {
+      background: #fee2e2 !important;
+      border-color: #dc2626 !important;
+      color: #7f1d1d !important;
+    }
+    .dot-handle {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #64748b;
+      border: 2.5px solid white;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+      transition: transform 0.2s, background-color 0.2s;
+    }
+    .match-item.selected .dot-handle {
+      background: #c2185b;
+      transform: scale(1.35);
+    }
+    @media print {
+      body {
+        background: white !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .worksheet-card {
+        background: white !important;
+        box-shadow: none !important;
+        border: 2px solid #ccc !important;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-800 flex flex-col justify-between p-3 sm:p-6 md:p-8">
+
+  <div class="max-w-4xl mx-auto w-full">
+    <!-- Top Bar Navigation Controls -->
+    <header class="flex flex-wrap items-center justify-between gap-3 mb-5 no-print">
+      <div class="flex items-center gap-2.5">
+        <div class="w-10 h-10 rounded-xl bg-pink-600 text-white flex items-center justify-center shadow-sm">
+          <i data-lucide="git-merge" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h1 class="text-xl sm:text-2xl font-bold font-baloo text-slate-800 leading-none">हिंदी अभ्यास कार्यपत्रिका</h1>
+          <p class="text-xs text-slate-500 font-medium mt-0.5">कक्षा अभ्यास | सही जोड़े मिलाइए</p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-2">
+        <button id="ttsBtn" onclick="readFullExercise()" title="बोलकर सुनें" class="flex items-center gap-1.5 px-3 py-2 text-xs sm:text-sm font-semibold text-pink-700 bg-pink-100 hover:bg-pink-200 rounded-lg transition-colors shadow-sm">
+          <i data-lucide="volume-2" class="w-4 h-4"></i>
+          <span>सुनें</span>
+        </button>
+        <button onclick="window.print()" title="प्रिंट करें" class="flex items-center gap-1.5 px-3 py-2 text-xs sm:text-sm font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 rounded-lg transition-colors shadow-sm">
+          <i data-lucide="printer" class="w-4 h-4"></i>
+          <span class="hidden sm:inline">प्रिंट</span>
+        </button>
+        <button onclick="resetExercise()" title="दोबारा शुरू करें" class="flex items-center gap-1.5 px-3 py-2 text-xs sm:text-sm font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 rounded-lg transition-colors shadow-sm">
+          <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+          <span>रीसेट</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="worksheet-card rounded-2xl sm:rounded-3xl p-6 sm:p-10 md:p-12 border border-[#bddba1] relative overflow-hidden transition-all duration-300">
+      
+      <!-- Exact Heading from image -->
+      <div class="mb-6 sm:mb-8">
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-normal font-baloo text-[#c2185b] tracking-wide inline-flex items-center gap-2">
+          <span>मिलान कीजिए-</span>
+        </h2>
+        <p class="text-xs sm:text-sm text-stone-600 mt-1 font-medium no-print">
+          बाईं ओर के वाक्य (क, ख, ग, घ) पर क्लिक करें, फिर दाईं ओर के सही उत्तर (अ, ब, स, द) पर क्लिक करके जोड़ें।
+        </p>
+      </div>
+
+      <!-- Relative Workspace with SVG Overlay -->
+      <div id="matchWorkspace" class="relative py-2">
+        
+        <!-- SVG Canvas for Drawing Connecting Lines -->
+        <svg id="svgLines" class="absolute inset-0 w-full h-full pointer-events-none z-10 overflow-visible"></svg>
+
+        <!-- Columns Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-14 lg:gap-x-20 gap-y-4">
+          
+          <!-- Column 1 (Left: क, ख, ग, घ) -->
+          <div class="flex flex-col gap-4 sm:gap-5" id="leftColumn">
+            
+            <!-- (क) हिरन और कौआ -->
+            <div 
+              id="item-left-ka" 
+              data-id="ka"
+              onclick="selectLeftItem('ka')"
+              class="match-item group relative flex items-center justify-between p-3 sm:p-4 bg-white/40 border-2 border-stone-300/80 rounded-xl cursor-pointer shadow-sm hover:border-pink-400">
+              <div class="flex items-center gap-3">
+                <span class="text-lg sm:text-xl font-bold text-stone-700 w-8">(क)</span>
+                <span class="text-lg sm:text-xl md:text-2xl font-medium text-[#242b35]">हिरन और कौआ</span>
+              </div>
+              <div class="dot-handle ml-2 flex-shrink-0" id="dot-left-ka"></div>
+            </div>
+
+            <!-- (ख) कौए ने -->
+            <div 
+              id="item-left-kha" 
+              data-id="kha"
+              onclick="selectLeftItem('kha')"
+              class="match-item group relative flex items-center justify-between p-3 sm:p-4 bg-white/40 border-2 border-stone-300/80 rounded-xl cursor-pointer shadow-sm hover:border-pink-400">
+              <div class="flex items-center gap-3">
+                <span class="text-lg sm:text-xl font-bold text-stone-700 w-8">(ख)</span>
+                <span class="text-lg sm:text-xl md:text-2xl font-medium text-[#242b35]">कौए ने</span>
+              </div>
+              <div class="dot-handle ml-2 flex-shrink-0" id="dot-left-kha"></div>
+            </div>
+
+            <!-- (ग) शिकारी -->
+            <div 
+              id="item-left-ga" 
+              data-id="ga"
+              onclick="selectLeftItem('ga')"
+              class="match-item group relative flex items-center justify-between p-3 sm:p-4 bg-white/40 border-2 border-stone-300/80 rounded-xl cursor-pointer shadow-sm hover:border-pink-400">
+              <div class="flex items-center gap-3">
+                <span class="text-lg sm:text-xl font-bold text-stone-700 w-8">(ग)</span>
+                <span class="text-lg sm:text-xl md:text-2xl font-medium text-[#242b35]">शिकारी</span>
+              </div>
+              <div class="dot-handle ml-2 flex-shrink-0" id="dot-left-ga"></div>
+            </div>
+
+            <!-- (घ) हिरन -->
+            <div 
+              id="item-left-gha" 
+              data-id="gha"
+              onclick="selectLeftItem('gha')"
+              class="match-item group relative flex items-center justify-between p-3 sm:p-4 bg-white/40 border-2 border-stone-300/80 rounded-xl cursor-pointer shadow-sm hover:border-pink-400">
+              <div class="flex items-center gap-3">
+                <span class="text-lg sm:text-xl font-bold text-stone-700 w-8">(घ)</span>
+                <span class="text-lg sm:text-xl md:text-2xl font-medium text-[#242b35]">हिरन</span>
+              </div>
+              <div class="dot-handle ml-2 flex-shrink-0" id="dot-left-gha"></div>
+            </div>
+
+          </div>
+
+          <!-- Column 2 (Right: अ, ब, स, द) -->
+          <div class="flex flex-col gap-4 sm:gap-5" id="rightColumn">
+            
+            <!-- (अ) हिरन के शिकार के लिए आए -->
+            <div 
+              id="item-right-a" 
+              data-id="a"
+              onclick="selectRightItem('a')"
+              class="match-item group relative flex items-center justify-between p-3 sm:p-4 bg-white/40 border-2 border-stone-300/80 rounded-xl cursor-pointer shadow-sm hover:border-pink-400">
+              <div class="dot-handle mr-2 flex-shrink-0 order-first md:order-first" id="dot-right-a"></div>
+              <div class="flex items-center gap-3 flex-grow ml-2">
+                <span class="text-lg sm:text-xl font-bold text-stone-700 w-8">(अ)</span>
+                <span class="text-lg sm:text-xl md:text-2xl font-medium text-[#242b35]">हिरन के शिकार के लिए आए</span>
+              </div>
+            </div>
+
+            <!-- (ब) जंगल में रहते थे -->
+            <div 
+              id="item-right-ba" 
+              data-id="ba"
+              onclick="selectRightItem('ba')"
+              class="match-item group relative flex items-center justify-between p-3 sm:p-4 bg-white/40 border-2 border-stone-300/80 rounded-xl cursor-pointer shadow-sm hover:border-pink-400">
+              <div class="dot-handle mr-2 flex-shrink-0 order-first md:order-first" id="dot-right-ba"></div>
+              <div class="flex items-center gap-3 flex-grow ml-2">
+                <span class="text-lg sm:text-xl font-bold text-stone-700 w-8">(ब)</span>
+                <span class="text-lg sm:text-xl md:text-2xl font-medium text-[#242b35]">जंगल में रहते थे</span>
+              </div>
+            </div>
+
+            <!-- (स) झाड़ी के पीछे छिप गया -->
+            <div 
+              id="item-right-sa" 
+              data-id="sa"
+              onclick="selectRightItem('sa')"
+              class="match-item group relative flex items-center justify-between p-3 sm:p-4 bg-white/40 border-2 border-stone-300/80 rounded-xl cursor-pointer shadow-sm hover:border-pink-400">
+              <div class="dot-handle mr-2 flex-shrink-0 order-first md:order-first" id="dot-right-sa"></div>
+              <div class="flex items-center gap-3 flex-grow ml-2">
+                <span class="text-lg sm:text-xl font-bold text-stone-700 w-8">(स)</span>
+                <span class="text-lg sm:text-xl md:text-2xl font-medium text-[#242b35]">झाड़ी के पीछे छिप गया</span>
+              </div>
+            </div>
+
+            <!-- (द) हिरन को सावधान किया -->
+            <div 
+              id="item-right-da" 
+              data-id="da"
+              onclick="selectRightItem('da')"
+              class="match-item group relative flex items-center justify-between p-3 sm:p-4 bg-white/40 border-2 border-stone-300/80 rounded-xl cursor-pointer shadow-sm hover:border-pink-400">
+              <div class="dot-handle mr-2 flex-shrink-0 order-first md:order-first" id="dot-right-da"></div>
+              <div class="flex items-center gap-3 flex-grow ml-2">
+                <span class="text-lg sm:text-xl font-bold text-stone-700 w-8">(द)</span>
+                <span class="text-lg sm:text-xl md:text-2xl font-medium text-[#242b35]">हिरन को सावधान किया</span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      <div class="mt-8 pt-4 border-t border-[#b7d598] flex flex-wrap items-center gap-3 no-print">
+        <button 
+          id="checkBtn" 
+          onclick="checkAnswers()" 
+          class="flex items-center gap-2 px-6 py-3 bg-[#c2185b] hover:bg-[#ad1450] active:scale-95 text-white font-bold rounded-xl shadow-md transition-all duration-150 text-base sm:text-lg">
+          <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+          <span>उत्तर जाँचें</span>
+        </button>
+
+        <button 
+          id="showAnswersBtn" 
+          onclick="autoSolve()" 
+          class="flex items-center gap-2 px-5 py-3 bg-white hover:bg-stone-50 text-stone-700 font-semibold border border-stone-300 rounded-xl transition-colors shadow-sm text-sm sm:text-base">
+          <i data-lucide="eye" class="w-4 h-4 text-emerald-600"></i>
+          <span>सही मिलान देखें</span>
+        </button>
+
+        <button 
+          id="clearPairsBtn" 
+          onclick="clearAllPairs()" 
+          class="flex items-center gap-2 px-4 py-3 bg-amber-50 hover:bg-amber-100 text-amber-800 font-semibold border border-amber-300 rounded-xl transition-colors text-sm sm:text-base">
+          <i data-lucide="eraser" class="w-4 h-4"></i>
+          <span>रेखाएँ मिटाएँ</span>
+        </button>
+      </div>
+
+      <!-- Result Banner Notification -->
+      <div id="resultBanner" class="mt-6 p-4 rounded-xl hidden transition-all duration-300 no-print">
+        <div class="flex items-start gap-3">
+          <div id="resultIcon" class="mt-0.5"></div>
+          <div>
+            <h4 id="resultTitle" class="font-bold text-lg leading-snug"></h4>
+            <p id="resultMessage" class="text-sm mt-1"></p>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <section class="mt-6 bg-white rounded-2xl p-5 border border-slate-200 shadow-sm no-print">
+      <div class="flex items-center justify-between cursor-pointer select-none" onclick="toggleStoryInfo()">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+            <i data-lucide="book-open" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-800 text-sm sm:text-base">कहानी का संदर्भ (कौआ और हिरन की सच्ची मित्रता)</h4>
+            <p class="text-xs text-slate-500">पंचतंत्र / हितोपदेश की प्रसिद्ध प्रेरक कथा</p>
+          </div>
+        </div>
+        <i id="infoChevron" data-lucide="chevron-down" class="w-5 h-5 text-slate-400 transition-transform duration-200"></i>
+      </div>
+
+      <div id="storyContent" class="hidden mt-4 pt-4 border-t border-slate-100 text-slate-600 text-sm leading-relaxed space-y-2.5">
+        <p>
+          <strong>कहानी का सार:</strong> एक जंगल में एक हिरन और एक कौआ गहरे मित्र बनकर रहते थे। जब शिकारी जंगल में हिरन के शिकार के लिए आया, तब चतुर कौए ने पेड़ से देखकर अपने मित्र हिरन को समय पर सावधान कर दिया। हिरन तुरंत भागकर घनी झाड़ी के पीछे छिप गया और उसकी जान बच गई।
+        </p>
+        <div class="p-3 bg-amber-50 rounded-xl border border-amber-200/60 text-amber-900 font-medium text-xs">
+          <strong>सही मिलान सूची:</strong><br>
+          • (क) हिरन और कौआ ➔ (ब) जंगल में रहते थे<br>
+          • (ख) कौए ने ➔ (द) हिरन को सावधान किया<br>
+          • (ग) शिकारी ➔ (अ) हिरन के शिकार के लिए आए<br>
+          • (घ) हिरन ➔ (स) झाड़ी के पीछे छिप गया
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer Note -->
+    <footer class="mt-6 mb-2 text-center text-xs text-slate-400 no-print">
+      हिंदी अभ्यास | मिलान कीजिए | NCERT / प्राथमिक शिक्षण सामग्री
+    </footer>
+  </div>
+
+  <script>
+    // Audio synthesizer using Web Audio API for responsive tones
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playTone(freq, type = 'sine', duration = 0.15) {
+      try {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    function playSuccessChime() {
+      const notes = [523.25, 659.25, 783.99, 1046.50];
+      notes.forEach((freq, i) => {
+        setTimeout(() => playTone(freq, 'triangle', 0.25), i * 110);
+      });
+    }
+
+    function playErrorBeep() {
+      playTone(220, 'sawtooth', 0.25);
+    }
+
+    function playConnectPop() {
+      playTone(520, 'sine', 0.09);
+    }
+
+    // Correct solution mapping based on the story:
+    // (क) हिरन और कौआ -> (ब) जंगल में रहते थे
+    // (ख) कौए ने -> (द) हिरन को सावधान किया
+    // (ग) शिकारी -> (अ) हिरन के शिकार के लिए आए
+    // (घ) हिरन -> (स) झाड़ी के पीछे छिप गया
+    const solution = {
+      'ka': 'ba',
+      'kha': 'da',
+      'ga': 'a',
+      'gha': 'sa'
+    };
+
+    // Current user connections: { leftId: rightId }
+    let connections = {};
+    let selectedLeft = null;
+    let selectedRight = null;
+
+    // Distinct colors for each left pair
+    const lineColors = {
+      'ka': '#0284c7', // Sky blue
+      'kha': '#d97706', // Amber
+      'ga': '#dc2626', // Red
+      'gha': '#7c3aed'  // Violet
+    };
+
+    function selectLeftItem(id) {
+      playConnectPop();
+      clearStatusClasses();
+
+      // If already connected to right, toggle or reselect
+      if (selectedLeft === id) {
+        selectedLeft = null;
+        updateItemSelectionStyles();
+        return;
+      }
+
+      selectedLeft = id;
+      updateItemSelectionStyles();
+
+      // If a right item was previously clicked, connect them
+      if (selectedRight) {
+        createConnection(selectedLeft, selectedRight);
+        selectedLeft = null;
+        selectedRight = null;
+        updateItemSelectionStyles();
+      }
+    }
+
+    function selectRightItem(id) {
+      playConnectPop();
+      clearStatusClasses();
+
+      if (selectedRight === id) {
+        selectedRight = null;
+        updateItemSelectionStyles();
+        return;
+      }
+
+      selectedRight = id;
+      updateItemSelectionStyles();
+
+      // If a left item was previously clicked, connect them
+      if (selectedLeft) {
+        createConnection(selectedLeft, selectedRight);
+        selectedLeft = null;
+        selectedRight = null;
+        updateItemSelectionStyles();
+      }
+    }
+
+    function createConnection(leftId, rightId) {
+      // Remove any existing connection that already uses this right item
+      for (const [key, val] of Object.entries(connections)) {
+        if (val === rightId) {
+          delete connections[key];
+        }
+      }
+      connections[leftId] = rightId;
+      redrawLines();
+    }
+
+    function updateItemSelectionStyles() {
+      // Clear left highlights
+      document.querySelectorAll('#leftColumn .match-item').forEach(el => {
+        el.classList.toggle('selected', el.dataset.id === selectedLeft);
+      });
+      // Clear right highlights
+      document.querySelectorAll('#rightColumn .match-item').forEach(el => {
+        el.classList.toggle('selected', el.dataset.id === selectedRight);
+      });
+    }
+
+    function clearStatusClasses() {
+      document.querySelectorAll('.match-item').forEach(el => {
+        el.classList.remove('correct', 'incorrect');
+      });
+      const banner = document.getElementById('resultBanner');
+      banner.classList.add('hidden');
+    }
+
+    function redrawLines() {
+      const svg = document.getElementById('svgLines');
+      const workspace = document.getElementById('matchWorkspace');
+      const wsRect = workspace.getBoundingClientRect();
+
+      // Clear SVG
+      svg.innerHTML = '';
+
+      for (const [leftId, rightId] of Object.entries(connections)) {
+        const dotLeft = document.getElementById(`dot-left-${leftId}`);
+        const dotRight = document.getElementById(`dot-right-${rightId}`);
+
+        if (!dotLeft || !dotRight) continue;
+
+        const rectL = dotLeft.getBoundingClientRect();
+        const rectR = dotRight.getBoundingClientRect();
+
+        const x1 = rectL.left + rectL.width / 2 - wsRect.left;
+        const y1 = rectL.top + rectL.height / 2 - wsRect.top;
+        const x2 = rectR.left + rectR.width / 2 - wsRect.left;
+        const y2 = rectR.top + rectR.height / 2 - wsRect.top;
+
+        const color = lineColors[leftId] || '#c2185b';
+
+        // Draw bezier curved line
+        const dx = Math.abs(x2 - x1) * 0.45;
+        const pathData = `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`;
+
+        // Outer glow/shadow path for readability
+        const bgPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        bgPath.setAttribute('d', pathData);
+        bgPath.setAttribute('stroke', 'rgba(255,255,255,0.7)');
+        bgPath.setAttribute('stroke-width', '7');
+        bgPath.setAttribute('fill', 'none');
+        bgPath.setAttribute('stroke-linecap', 'round');
+        svg.appendChild(bgPath);
+
+        // Main colored stroke
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', pathData);
+        path.setAttribute('stroke', color);
+        path.setAttribute('stroke-width', '3.5');
+        path.setAttribute('fill', 'none');
+        path.setAttribute('stroke-linecap', 'round');
+        svg.appendChild(path);
+
+        // Highlight connected dots
+        dotLeft.style.backgroundColor = color;
+        dotRight.style.backgroundColor = color;
+      }
+
+      // Reset unconnected dots
+      const allLeftKeys = Object.keys(solution);
+      allLeftKeys.forEach(lKey => {
+        if (!connections[lKey]) {
+          const dot = document.getElementById(`dot-left-${lKey}`);
+          if (dot) dot.style.backgroundColor = '#64748b';
+        }
+      });
+
+      const connectedRights = Object.values(connections);
+      ['a', 'ba', 'sa', 'da'].forEach(rKey => {
+        if (!connectedRights.includes(rKey)) {
+          const dot = document.getElementById(`dot-right-${rKey}`);
+          if (dot) dot.style.backgroundColor = '#64748b';
+        }
+      });
+    }
+
+    // Redraw on window resize
+    window.addEventListener('resize', redrawLines);
+
+    function checkAnswers() {
+      const keys = Object.keys(solution);
+      let matchedCount = 0;
+      let correctCount = 0;
+
+      clearStatusClasses();
+
+      keys.forEach(k => {
+        const leftEl = document.getElementById(`item-left-${k}`);
+        const userRight = connections[k];
+
+        if (userRight) {
+          matchedCount++;
+          const rightEl = document.getElementById(`item-right-${userRight}`);
+          if (userRight === solution[k]) {
+            correctCount++;
+            leftEl.classList.add('correct');
+            rightEl.classList.add('correct');
+          } else {
+            leftEl.classList.add('incorrect');
+            rightEl.classList.add('incorrect');
+          }
+        }
+      });
+
+      const banner = document.getElementById('resultBanner');
+      const icon = document.getElementById('resultIcon');
+      const title = document.getElementById('resultTitle');
+      const msg = document.getElementById('resultMessage');
+      banner.classList.remove('hidden');
+
+      if (matchedCount < keys.length) {
+        playErrorBeep();
+        banner.className = 'mt-6 p-4 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 transition-all no-print';
+        icon.innerHTML = `<div class="p-2 bg-amber-200 rounded-full"><i data-lucide="alert-triangle" class="w-6 h-6 text-amber-700"></i></div>`;
+        title.innerText = 'कृपया सभी जोड़ों का मिलान करें!';
+        msg.innerText = `आपने ${keys.length} में से केवल ${matchedCount} जोड़े मिलाए हैं। बाकियों को भी मिलाएँ।`;
+      } else if (correctCount === keys.length) {
+        playSuccessChime();
+        banner.className = 'mt-6 p-4 rounded-xl bg-emerald-100 border border-emerald-300 text-emerald-900 transition-all no-print';
+        icon.innerHTML = `<div class="p-2 bg-emerald-200 rounded-full"><i data-lucide="award" class="w-6 h-6 text-emerald-700"></i></div>`;
+        title.innerText = 'अति सुंदर! सभी मिलान सही हैं! (100% Correct)';
+        msg.innerText = 'शाबाश! आपने कहानी के अनुसार सभी सही जोड़े मिला दिए हैं।';
+
+        try {
+          confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.65 },
+            colors: ['#c2185b', '#0284c7', '#d97706', '#16a34a', '#9333ea']
+          });
+        } catch (e) {}
+      } else {
+        playErrorBeep();
+        banner.className = 'mt-6 p-4 rounded-xl bg-rose-50 border border-rose-300 text-rose-900 transition-all no-print';
+        icon.innerHTML = `<div class="p-2 bg-rose-200 rounded-full"><i data-lucide="x-circle" class="w-6 h-6 text-rose-700"></i></div>`;
+        title.innerText = `${keys.length} में से ${correctCount} मिलान सही हैं।`;
+        msg.innerText = 'लाल रंग में दिखाए गए जोड़े गलत हैं। "रेखाएँ मिटाएँ" पर क्लिक करके पुनः प्रयास करें!';
+      }
+
+      lucide.createIcons();
+    }
+
+    // Auto solve all matching pairs
+    function autoSolve() {
+      playConnectPop();
+      connections = { ...solution };
+      selectedLeft = null;
+      selectedRight = null;
+      updateItemSelectionStyles();
+      redrawLines();
+      checkAnswers();
+    }
+
+    // Clear drawn connections
+    function clearAllPairs() {
+      playConnectPop();
+      connections = {};
+      selectedLeft = null;
+      selectedRight = null;
+      updateItemSelectionStyles();
+      clearStatusClasses();
+      redrawLines();
+    }
+
+    // Reset whole exercise
+    function resetExercise() {
+      clearAllPairs();
+    }
+
+    function toggleStoryInfo() {
+      playConnectPop();
+      const content = document.getElementById('storyContent');
+      const chevron = document.getElementById('infoChevron');
+      content.classList.toggle('hidden');
+      chevron.classList.toggle('rotate-180');
+    }
+
+    function readFullExercise() {
+      playConnectPop();
+      if (!('speechSynthesis' in window)) return;
+
+      window.speechSynthesis.cancel();
+      const textToRead = "अभ्यास: मिलान कीजिए। क: हिरन और कौआ। ख: कौए ने। ग: शिकारी। घ: हिरन। अ: हिरन के शिकार के लिए आए। ब: जंगल में रहते थे। स: झाड़ी के पीछे छिप गया। द: हिरन को सावधान किया।";
+
+      const utterance = new SpeechSynthesisUtterance(textToRead);
+      utterance.lang = 'hi-IN';
+      utterance.rate = 0.85;
+
+      const voices = window.speechSynthesis.getVoices();
+      const hiVoice = voices.find(v => v.lang.startsWith('hi') || v.lang.includes('IN'));
+      if (hiVoice) utterance.voice = hiVoice;
+
+      const btn = document.getElementById('ttsBtn');
+      const originalText = btn.innerHTML;
+      btn.classList.add('bg-pink-300');
+      btn.innerHTML = `<i data-lucide="volume-x" class="w-4 h-4"></i><span>सुनाई दे रहा है...</span>`;
+      lucide.createIcons();
+
+      utterance.onend = utterance.onerror = () => {
+        btn.classList.remove('bg-pink-300');
+        btn.innerHTML = originalText;
+        lucide.createIcons();
+      };
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    // Initialize after DOM is ready
+    window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      // Short delay to ensure bounding boxes are computed accurately
+      setTimeout(redrawLines, 100);
+    });
+  </script>
+</body>
+</html>
