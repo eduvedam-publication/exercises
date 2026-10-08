@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>संज्ञा शब्दों को रेखांकित कीजिए - अभ्यास</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts for authentic Devanagari typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'book-bg': '#d6ebbe',
+            'book-header': '#c2185b',
+            'item-text': '#242b35'
+          },
+          fontFamily: {
+            hindi: ['"Noto Sans Devanagari"', 'sans-serif'],
+            baloo: ['"Baloo 2"', 'cursive']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Noto Sans Devanagari', sans-serif;
+      background-color: #f1f4ed;
+      color: #242b35;
+      user-select: none;
+    }
+    .worksheet-card {
+      background-color: #d6ebbe;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+      background-image: 
+        radial-gradient(#bedea2 0.75px, transparent 0.75px),
+        radial-gradient(#bedea2 0.75px, #d6ebbe 0.75px);
+      background-size: 32px 32px;
+      background-position: 0 0, 16px 16px;
+    }
+    /* Interactive word chip inside sentences */
+    .word-token {
+      display: inline-block;
+      padding: 0px 4px 2px 4px;
+      margin: 2px 2px;
+      border-radius: 4px;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.15s ease-in-out;
+      border-bottom: 2px solid transparent;
+    }
+    .word-token:hover {
+      background-color: rgba(255, 255, 255, 0.65);
+      border-bottom: 2px dashed #c2185b;
+    }
+    /* Underlined state (रेखांकित) */
+    .word-token.underlined {
+      background-color: rgba(255, 255, 255, 0.9);
+      border-bottom: 3.5px solid #c2185b !important;
+      font-weight: 700;
+      color: #9d174d;
+      transform: translateY(-1px);
+    }
+    /* Correct answer status */
+    .word-token.state-correct {
+      background-color: #dcfce7 !important;
+      border-bottom: 3.5px solid #16a34a !important;
+      color: #14532d !important;
+    }
+    /* Incorrectly selected (not a noun) */
+    .word-token.state-wrong-selected {
+      background-color: #fee2e2 !important;
+      border-bottom: 3.5px solid #dc2626 !important;
+      color: #991b1b !important;
+      text-decoration: line-through;
+    }
+    /* Missed noun (should have been selected) */
+    .word-token.state-missed {
+      background-color: #fef3c7 !important;
+      border-bottom: 3px dotted #d97706 !important;
+      color: #92400e !important;
+    }
+
+    @media print {
+      body {
+        background: white !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .worksheet-card {
+        background: white !important;
+        box-shadow: none !important;
+        border: 2px solid #ccc !important;
+      }
+      .word-token {
+        cursor: default !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="min-h-screen text-slate-800 flex flex-col justify-between p-3 sm:p-6 md:p-8">
+
+  <div class="max-w-4xl mx-auto w-full">
+    <!-- Header Bar with Action Controls -->
+    <header class="flex flex-wrap items-center justify-between gap-3 mb-5 no-print">
+      <div class="flex items-center gap-2.5">
+        <div class="w-10 h-10 rounded-xl bg-pink-600 text-white flex items-center justify-center shadow-sm">
+          <i data-lucide="highlighter" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h1 class="text-xl sm:text-2xl font-bold font-baloo text-slate-800 leading-none">हिंदी व्याकरण अभ्यास कार्यपत्रिका</h1>
+          <p class="text-xs text-slate-500 font-medium mt-0.5">कक्षा अभ्यास | संज्ञा पहचानिए (Identify Nouns)</p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-2">
+        <button id="ttsBtn" onclick="readExerciseAudio()" title="बोलकर सुनें" class="flex items-center gap-1.5 px-3 py-2 text-xs sm:text-sm font-semibold text-pink-700 bg-pink-100 hover:bg-pink-200 rounded-lg transition-colors shadow-sm">
+          <i data-lucide="volume-2" class="w-4 h-4"></i>
+          <span>सुनें</span>
+        </button>
+        <button onclick="window.print()" title="प्रिंट करें" class="flex items-center gap-1.5 px-3 py-2 text-xs sm:text-sm font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 rounded-lg transition-colors shadow-sm">
+          <i data-lucide="printer" class="w-4 h-4"></i>
+          <span class="hidden sm:inline">प्रिंट</span>
+        </button>
+        <button onclick="resetExercise()" title="दोबारा शुरू करें" class="flex items-center gap-1.5 px-3 py-2 text-xs sm:text-sm font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 rounded-lg transition-colors shadow-sm">
+          <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+          <span>रीसेट</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Worksheet Container Matching Original Appearance -->
+    <main class="worksheet-card rounded-2xl sm:rounded-3xl p-6 sm:p-10 md:p-12 border border-[#bddba1] relative overflow-hidden transition-all duration-300">
+      
+      <!-- Heading Exact from Image -->
+      <div class="mb-7 md:mb-9">
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-normal font-baloo text-[#c2185b] tracking-wide inline-flex items-center gap-2">
+          <span>संज्ञा शब्दों को रेखांकित कीजिए-</span>
+        </h2>
+        <p class="text-xs sm:text-sm text-stone-600 mt-1 font-medium no-print">
+          निर्देश: वाक्यों में आए किसी व्यक्ति, वस्तु, स्थान या भाव के नाम (संज्ञा) पर क्लिक करके उसे रेखांकित करें।
+        </p>
+      </div>
+
+      <!-- Sentences Container -->
+      <div class="flex flex-col gap-5 sm:gap-6 text-xl sm:text-2xl md:text-3xl font-medium text-[#242b35] leading-relaxed">
+        
+        <!-- (क) अमन पार्क में खेल रहा था। -->
+        <div class="flex items-baseline gap-3 sm:gap-4 p-3 rounded-xl bg-white/25 border border-stone-300/40" id="sentence-ka">
+          <span class="font-bold text-stone-700 min-w-[36px] sm:min-w-[42px] select-none">(क)</span>
+          <div class="flex flex-wrap items-baseline flex-grow">
+            <!-- अमन (संज्ञा: व्यक्तिवाचक) -->
+            <span class="word-token" data-is-noun="true" data-label="व्यक्तिवाचक संज्ञा" onclick="toggleToken(this)">अमन</span>
+            <!-- पार्क (संज्ञा: स्थान / जातिवाचक) -->
+            <span class="word-token" data-is-noun="true" data-label="स्थान / जातिवाचक संज्ञा" onclick="toggleToken(this)">पार्क</span>
+            <span class="word-token" data-is-noun="false" onclick="toggleToken(this)">में</span>
+            <span class="word-token" data-is-noun="false" onclick="toggleToken(this)">खेल</span>
+            <span class="word-token" data-is-noun="false" onclick="toggleToken(this)">रहा</span>
+            <span class="word-token" data-is-noun="false" onclick="toggleToken(this)">था।</span>
+          </div>
+          <span class="status-indicator ml-2 hidden" id="status-ka"></span>
+        </div>
+
+        <!-- (ख) आसमान में काले बादल छा गए। -->
+        <div class="flex items-baseline gap-3 sm:gap-4 p-3 rounded-xl bg-white/25 border border-stone-300/40" id="sentence-kha">
+          <span class="font-bold text-stone-700 min-w-[36px] sm:min-w-[42px] select-none">(ख)</span>
+          <div class="flex flex-wrap items-baseline flex-grow">
+            <!-- आसमान (संज्ञा: स्थान / जातिवाचक) -->
+            <span class="word-token" data-is-noun="true" data-label="जातिवाचक संज्ञा (स्थान/प्रकृति)" onclick="toggleToken(this)">आसमान</span>
+            <span class="word-token" data-is-noun="false" onclick="toggleToken(this)">में</span>
+            <span class="word-token" data-is-noun="false" onclick="toggleToken(this)">काले</span>
+            <!-- बादल (संज्ञा: जातिवाचक / वस्तु) -->
+            <span class="word-token" data-is-noun="true" data-label="जातिवाचक संज्ञा" onclick="toggleToken(this)">बादल</span>
+            <span class="word-token" data-is-noun="false" onclick="toggleToken(this)">छा</span>
+            <span class="word-token" data-is-noun="false" onclick="toggleToken(this)">गए।</span>
+          </div>
+          <span class="status-indicator ml-2 hidden" id="status-kha"></span>
+        </div>
+
+        <!-- (ग) सूर्य की किरणें चमक रही थीं। -->
+        <div class="flex items-baseline gap-3 sm:gap-4 p-3 rounded-xl bg-white/25 border border-stone-300/40" id="sentence-ga">
+          <span class="font-bold text-stone-700 min-w-[36px] sm:min-w-[42px] select-none">(ग)</span>
+          <div class="flex flex-wrap items-baseline flex-grow">
+            <!-- सूर्य (संज्ञा: व्यक्तिवाचक / खगोलीय पिंड) -->
+            <span class="word-token" data-is-noun="true" data-label="व्यक्तिवाचक संज्ञा" onclick="toggleToken(this)">सूर्य</span>
+            <span class="word-token" data-is-noun="false" onclick="toggleToken(this)">की</span>
+            <!-- किरणें (संज्ञा: जातिवाचक) -->
+            <span class="word-token" data-is-noun="true" data-label="जातिवाचक संज्ञा" onclick="toggleToken(this)">किरणें</span>
+            <span class="word-token" data-is-noun="false" onclick="toggleToken(this)">चमक</span>
+            <span class="word-token" data-is-noun="false" onclick="toggleToken(this)">रही</span>
+            <span class="word-token" data-is-noun="false" onclick="toggleToken(this)">थीं।</span>
+          </div>
+          <span class="status-indicator ml-2 hidden" id="status-ga"></span>
+        </div>
+
+        <!-- (घ) माँ ने पानी के बारे में बताया। -->
+        <div class="flex items-baseline gap-3 sm:gap-4 p-3 rounded-xl bg-white/25 border border-stone-300/40" id="sentence-gha">
+          <span class="font-bold text-stone-700 min-w-[36px] sm:min-w-[42px] select-none">(घ)</span>
+          <div class="flex flex-wrap items-baseline flex-grow">
+            <!-- माँ (संज्ञा: जातिवाचक / संबंध) -->
+            <span class="word-token" data-is-noun="true" data-label="जातिवाचक संज्ञा (संबंध)" onclick="toggleToken(this)">माँ</span>
+            <span class="word-token" data-is-noun="false" onclick="toggleToken(this)">ने</span>
+            <!-- पानी (संज्ञा: द्रव्यवाचक संज्ञा) -->
+            <span class="word-token" data-is-noun="true" data-label="द्रव्यवाचक संज्ञा" onclick="toggleToken(this)">पानी</span>
+            <span class="word-token" data-is-noun="false" onclick="toggleToken(this)">के</span>
+            <span class="word-token" data-is-noun="false" onclick="toggleToken(this)">बारे</span>
+            <span class="word-token" data-is-noun="false" onclick="toggleToken(this)">में</span>
+            <span class="word-token" data-is-noun="false" onclick="toggleToken(this)">बताया।</span>
+          </div>
+          <span class="status-indicator ml-2 hidden" id="status-gha"></span>
+        </div>
+
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="mt-9 pt-5 border-t border-[#b7d598] flex flex-wrap items-center gap-3 no-print">
+        <button 
+          id="checkBtn" 
+          onclick="checkAnswers()" 
+          class="flex items-center gap-2 px-6 py-3 bg-[#c2185b] hover:bg-[#ad1450] active:scale-95 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all duration-150 text-base sm:text-lg">
+          <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+          <span>उत्तर जाँचें</span>
+        </button>
+
+        <button 
+          id="hintBtn" 
+          onclick="toggleHints()" 
+          class="flex items-center gap-2 px-5 py-3 bg-white hover:bg-slate-50 text-slate-700 font-semibold border border-slate-300 rounded-xl transition-colors shadow-sm text-sm sm:text-base">
+          <i data-lucide="lightbulb" class="w-4 h-4 text-amber-500"></i>
+          <span id="hintBtnText">संकेत देखें</span>
+        </button>
+
+        <button 
+          id="autoSolveBtn" 
+          onclick="autoSolveExercise()" 
+          class="flex items-center gap-2 px-4 py-3 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-semibold border border-emerald-300 rounded-xl transition-colors text-sm sm:text-base">
+          <i data-lucide="eye" class="w-4 h-4"></i>
+          <span>सही संज्ञा शब्द देखें</span>
+        </button>
+
+        <button 
+          id="clearSelectionBtn" 
+          onclick="clearSelection()" 
+          class="flex items-center gap-2 px-4 py-3 bg-amber-50 hover:bg-amber-100 text-amber-900 font-semibold border border-amber-300 rounded-xl transition-colors text-sm sm:text-base">
+          <i data-lucide="eraser" class="w-4 h-4"></i>
+          <span>रेखांकन हटाएँ</span>
+        </button>
+      </div>
+
+      <!-- Live Selection Status Counter -->
+      <div class="mt-4 flex items-center justify-between text-xs text-stone-700 font-medium no-print">
+        <span id="selectionCounter">चुने गए शब्द: 0</span>
+        <span class="text-stone-500">कुल संज्ञा शब्द: 8</span>
+      </div>
+
+      <!-- Result Banner Notification -->
+      <div id="resultBanner" class="mt-5 p-4 rounded-xl hidden transition-all duration-300 no-print">
+        <div class="flex items-start gap-3">
+          <div id="resultIcon" class="mt-0.5"></div>
+          <div>
+            <h4 id="resultTitle" class="font-bold text-lg leading-snug"></h4>
+            <p id="resultMessage" class="text-sm mt-1"></p>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Learning Info: संज्ञा की परिभाषा एवं भेद (Collapsible Card) -->
+    <section class="mt-6 bg-white rounded-2xl p-5 border border-slate-200 shadow-sm no-print">
+      <div class="flex items-center justify-between cursor-pointer select-none" onclick="toggleNounInfo()">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-pink-50 text-pink-600 flex items-center justify-center">
+            <i data-lucide="book-open" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-800 text-sm sm:text-base">संज्ञा (Noun) क्या है और इसके सही उत्तर कौन-से हैं?</h4>
+            <p class="text-xs text-slate-500">परिभाषा, प्रकार और इस अभ्यास का हल</p>
+          </div>
+        </div>
+        <i id="infoChevron" data-lucide="chevron-down" class="w-5 h-5 text-slate-400 transition-transform duration-200"></i>
+      </div>
+
+      <div id="nounInfoContent" class="hidden mt-4 pt-4 border-t border-slate-100 text-slate-600 text-sm leading-relaxed space-y-3">
+        <p>
+          <strong>संज्ञा की परिभाषा:</strong> किसी भी व्यक्ति, वस्तु, स्थान, प्राणी या भाव के नाम को <strong>संज्ञा (Noun)</strong> कहते हैं।
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+          <div>
+            <span class="font-bold text-pink-700 block mb-1">इस अभ्यास के सही संज्ञा शब्द:</span>
+            <ul class="space-y-1 text-slate-700">
+              <li>• <strong>(क)</strong> <span class="text-pink-800 font-semibold">अमन</span> (व्यक्ति), <span class="text-pink-800 font-semibold">पार्क</span> (स्थान)</li>
+              <li>• <strong>(ख)</strong> <span class="text-pink-800 font-semibold">आसमान</span> (स्थान/प्रकृति), <span class="text-pink-800 font-semibold">बादल</span> (वस्तु/प्राकृतिक रूप)</li>
+              <li>• <strong>(ग)</strong> <span class="text-pink-800 font-semibold">सूर्य</span> (खगोलीय पिंड/नाम), <span class="text-pink-800 font-semibold">किरणें</span> (प्राकृतिक तत्व)</li>
+              <li>• <strong>(घ)</strong> <span class="text-pink-800 font-semibold">माँ</span> (संबंध/व्यक्ति), <span class="text-pink-800 font-semibold">पानी</span> (द्रव्यवाचक संज्ञा)</li>
+            </ul>
+          </div>
+          <div>
+            <span class="font-bold text-emerald-700 block mb-1">संज्ञा के मुख्य भेद:</span>
+            <ul class="list-disc list-inside space-y-0.5 text-slate-700">
+              <li><strong>व्यक्तिवाचक संज्ञा:</strong> किसी विशेष व्यक्ति या वस्तु का नाम (उदा. अमन, सूर्य)</li>
+              <li><strong>जातिवाचक संज्ञा:</strong> एक ही जाति या वर्ग के नाम (उदा. पार्क, बादल, माँ)</li>
+              <li><strong>द्रव्यवाचक संज्ञा:</strong> किसी धातु या तरल का नाम (उदा. पानी, दूध)</li>
+              <li><strong>भाववाचक संज्ञा:</strong> गुण, दोष या भाव (उदा. खुशी, मिठास)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer Note -->
+    <footer class="mt-6 mb-2 text-center text-xs text-slate-400 no-print">
+      हिंदी व्याकरण अभ्यास | संज्ञा पहचानिए | NCERT / प्राथमिक शिक्षण सामग्री
+    </footer>
+  </div>
+
+  <script>
+    // Web Audio synthesizer for kid-friendly interaction feedback
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playTone(freq, type = 'sine', duration = 0.15) {
+      try {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    function playSuccessChime() {
+      const notes = [523.25, 659.25, 783.99, 1046.50];
+      notes.forEach((freq, i) => {
+        setTimeout(() => playTone(freq, 'triangle', 0.25), i * 110);
+      });
+    }
+
+    function playErrorBeep() {
+      playTone(220, 'sawtooth', 0.25);
+    }
+
+    function playClickPop() {
+      playTone(460, 'sine', 0.08);
+    }
+
+    // Toggle word selection
+    function toggleToken(element) {
+      playClickPop();
+      clearStateClasses();
+
+      element.classList.toggle('underlined');
+      updateCounter();
+    }
+
+    function updateCounter() {
+      const selected = document.querySelectorAll('.word-token.underlined').length;
+      const counter = document.getElementById('selectionCounter');
+      if (counter) {
+        counter.innerText = `चुने गए शब्द: ${selected}`;
+      }
+    }
+
+    function clearStateClasses() {
+      const tokens = document.querySelectorAll('.word-token');
+      tokens.forEach(token => {
+        token.classList.remove('state-correct', 'state-wrong-selected', 'state-missed');
+      });
+      const banner = document.getElementById('resultBanner');
+      if (banner) banner.classList.add('hidden');
+    }
+
+    // Check answers algorithm
+    function checkAnswers() {
+      const allTokens = Array.from(document.querySelectorAll('.word-token'));
+      const nounTokens = allTokens.filter(t => t.dataset.isNoun === 'true');
+      const totalNouns = nounTokens.length;
+
+      let correctlyFound = 0;
+      let wrongSelected = 0;
+      let missedNouns = 0;
+
+      allTokens.forEach(token => {
+        token.classList.remove('state-correct', 'state-wrong-selected', 'state-missed');
+        const isNoun = token.dataset.isNoun === 'true';
+        const isUnderlined = token.classList.contains('underlined');
+
+        if (isNoun && isUnderlined) {
+          // Correctly identified noun
+          correctlyFound++;
+          token.classList.add('state-correct');
+        } else if (!isNoun && isUnderlined) {
+          // Wrong selection
+          wrongSelected++;
+          token.classList.add('state-wrong-selected');
+        } else if (isNoun && !isUnderlined) {
+          // Missed noun
+          missedNouns++;
+          token.classList.add('state-missed');
+        }
+      });
+
+      const banner = document.getElementById('resultBanner');
+      const icon = document.getElementById('resultIcon');
+      const title = document.getElementById('resultTitle');
+      const msg = document.getElementById('resultMessage');
+      banner.classList.remove('hidden');
+
+      if (correctlyFound === totalNouns && wrongSelected === 0) {
+        playSuccessChime();
+        banner.className = 'mt-5 p-4 rounded-xl bg-emerald-100 border border-emerald-300 text-emerald-900 transition-all no-print';
+        icon.innerHTML = `<div class="p-2 bg-emerald-200 rounded-full"><i data-lucide="award" class="w-6 h-6 text-emerald-700"></i></div>`;
+        title.innerText = 'अति सुंदर! शाबाश! सभी 8 संज्ञा शब्द सही रेखांकित हैं!';
+        msg.innerText = 'आपने सभी वाक्यों में से नाम (संज्ञा) शब्दों को बिल्कुल सही पहचाना है।';
+
+        try {
+          confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.65 },
+            colors: ['#c2185b', '#0284c7', '#d97706', '#16a34a', '#9333ea']
+          });
+        } catch (e) {}
+      } else if (correctlyFound === 0 && wrongSelected === 0) {
+        playErrorBeep();
+        banner.className = 'mt-5 p-4 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 transition-all no-print';
+        icon.innerHTML = `<div class="p-2 bg-amber-200 rounded-full"><i data-lucide="help-circle" class="w-6 h-6 text-amber-700"></i></div>`;
+        title.innerText = 'कृपया वाक्यों में से संज्ञा शब्दों पर क्लिक करें!';
+        msg.innerText = 'किसी भी शब्द पर क्लिक करने से वह रेखांकित (underline) हो जाएगा।';
+      } else {
+        playErrorBeep();
+        banner.className = 'mt-5 p-4 rounded-xl bg-rose-50 border border-rose-300 text-rose-900 transition-all no-print';
+        icon.innerHTML = `<div class="p-2 bg-rose-200 rounded-full"><i data-lucide="alert-circle" class="w-6 h-6 text-rose-700"></i></div>`;
+        
+        let details = `आपने ${totalNouns} में से ${correctlyFound} संज्ञा शब्द सही चुने हैं।`;
+        if (wrongSelected > 0) {
+          details += ` लाल रंग में कटे हुए (${wrongSelected}) शब्द संज्ञा नहीं हैं।`;
+        }
+        if (missedNouns > 0) {
+          details += ` पीले बिंदु वाली रेखा (${missedNouns}) छूटी हुई संज्ञाएँ दर्शाती है।`;
+        }
+        title.innerText = `${correctlyFound}/${totalNouns} सही उत्तर`;
+        msg.innerText = details;
+      }
+
+      lucide.createIcons();
+    }
+
+    let hintsActive = false;
+    function toggleHints() {
+      playClickPop();
+      hintsActive = !hintsActive;
+      const tokens = document.querySelectorAll('.word-token');
+
+      tokens.forEach(tok => {
+        if (hintsActive && tok.dataset.isNoun === 'true') {
+          tok.title = `संकेत: यह संज्ञा है (${tok.dataset.label || 'नाम'})`;
+          tok.classList.add('ring-2', 'ring-amber-300', 'ring-offset-1');
+        } else {
+          tok.removeAttribute('title');
+          tok.classList.remove('ring-2', 'ring-amber-300', 'ring-offset-1');
+        }
+      });
+
+      document.getElementById('hintBtnText').innerText = hintsActive ? 'संकेत छिपाएँ' : 'संकेत देखें';
+    }
+
+    function autoSolveExercise() {
+      playClickPop();
+      const tokens = document.querySelectorAll('.word-token');
+      tokens.forEach(tok => {
+        if (tok.dataset.isNoun === 'true') {
+          tok.classList.add('underlined');
+        } else {
+          tok.classList.remove('underlined');
+        }
+      });
+      updateCounter();
+      checkAnswers();
+    }
+
+    function clearSelection() {
+      playClickPop();
+      const tokens = document.querySelectorAll('.word-token');
+      tokens.forEach(tok => tok.classList.remove('underlined'));
+      clearStateClasses();
+      updateCounter();
+    }
+
+    function resetExercise() {
+      playClickPop();
+      clearSelection();
+      hintsActive = false;
+      document.getElementById('hintBtnText').innerText = 'संकेत देखें';
+      const tokens = document.querySelectorAll('.word-token');
+      tokens.forEach(tok => {
+        tok.removeAttribute('title');
+        tok.classList.remove('ring-2', 'ring-amber-300', 'ring-offset-1');
+      });
+    }
+
+    function toggleNounInfo() {
+      playClickPop();
+      const content = document.getElementById('nounInfoContent');
+      const chevron = document.getElementById('infoChevron');
+      content.classList.toggle('hidden');
+      chevron.classList.toggle('rotate-180');
+    }
+
+    // Audio narration via Web Speech API
+    function readExerciseAudio() {
+      playClickPop();
+      if (!('speechSynthesis' in window)) return;
+
+      window.speechSynthesis.cancel();
+      const textToRead = "अभ्यास: संज्ञा शब्दों को रेखांकित कीजिए। क: अमन पार्क में खेल रहा था। ख: आसमान में काले बादल छा गए। ग: सूर्य की किरणें चमक रही थीं। घ: माँ ने पानी के बारे में बताया।";
+
+      const utterance = new SpeechSynthesisUtterance(textToRead);
+      utterance.lang = 'hi-IN';
+      utterance.rate = 0.85;
+
+      const voices = window.speechSynthesis.getVoices();
+      const hiVoice = voices.find(v => v.lang.startsWith('hi') || v.lang.includes('IN'));
+      if (hiVoice) utterance.voice = hiVoice;
+
+      const btn = document.getElementById('ttsBtn');
+      const originalText = btn.innerHTML;
+      btn.classList.add('bg-pink-300');
+      btn.innerHTML = `<i data-lucide="volume-x" class="w-4 h-4"></i><span>सुनाई दे रहा है...</span>`;
+      lucide.createIcons();
+
+      utterance.onend = utterance.onerror = () => {
+        btn.classList.remove('bg-pink-300');
+        btn.innerHTML = originalText;
+        lucide.createIcons();
+      };
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    // Initialize Lucide icons on load
+    window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      updateCounter();
+    });
+  </script>
+</body>
+</html>
