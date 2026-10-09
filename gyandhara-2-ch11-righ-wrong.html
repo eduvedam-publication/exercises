@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>सही (✓) या गलत (✗) चिन्ह लगाइए</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:18px;font-family:"Noto Sans Devanagari","Mangal",Arial,sans-serif;background:#d9f8fb;color:#17334a}
+.exercise{max-width:960px;margin:0 auto;padding:20px 24px 18px;background:#fff;border:3px solid #00afd0;border-radius:24px}
+h1{margin:0 0 16px;color:#00a6d2;font-size:clamp(23px,4vw,34px);font-weight:600}
+.instructions{font-size:18px;margin:0 0 14px}
+.question{display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px;min-height:70px;margin:9px 0;padding:13px 15px;border:1.5px solid #00b5d9;border-radius:14px;background:#effbfe;font-size:clamp(17px,2.3vw,21px)}
+.statement{line-height:1.65}
+.choices{display:flex;gap:8px;align-items:center}
+.choice{width:42px;height:42px;display:flex;align-items:center;justify-content:center;border:1.5px solid #00aee0;border-radius:10px;background:#fff;cursor:pointer;font-size:23px;font-weight:700;color:#426174;user-select:none}
+.choice input{position:absolute;opacity:0;pointer-events:none}
+.choice:has(input:checked){background:#d5f7ff;border:2px solid #0087b5;color:#007da5;box-shadow:0 0 0 2px #bceefa}
+.choice.true:has(input:checked){color:#13834c;border-color:#20a66a;background:#e9fff3}
+.choice.false:has(input:checked){color:#c33b3b;border-color:#e34b4b;background:#fff0f0}
+.question.correct{border-color:#20a66a;background:#f0fff6}
+.question.incorrect{border-color:#e34b4b;background:#fff5f5}
+.controls{display:flex;justify-content:center;gap:10px;margin-top:22px}
+.action{border:1.5px solid #ff1680;border-radius:11px;background:#fff;padding:8px 19px;font:inherit;font-size:16px;cursor:pointer}
+.action:hover{background:#fff0f7}
+#score{text-align:center;color:#0073bd;font-size:20px;font-weight:700;margin:8px 0 0}
+#message{text-align:center;min-height:24px;margin-top:6px}
+.legend{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;color:#4d6877;font-size:15px;margin:10px 0}
+@media(max-width:520px){body{padding:8px}.exercise{padding:15px 11px;border-radius:18px}.question{padding:10px;gap:8px}.choice{width:36px;height:38px}.statement{font-size:16px}}
+</style>
+</head>
+<body>
+<main class="exercise">
+<h1>सही (✓) या गलत (✗) का चिन्ह लगाइए–</h1>
+<p class="instructions">प्रत्येक वाक्य को पढ़िए और सही या गलत विकल्प चुनिए।</p>
+<div class="legend"><span>✓ = सही</span><span>✗ = गलत</span></div>
+
+<div id="questions">
+  <section class="question" data-answer="false">
+    <div class="statement">(क) वर्तमान काल क्रिया के विषय में बताता है।</div>
+    <div class="choices">
+      <label class="choice true" title="सही"><input type="radio" name="q1" value="true"><span>✓</span></label>
+      <label class="choice false" title="गलत"><input type="radio" name="q1" value="false"><span>✗</span></label>
+    </div>
+  </section>
+  <section class="question" data-answer="true">
+    <div class="statement">(ख) वर्तमान काल की क्रिया से भविष्य का पता चल सकता है।</div>
+    <div class="choices">
+      <label class="choice true" title="सही"><input type="radio" name="q2" value="true"><span>✓</span></label>
+      <label class="choice false" title="गलत"><input type="radio" name="q2" value="false"><span>✗</span></label>
+    </div>
+  </section>
+  <section class="question" data-answer="true">
+    <div class="statement">(ग) संज्ञा शब्द के स्थान पर आने वाले शब्दों को सर्वनाम कहते हैं।</div>
+    <div class="choices">
+      <label class="choice true" title="सही"><input type="radio" name="q3" value="true"><span>✓</span></label>
+      <label class="choice false" title="गलत"><input type="radio" name="q3" value="false"><span>✗</span></label>
+    </div>
+  </section>
+  <section class="question" data-answer="false">
+    <div class="statement">(घ) ‘वह’ एक संबंध बताने वाला शब्द है।</div>
+    <div class="choices">
+      <label class="choice true" title="सही"><input type="radio" name="q4" value="true"><span>✓</span></label>
+      <label class="choice false" title="गलत"><input type="radio" name="q4" value="false"><span>✗</span></label>
+    </div>
+  </section>
+</div>
+<div class="controls"><button class="action" id="submit">Submit</button><button class="action" id="reset">Reset</button></div>
+<div id="score">Score: 0 / 4</div><div id="message" role="status"></div>
+</main>
+<script>
+const questions=[...document.querySelectorAll('.question')];
+document.getElementById('submit').addEventListener('click',()=>{
+ let score=0, unanswered=0;
+ questions.forEach(q=>{
+   const selected=q.querySelector('input:checked');
+   q.classList.remove('correct','incorrect');
+   if(!selected){unanswered++;q.classList.add('incorrect');return;}
+   if(selected.value===q.dataset.answer){score++;q.classList.add('correct');}
+   else q.classList.add('incorrect');
+ });
+ document.getElementById('score').textContent=`Score: ${score} / ${questions.length}`;
+ document.getElementById('message').textContent=unanswered
+   ? `${unanswered} प्रश्नों का उत्तर बाकी है।`
+   : score===questions.length?'बहुत अच्छा! सभी उत्तर सही हैं।':'लाल बॉर्डर वाले उत्तर फिर से जाँचिए।';
+});
+document.getElementById('reset').addEventListener('click',()=>{
+ questions.forEach(q=>{q.querySelectorAll('input').forEach(i=>i.checked=false);q.classList.remove('correct','incorrect');});
+ document.getElementById('score').textContent=`Score: 0 / ${questions.length}`;
+ document.getElementById('message').textContent='';
+});
+</script>
+</body>
+</html>

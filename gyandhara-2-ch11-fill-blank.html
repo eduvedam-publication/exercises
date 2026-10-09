@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>रिक्त स्थान पूर्ण कीजिए</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:18px;font-family:"Noto Sans Devanagari","Mangal",Arial,sans-serif;background:#d9f8fb;color:#17334a}
+.exercise{max-width:960px;margin:0 auto;padding:20px 24px 18px;background:#fff;border:3px solid #00afd0;border-radius:24px}
+h1{margin:0 0 14px;color:#00a6d2;font-size:clamp(24px,4vw,36px);font-weight:600}
+.word-bank{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;background:#e0f8fc;padding:12px;border-radius:14px;margin-bottom:15px}
+.word{background:#fff;border:1.5px solid #00aee0;border-radius:10px;padding:7px 13px;font:inherit;font-size:17px;cursor:grab;user-select:none;touch-action:none}
+.word:active{cursor:grabbing}.word.dragging{opacity:.45}
+.question{display:flex;align-items:center;flex-wrap:wrap;gap:9px;min-height:76px;margin:9px 0;padding:13px 14px;border:1.5px solid #00b5d9;border-radius:14px;background:#effbfe;font-size:clamp(18px,2.5vw,23px)}
+.q-label{white-space:nowrap}
+.blank{min-width:105px;min-height:53px;display:inline-flex;align-items:center;justify-content:center;padding:4px 8px;background:#fff;border:2px dashed #ff705e;border-radius:9px;color:#007fa8;font-size:19px}
+.blank:empty::after{content:"________";color:#18384a;font-size:17px}
+.blank.drag-over{background:#d8f7ff;border-color:#008eb4;border-style:solid;box-shadow:0 0 0 3px #b9effa}
+.blank.correct{border:2px solid #20a66a;background:#e9fff3}.blank.incorrect{border:2px solid #e34b4b;background:#fff0f0}
+.controls{display:flex;justify-content:center;gap:10px;margin-top:22px}
+.action{border:1.5px solid #ff1680;border-radius:11px;background:#fff;padding:8px 19px;font:inherit;font-size:16px;cursor:pointer}
+.action:hover{background:#fff0f7}
+#score{text-align:center;color:#0073bd;font-size:20px;font-weight:700;margin:8px 0 0}
+#message{text-align:center;min-height:24px;margin-top:6px}.hint{font-size:14px;color:#4d6877;text-align:center;margin:8px 0 0}
+@media(max-width:520px){body{padding:8px}.exercise{padding:15px 11px;border-radius:18px}.question{gap:6px;padding:10px}.blank{min-width:86px}.word{padding:6px 9px;font-size:16px}}
+</style>
+</head>
+<body>
+<main class="exercise">
+<h1>रिक्त स्थान पूर्ण कीजिए–</h1>
+<div class="word-bank" id="wordBank" aria-label="शब्दों को खींचकर रिक्त स्थान में डालें">
+  <span class="word" draggable="true" data-word="मुझे">मुझे</span>
+  <span class="word" draggable="true" data-word="मेरे को">मेरे को</span>
+  <span class="word" draggable="true" data-word="हमें">हमें</span>
+  <span class="word" draggable="true" data-word="हमारे को">हमारे को</span>
+  <span class="word" draggable="true" data-word="काट लिया">काट लिया</span>
+  <span class="word" draggable="true" data-word="काटा">काटा</span>
+  <span class="word" draggable="true" data-word="चलने से">चलने से</span>
+  <span class="word" draggable="true" data-word="चलने पर">चलने पर</span>
+</div>
+<section class="question"><span class="q-label">(क)</span><span class="blank" data-answer="मुझे" aria-label="प्रश्न क का रिक्त स्थान"></span><span>आपके साथ चलना है।</span><span>(मुझे / मेरे को)</span></section>
+<section class="question"><span class="q-label">(ख)</span><span class="blank" data-answer="हमें" aria-label="प्रश्न ख का रिक्त स्थान"></span><span>कसरत करनी है।</span><span>(हमारे को / हमें)</span></section>
+<section class="question"><span class="q-label">(ग)</span><span class="blank" data-answer="काटा" aria-label="प्रश्न ग का रिक्त स्थान"></span><span>मेरे कुत्ते ने</span><span>(काटा / काट लिया)</span></section>
+<section class="question"><span class="q-label">(घ)</span><span class="blank" data-answer="चलने से" aria-label="प्रश्न घ का रिक्त स्थान"></span><span>बहुत थकावट होती है।</span><span>(चलने से / चलने पर)</span></section>
+<div class="controls"><button class="action" id="submit">Submit</button><button class="action" id="reset">Reset</button></div>
+<div id="score">Score: 0 / 4</div><div id="message" role="status"></div>
+<p class="hint">ऊपर दिए गए शब्द को खींचकर खाली स्थान में छोड़ें (Drag &amp; Drop)।</p>
+</main>
+<script>
+const words=[...document.querySelectorAll('.word')];
+const blanks=[...document.querySelectorAll('.blank')];
+let draggedWord='';
+words.forEach(word=>{
+  word.addEventListener('dragstart',e=>{
+    draggedWord=word.dataset.word;
+    word.classList.add('dragging');
+    if(e.dataTransfer){e.dataTransfer.setData('text/plain',draggedWord);e.dataTransfer.effectAllowed='copy';}
+  });
+  word.addEventListener('dragend',()=>word.classList.remove('dragging'));
+});
+blanks.forEach(blank=>{
+  blank.addEventListener('dragover',e=>{e.preventDefault();blank.classList.add('drag-over');if(e.dataTransfer)e.dataTransfer.dropEffect='copy';});
+  blank.addEventListener('dragleave',()=>blank.classList.remove('drag-over'));
+  blank.addEventListener('drop',e=>{
+    e.preventDefault();blank.classList.remove('drag-over');
+    const value=(e.dataTransfer&&e.dataTransfer.getData('text/plain'))||draggedWord;
+    if(!value)return;
+    blank.textContent=value;blank.dataset.value=value;blank.classList.remove('correct','incorrect');
+    document.getElementById('message').textContent=`“${value}” रिक्त स्थान में रखा गया।`;
+  });
+});
+document.getElementById('submit').addEventListener('click',()=>{
+  let score=0;
+  blanks.forEach(blank=>{
+    const correct=blank.dataset.value===blank.dataset.answer;
+    blank.classList.toggle('correct',correct);blank.classList.toggle('incorrect',!correct);
+    if(correct)score++;
+  });
+  document.getElementById('score').textContent=`Score: ${score} / ${blanks.length}`;
+  document.getElementById('message').textContent=score===blanks.length?'बहुत अच्छा! सभी उत्तर सही हैं।':'लाल बॉर्डर वाले उत्तर फिर से जाँचिए।';
+});
+document.getElementById('reset').addEventListener('click',()=>{
+  blanks.forEach(blank=>{blank.textContent='';delete blank.dataset.value;blank.classList.remove('correct','incorrect','drag-over');});
+  document.getElementById('score').textContent='Score: 0 / 4';document.getElementById('message').textContent='';
+});
+</script>
+</body></html>
