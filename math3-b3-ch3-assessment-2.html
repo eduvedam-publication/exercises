@@ -1,10 +1,64 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>
-*{box-sizing:border-box}body{margin:0;padding:18px;background:#e8faff;font-family:Arial,sans-serif;color:#111}
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fill the spaces</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:18px;background:#e8faff;font-family:Arial,sans-serif;color:#111}
 .exercise{max-width:1080px;margin:auto;background:#fff;border:4px solid #08a8d8;border-radius:28px;padding:30px 38px}
-h1{margin:0 0 26px;color:#00a3dc;font-size:25px}.questions{display:grid;width:100%;gap:22px 55px}.two{grid-template-columns:repeat(2,1fr)}.four{grid-template-columns:repeat(4,1fr)}
-.q{display:flex;align-items:center;gap:8px;font:20px Georgia,serif}.nowrap{white-space:nowrap}.ans{width:95px;height:37px;border:2px solid #ff3b30;background:#fff;font-size:18px;padding:4px 7px}
-.mcq{margin-bottom:24px;font:19px Georgia,serif}.prompt{margin-bottom:10px}.opts{display:flex;flex-wrap:wrap;gap:10px 20px;margin-left:28px}.opt{border:2px solid #ff1680;background:#fff;border-radius:11px;padding:9px 16px;font:17px Georgia,serif;cursor:pointer}.opt.sel{background:#ffe2ef}.opt.ok{background:#dcf8df;border-color:#009b8e}.opt.bad{background:#ffe1e1;border-color:#e43d30}
-.controls{display:flex;justify-content:center;gap:14px;width:100%;margin-top:38px}.controls button{border:0;border-radius:24px;background:#ff7d00;color:#fff;font-weight:bold;padding:12px 22px;cursor:pointer}.score{text-align:center;color:#064bb4;font-size:22px;font-weight:bold;margin-top:16px}
-.okI{background:#dcf8df!important;border-color:#009b8e!important}.badI{background:#ffe1e1!important;border-color:#e43d30!important}
-@media(max-width:900px){.four{grid-template-columns:repeat(2,1fr)}}@media(max-width:620px){body{padding:0}.exercise{border-radius:0;padding:18px}.two,.four{grid-template-columns:1fr}}
-</style></head><body><main class="exercise"><h1>Fill the spaces.</h1><div class="questions two"><div class="q nowrap"><span>a. &nbsp; 2354 − 2354 =</span><input id="a0" class="ans"></div><div class="q nowrap"><span>b. &nbsp; 4586 −</span><input id="a1" class="ans"></div><div class="q nowrap"><span>c. &nbsp; 534 −</span><input id="a2" class="ans"></div><div class="q nowrap"><span>d. &nbsp; ____ − 1 = 8456</span><input id="a3" class="ans"></div><div class="q nowrap"><span>e. &nbsp; 8956 − 0 =</span><input id="a4" class="ans"></div><div class="q nowrap"><span>f. &nbsp; 6586 −</span><input id="a5" class="ans"></div></div><div class="controls"><button onclick="check()">Check Answers</button><button onclick="resetAll()">Reset</button></div><div id="score" class="score">Score: 0 / 6</div></main><script>const A=['0', '1', '534', '8457', '8956', '1'];function check(){let s=0;A.forEach((a,i)=>{let e=document.getElementById('a'+i),o=e.value.trim()===a;e.classList.remove('okI','badI');e.classList.add(o?'okI':'badI');if(o)s++});score.textContent='Score: '+s+' / 6'}function resetAll(){document.querySelectorAll('input').forEach(e=>{e.value='';e.classList.remove('okI','badI')});score.textContent='Score: 0 / 6'}</script></body></html>
+h1{margin:0 0 26px;color:#00a3dc;font-size:clamp(23px,3vw,30px)}
+.questions{display:grid;width:100%;gap:22px 55px}
+.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.q{display:flex;align-items:center;gap:8px;font:clamp(17px,2vw,21px) Georgia,serif;min-width:0;flex-wrap:wrap}
+.label{white-space:nowrap}
+.ans{width:105px;max-width:100%;height:38px;border:2px solid #ff3b30;background:#fff;font-size:18px;padding:4px 7px;border-radius:4px}
+.controls{display:flex;justify-content:center;gap:14px;width:100%;margin-top:38px}
+.controls button{border:0;border-radius:24px;background:#ff7d00;color:#fff;font-weight:bold;padding:12px 22px;cursor:pointer;font-size:15px}
+.score{text-align:center;color:#064bb4;font-size:22px;font-weight:bold;margin-top:16px}
+.feedback{text-align:center;min-height:22px;margin-top:8px}
+.okI{background:#dcf8df!important;border-color:#009b8e!important}
+.badI{background:#ffe1e1!important;border-color:#e43d30!important}
+@media(max-width:700px){body{padding:8px}.exercise{border-radius:18px;padding:20px 16px}.two{grid-template-columns:1fr}.questions{gap:18px}.q{font-size:19px}}
+</style>
+</head>
+<body>
+<main class="exercise">
+<h1>Fill the spaces.</h1>
+<div class="questions two">
+  <div class="q"><span class="label">a. &nbsp; 2354 − 2354 =</span><input id="a0" class="ans" aria-label="Answer a" inputmode="numeric"></div>
+  <div class="q"><span class="label">b. &nbsp; 4586 −</span><input id="a1" class="ans" aria-label="Answer b" inputmode="numeric"><span>= 4585</span></div>
+  <div class="q"><span class="label">c. &nbsp; 534 −</span><input id="a2" class="ans" aria-label="Answer c" inputmode="numeric"><span>= 0</span></div>
+  <div class="q"><span class="label">d. &nbsp;</span><input id="a3" class="ans" aria-label="Answer d" inputmode="numeric"><span>− 1 = 8456</span></div>
+  <div class="q"><span class="label">e. &nbsp; 8956 − 0 =</span><input id="a4" class="ans" aria-label="Answer e" inputmode="numeric"></div>
+  <div class="q"><span class="label">f. &nbsp; 6586 −</span><input id="a5" class="ans" aria-label="Answer f" inputmode="numeric"><span>= 6585</span></div>
+</div>
+<div class="controls"><button type="button" id="checkBtn">Check Answers</button><button type="button" id="resetBtn">Reset</button></div>
+<div id="score" class="score">Score: 0 / 6</div>
+<div id="feedback" class="feedback" role="status"></div>
+</main>
+<script>
+const answers=['0','1','534','8457','8956','1'];
+function check(){
+ let total=0;
+ answers.forEach((answer,i)=>{
+   const field=document.getElementById('a'+i);
+   const correct=field.value.trim()===answer;
+   field.classList.remove('okI','badI');
+   field.classList.add(correct?'okI':'badI');
+   if(correct) total++;
+ });
+ document.getElementById('score').textContent=`Score: ${total} / ${answers.length}`;
+ document.getElementById('feedback').textContent=total===answers.length?'Excellent! All answers are correct.':'Check the answers highlighted in red.';
+}
+function resetAll(){
+ document.querySelectorAll('.ans').forEach(field=>{field.value='';field.classList.remove('okI','badI');});
+ document.getElementById('score').textContent='Score: 0 / 6';
+ document.getElementById('feedback').textContent='';
+}
+document.getElementById('checkBtn').addEventListener('click',check);
+document.getElementById('resetBtn').addEventListener('click',resetAll);
+</script>
+</body>
+</html>
