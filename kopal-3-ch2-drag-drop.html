@@ -1,1 +1,587 @@
-<!doctype html><html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>kopal-2-ch2-drag-drop</title><style>*{box-sizing:border-box}body{margin:0;background:#dcf8ff;font-family:"Noto Sans Devanagari","Mangal",sans-serif;color:#24313a}.sheet{width:min(920px,96vw);margin:12px auto;background:#fff;border:3px solid #08a9d2;border-radius:22px;padding:18px 24px;min-height:min(560px,94vh);display:flex;flex-direction:column}h1{font-size:clamp(21px,2.6vw,29px);color:#ff0065;margin:0 0 15px}.content{flex:1}.q{background:#f1fbff;border:2px solid #00c8ea;border-radius:12px;padding:11px 14px;margin:9px 0;font-size:19px}.opts{display:flex;flex-wrap:wrap;gap:8px 12px;margin-top:9px}.opt,.word{border:1.5px solid #ff0069;background:#fff;border-radius:9px;padding:7px 11px;font:inherit;cursor:pointer}.opt.selected,.word.selected{background:#c9f4dc}.slot{display:inline-flex;min-width:140px;min-height:37px;border:2px dashed #ff684b;border-radius:7px;vertical-align:middle;align-items:center;justify-content:center;cursor:pointer;padding:3px 8px;background:#fff}.bank{display:flex;flex-wrap:wrap;justify-content:center;gap:9px;background:#e1f8ff;border-radius:12px;padding:12px;margin-bottom:15px}.word{border-color:#00aee5}.actions{text-align:center;margin-top:15px}.actions button{border:1.5px solid #ff0069;border-radius:9px;background:#fff;padding:7px 16px;font-size:15px;cursor:pointer}.score{text-align:center;color:#0074ba;font-size:19px;font-weight:bold;margin-top:8px}.good{background:#d9f8e1!important}.bad{background:#ffe3e3!important;border-color:#ff284e!important;animation:wrongBlink .48s ease-in-out 4}@keyframes wrongBlink{0%,100%{background:#ffe3e3;box-shadow:none}50%{background:#ff506a;box-shadow:0 0 0 3px #ffb1c0;color:#fff}}@media(max-width:600px){.sheet{padding:12px;min-height:95vh}.q{font-size:16px}.slot{min-width:100px}}</style></head><body><main class="sheet"><h1>चुनिए और लिखिए–</h1><div id="bank" class="bank"></div><div id="content" class="content"></div><div class="actions"><button onclick="submitAnswers()">Submit</button> <button onclick="resetAnswers()">Reset</button></div><div class="score" id="score">Score: 0 / 3</div></main><script>const Q=["उसने तुरंत छलाँग लगाकर जुगनू पकड़ ______ ।", "बंदरों ने उस ओर ध्यान ______ ।", "यह छोटा-सा चमकने वाला ______ है।"],ANS=["लिया", "नहीं दिया", "कीड़ा"],B=["लिया", "दिया", "नहीं दिया", "शेर", "कीड़ा"],K='kopal-2-ch2-drag-drop';let A;try{A=JSON.parse(localStorage.getItem(K))||{}}catch{A={}}let selected='';function save(){localStorage.setItem(K,JSON.stringify(A))}function draw(){document.getElementById('bank').innerHTML=B.map((v,i)=>`<button class="word ${selected===v?'selected':''}" draggable="true" ondragstart="event.dataTransfer.setData('text/plain',${i})" onclick="selected=${json(v)};draw()">${v}</button>`.replace('${json(v)}',JSON.stringify(v))).join('');document.getElementById('content').innerHTML=Q.map((q,i)=>`<div class="q"><b>${['(क)','(ख)','(ग)'][i]}</b> ${q.replace('______',`<span class="slot" data-i="${i}" ondragover="event.preventDefault()" ondrop="event.preventDefault();put(${i},B[Number(event.dataTransfer.getData('text/plain'))])" onclick="put(${i},selected)">${A[i]||'________'}</span>`)}</div>`).join('')}function put(i,v){if(!v)return;A[i]=v;selected='';save();draw()}function submitAnswers(){let n=ANS.filter((v,i)=>A[i]===v).length;document.querySelectorAll('.slot').forEach((el,i)=>{if(A[i])el.classList.add(A[i]===ANS[i]?'good':'bad')});document.getElementById('score').textContent=`Score: ${n} / 3`;parent.postMessage({type:'VIDYALAYA_EXERCISE_SUBMIT',payload:{exerciseType:'DRAG_DROP',response:Object.fromEntries(Q.map((q,i)=>['question'+(i+1),A[i]||'']))}},'*')}function resetAnswers(){A={};selected='';save();document.getElementById('score').textContent='Score: 0 / 3';draw()}draw();</script></body></html>
+<!doctype html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>कोपल - २ | चुनिए और लिखिए (Drag & Drop)</title>
+  
+  <!-- Google Fonts: Baloo 2 & Noto Sans Devanagari for clean Hindi typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            hindi: ['"Baloo 2"', '"Noto Sans Devanagari"', 'sans-serif'],
+            body: ['"Noto Sans Devanagari"', 'sans-serif']
+          },
+          colors: {
+            brand: {
+              pink: '#ff2d75',
+              yellow: '#ffcf26',
+              cyan: '#08a9d2',
+              sky: '#dcf8ff',
+              green: '#22c55e',
+              border: '#0ea5e9'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Baloo 2', 'Noto Sans Devanagari', sans-serif;
+      background: linear-gradient(135deg, #dcf8ff 0%, #ebfaff 50%, #d4f3fc 100%);
+      min-height: 100vh;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Bouncing and pulsing effects */
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(-1.5deg); }
+      50% { transform: rotate(1.5deg); }
+    }
+    .animate-wiggle {
+      animation: wiggle 0.4s ease-in-out infinite;
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.85); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .animate-pop {
+      animation: popIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes wrongShake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+    .animate-wrong {
+      animation: wrongShake 0.45s ease-in-out;
+    }
+
+    .word-card {
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 4px 0 rgba(0, 0, 0, 0.08);
+    }
+    .word-card:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.08);
+    }
+    .word-card.selected {
+      border-color: #ff0065;
+      background: #ffecf4;
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 6px 12px rgba(255, 0, 101, 0.25);
+    }
+
+    .slot-box {
+      transition: all 0.2s ease;
+      background: rgba(255, 255, 255, 0.95);
+    }
+    .slot-box.drag-over {
+      border-color: #08a9d2;
+      background-color: #e0f8ff;
+      transform: scale(1.03);
+    }
+
+    /* Confetti Canvas */
+    #confettiCanvas {
+      pointer-events: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 100;
+    }
+  </style>
+</head>
+<body class="flex flex-col items-center justify-center p-3 sm:p-6 text-slate-800">
+  <canvas id="confettiCanvas"></canvas>
+
+  <main class="w-full max-w-3xl bg-white/95 backdrop-blur-md rounded-3xl border-4 border-[#08a9d2] shadow-2xl p-4 sm:p-7 flex flex-col justify-between min-h-[580px] relative overflow-hidden">
+    
+    <!-- Top Decorative Elements -->
+    <div class="flex items-center justify-between pb-3 mb-2 border-b-2 border-dashed border-sky-200">
+      <div class="flex items-center gap-2.5">
+        <span class="inline-flex items-center justify-center w-10 h-10 rounded-2xl bg-amber-400 text-white font-black text-xl shadow-md">
+          २
+        </span>
+        <div>
+          <h1 class="text-xl sm:text-2xl md:text-3xl font-extrabold text-[#ff0065] tracking-tight leading-tight">
+            चुनिए और लिखिए–
+          </h1>
+          <p class="text-xs sm:text-sm text-slate-500 font-medium">
+            शब्द को खींचकर (Drag) या छूकर (Tap) सही खाली स्थान में भरिए
+          </p>
+        </div>
+      </div>
+      
+      <!-- Live Badge / Chapter Info -->
+      <div class="hidden sm:flex flex-col items-end">
+        <span class="px-3 py-1 bg-sky-100 text-[#0074ba] text-xs font-bold rounded-full border border-sky-200">
+          पाठ २ : अभ्यास
+        </span>
+      </div>
+    </div>
+
+    <section class="my-3">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-xs sm:text-sm font-bold uppercase tracking-wider text-sky-800 flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+          </svg>
+          शब्द पिटारा (Word Bank):
+        </span>
+        <span id="guideHint" class="text-xs text-pink-600 font-semibold animate-pulse hidden">
+          शब्द चुन लिया गया है, अब खाली स्थान पर टैप करें!
+        </span>
+      </div>
+
+      <div id="bank" class="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3.5 p-3.5 sm:p-4 bg-gradient-to-r from-sky-50 via-cyan-50 to-sky-100/70 border-2 border-[#00c8ea]/40 rounded-2xl min-h-[64px]">
+        <!-- Dynamic Word Buttons will populate here -->
+      </div>
+    </section>
+
+    <section id="content" class="flex-1 flex flex-col justify-center gap-3.5 sm:gap-4 my-2">
+      <!-- Dynamic Question Cards will populate here -->
+    </section>
+
+    <div id="feedbackBanner" class="hidden text-center py-2 px-4 rounded-xl text-sm font-bold my-1 transition-all"></div>
+
+    <footer class="pt-3 border-t-2 border-dashed border-sky-200 mt-2 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <!-- Score Display -->
+      <div class="flex items-center gap-2">
+        <div class="px-4 py-1.5 bg-sky-100 rounded-xl border border-sky-300 text-sky-900 font-extrabold text-base sm:text-lg flex items-center gap-2">
+          <span>अंक (Score):</span>
+          <span id="score" class="text-[#0074ba] text-lg sm:text-xl">० / ३</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-2.5 w-full sm:w-auto justify-end">
+        <button 
+          id="btnReset"
+          onclick="resetAnswers()" 
+          class="flex-1 sm:flex-none px-4 py-2 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 font-bold rounded-xl border border-slate-300 transition text-sm sm:text-base flex items-center justify-center gap-1.5 shadow-sm"
+          title="पुनः प्रयास करें">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+          </svg>
+          रीसेट (Reset)
+        </button>
+
+        <button 
+          id="btnSubmit"
+          onclick="submitAnswers()" 
+          class="flex-1 sm:flex-none px-6 py-2 bg-gradient-to-r from-[#ff0069] to-[#ff2a85] hover:brightness-105 active:scale-95 text-white font-extrabold rounded-xl shadow-md transition text-sm sm:text-base flex items-center justify-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+          </svg>
+          जाँचिए (Submit)
+        </button>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    // Audio Context Synthesizer (No external asset dependency)
+    const AudioFX = {
+      ctx: null,
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) this.ctx = new AudioContext();
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      },
+      playTone(freq, type, duration, delay = 0, volume = 0.15) {
+        try {
+          this.init();
+          if (!this.ctx) return;
+          setTimeout(() => {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+            gain.gain.setValueAtTime(volume, this.ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start();
+            osc.stop(this.ctx.currentTime + duration);
+          }, delay * 1000);
+        } catch(e) {
+          console.warn("Audio unavailable", e);
+        }
+      },
+      click() {
+        this.playTone(550, 'sine', 0.08, 0, 0.1);
+      },
+      place() {
+        this.playTone(440, 'triangle', 0.12, 0, 0.15);
+        this.playTone(660, 'sine', 0.15, 0.06, 0.15);
+      },
+      clear() {
+        this.playTone(320, 'sine', 0.1, 0, 0.1);
+      },
+      success() {
+        this.playTone(523.25, 'triangle', 0.15, 0, 0.2); // C5
+        this.playTone(659.25, 'triangle', 0.18, 0.1, 0.2); // E5
+        this.playTone(783.99, 'triangle', 0.35, 0.2, 0.25); // G5
+      },
+      partial() {
+        this.playTone(400, 'sine', 0.15, 0, 0.15);
+        this.playTone(500, 'sine', 0.2, 0.1, 0.15);
+      },
+      error() {
+        this.playTone(280, 'sawtooth', 0.22, 0, 0.15);
+        this.playTone(220, 'sawtooth', 0.3, 0.12, 0.18);
+      }
+    };
+  </script>
+
+  <script>
+    // Data definition
+    const Q = [
+      "उसने तुरंत छलाँग लगाकर जुगनू पकड़ ______ ।",
+      "बंदरों ने उस ओर ध्यान ______ ।",
+      "यह छोटा-सा चमकने वाला ______ है।"
+    ];
+    const ANS = ["लिया", "नहीं दिया", "कीड़ा"];
+    const B = ["लिया", "दिया", "नहीं दिया", "शेर", "कीड़ा"];
+    const Q_NUMS = ['(क)', '(ख)', '(ग)'];
+    const DEV_NUMS = ['०', '१', '२', '३'];
+
+    const STORAGE_KEY = 'kopal-2-ch2-drag-drop';
+    let userAnswers = {};
+    let selectedWord = null;
+    let isEvaluated = false;
+
+    // Load initial answers safely from localStorage
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        userAnswers = JSON.parse(saved) || {};
+      }
+    } catch(e) {
+      userAnswers = {};
+    }
+
+    function saveToStorage() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(userAnswers));
+      } catch (e) {
+        console.warn("Storage write failed", e);
+      }
+    }
+
+    function render() {
+      // 1. Render Word Bank
+      const bankContainer = document.getElementById('bank');
+      bankContainer.innerHTML = B.map((word, index) => {
+        const isSelected = selectedWord === word;
+        const isUsed = Object.values(userAnswers).includes(word);
+
+        return `
+          <button 
+            type="button"
+            class="word-card px-4 py-2 font-hindi text-base sm:text-lg font-bold rounded-xl border-2 cursor-pointer 
+                   ${isSelected 
+                      ? 'selected border-[#ff0069] bg-pink-50 text-[#ff0069]' 
+                      : isUsed 
+                        ? 'border-slate-300 bg-slate-100 text-slate-400 opacity-70' 
+                        : 'border-[#08a9d2] bg-white text-slate-800 hover:border-[#ff0069] hover:bg-sky-50'}"
+            draggable="true"
+            data-word="${escapeHtml(word)}"
+            ondragstart="handleDragStart(event, '${escapeHtml(word)}')"
+            onclick="selectWord('${escapeHtml(word)}')"
+          >
+            ${word}
+          </button>
+        `;
+      }).join('');
+
+      // Guide hint visibility
+      const guideHint = document.getElementById('guideHint');
+      if (selectedWord) {
+        guideHint.classList.remove('hidden');
+      } else {
+        guideHint.classList.add('hidden');
+      }
+
+      // 2. Render Question Lines
+      const contentContainer = document.getElementById('content');
+      contentContainer.innerHTML = Q.map((text, i) => {
+        const filled = userAnswers[i] || '';
+        const hasValue = filled.length > 0;
+        
+        let statusStyle = 'border-[#ff684b] border-dashed text-slate-800';
+        let statusIcon = '';
+        let rowShake = '';
+
+        if (isEvaluated) {
+          if (filled === ANS[i]) {
+            statusStyle = 'border-green-500 bg-green-50 text-green-700 font-bold border-solid';
+            statusIcon = '<span class="text-green-600 ml-1 text-sm">✓</span>';
+          } else {
+            statusStyle = 'border-red-500 bg-red-50 text-red-700 font-bold border-solid';
+            statusIcon = '<span class="text-red-500 ml-1 text-sm">✕</span>';
+            rowShake = 'animate-wrong';
+          }
+        }
+
+        const slotHtml = `
+          <span 
+            class="slot-box inline-flex items-center justify-center min-w-[125px] sm:min-w-[150px] min-h-[42px] px-3.5 py-1 mx-1.5 rounded-xl border-2 font-hindi font-bold text-base sm:text-lg cursor-pointer shadow-inner relative transition-transform ${statusStyle} ${rowShake}"
+            data-index="${i}"
+            ondragover="handleDragOver(event)"
+            ondragleave="handleDragLeave(event)"
+            ondrop="handleDrop(event, ${i})"
+            onclick="handleSlotClick(${i})"
+            title="${hasValue ? 'हटाने के लिए टैप करें (Tap to remove)' : 'यहाँ शब्द भरें (Fill here)'}"
+          >
+            ${hasValue ? `<span class="animate-pop inline-flex items-center">${filled} ${statusIcon}</span>` : '<span class="text-slate-300 tracking-wider">________</span>'}
+          </span>
+        `;
+
+        return `
+          <div class="flex items-center gap-2 p-3 sm:p-4 rounded-2xl bg-[#f0fbff] border-2 border-[#00c8ea]/40 shadow-sm transition hover:border-[#00c8ea]">
+            <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-sky-200/80 text-[#0074ba] font-bold text-sm sm:text-base shrink-0">
+              ${Q_NUMS[i]}
+            </span>
+            <div class="text-slate-800 text-base sm:text-lg md:text-xl font-medium leading-relaxed flex-1 flex flex-wrap items-center">
+              ${text.replace('______', slotHtml)}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Helper for safe HTML attributes
+    function escapeHtml(str) {
+      return str.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    function selectWord(word) {
+      AudioFX.click();
+      isEvaluated = false;
+      clearFeedback();
+      if (selectedWord === word) {
+        selectedWord = null; // Toggle off
+      } else {
+        selectedWord = word;
+      }
+      render();
+    }
+
+    function handleSlotClick(slotIndex) {
+      isEvaluated = false;
+      clearFeedback();
+
+      if (selectedWord) {
+        // If a word is currently picked from bank, place it into slot
+        userAnswers[slotIndex] = selectedWord;
+        AudioFX.place();
+        selectedWord = null;
+        saveToStorage();
+        render();
+      } else if (userAnswers[slotIndex]) {
+        // If slot already has word and nothing selected, return it (clear it)
+        AudioFX.clear();
+        delete userAnswers[slotIndex];
+        saveToStorage();
+        render();
+      }
+    }
+
+    // HTML5 Drag and Drop events
+    function handleDragStart(ev, word) {
+      AudioFX.click();
+      ev.dataTransfer.setData('text/plain', word);
+      selectedWord = word;
+      ev.currentTarget.classList.add('opacity-50');
+    }
+
+    function handleDragOver(ev) {
+      ev.preventDefault();
+      ev.currentTarget.classList.add('drag-over');
+    }
+
+    function handleDragLeave(ev) {
+      ev.currentTarget.classList.remove('drag-over');
+    }
+
+    function handleDrop(ev, slotIndex) {
+      ev.preventDefault();
+      ev.currentTarget.classList.remove('drag-over');
+      const droppedWord = ev.dataTransfer.getData('text/plain') || selectedWord;
+      if (droppedWord) {
+        userAnswers[slotIndex] = droppedWord;
+        selectedWord = null;
+        isEvaluated = false;
+        AudioFX.place();
+        saveToStorage();
+        render();
+      }
+    }
+
+    function submitAnswers() {
+      AudioFX.init();
+      isEvaluated = true;
+
+      let score = 0;
+      let unanswered = 0;
+
+      for (let i = 0; i < ANS.length; i++) {
+        if (!userAnswers[i]) {
+          unanswered++;
+        } else if (userAnswers[i] === ANS[i]) {
+          score++;
+        }
+      }
+
+      // Update score display in Hindi numerals & Western format
+      const scoreEl = document.getElementById('score');
+      scoreEl.textContent = `${DEV_NUMS[score]} / ३  (${score} / 3)`;
+
+      // Feedback display
+      const feedbackBanner = document.getElementById('feedbackBanner');
+      feedbackBanner.classList.remove('hidden');
+
+      if (score === ANS.length) {
+        AudioFX.success();
+        launchConfetti();
+        feedbackBanner.className = "text-center py-2 px-4 rounded-xl text-base font-bold my-1 bg-green-100 text-green-800 border-2 border-green-300 animate-pop";
+        feedbackBanner.innerHTML = "🎉 बहुत बढ़िया! आपने सभी उत्तर बिल्कुल सही चुने हैं!";
+      } else if (score > 0) {
+        AudioFX.partial();
+        feedbackBanner.className = "text-center py-2 px-4 rounded-xl text-base font-bold my-1 bg-amber-100 text-amber-800 border-2 border-amber-300";
+        feedbackBanner.innerHTML = `शाबाश! आपने ${score} सही उत्तर दिए। गलत उत्तरों को ठीक करने का प्रयास करें।`;
+      } else {
+        AudioFX.error();
+        feedbackBanner.className = "text-center py-2 px-4 rounded-xl text-base font-bold my-1 bg-red-100 text-red-800 border-2 border-red-300";
+        feedbackBanner.innerHTML = "कोई बात नहीं! दोबारा सोचकर सही शब्द चुनिए।";
+      }
+
+      render();
+
+      // Vidyalaya exercise message dispatch
+      try {
+        const payloadData = {
+          type: 'VIDYALAYA_EXERCISE_SUBMIT',
+          payload: {
+            exerciseType: 'DRAG_DROP',
+            score: score,
+            maxScore: ANS.length,
+            response: Object.fromEntries(
+              Q.map((q, i) => [`question${i + 1}`, userAnswers[i] || ''])
+            )
+          }
+        };
+        parent.postMessage(payloadData, '*');
+      } catch (err) {
+        console.warn("postMessage communication error", err);
+      }
+    }
+
+    function resetAnswers() {
+      AudioFX.click();
+      userAnswers = {};
+      selectedWord = null;
+      isEvaluated = false;
+      saveToStorage();
+      clearFeedback();
+      document.getElementById('score').textContent = '० / ३';
+      render();
+    }
+
+    function clearFeedback() {
+      const feedbackBanner = document.getElementById('feedbackBanner');
+      feedbackBanner.classList.add('hidden');
+      feedbackBanner.innerHTML = '';
+    }
+
+    function launchConfetti() {
+      const canvas = document.getElementById('confettiCanvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const particles = [];
+      const colors = ['#ff0065', '#08a9d2', '#ffcf26', '#22c55e', '#a855f7', '#fb923c'];
+
+      for (let i = 0; i < 90; i++) {
+        particles.push({
+          x: canvas.width / 2,
+          y: canvas.height / 2,
+          r: Math.random() * 6 + 3,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          vx: (Math.random() - 0.5) * 16,
+          vy: (Math.random() - 0.7) * 18,
+          alpha: 1,
+          decay: Math.random() * 0.015 + 0.01
+        });
+      }
+
+      let animationId;
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let alive = false;
+
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.35; // Gravity
+          p.alpha -= p.decay;
+
+          if (p.alpha > 0) {
+            alive = true;
+            ctx.save();
+            ctx.globalAlpha = p.alpha;
+            ctx.fillStyle = p.color;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+          }
+        });
+
+        if (alive) {
+          animationId = requestAnimationFrame(animate);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          cancelAnimationFrame(animationId);
+        }
+      }
+      animate();
+    }
+
+    // Window resize handler for confetti canvas
+    window.addEventListener('resize', () => {
+      const canvas = document.getElementById('confettiCanvas');
+      if (canvas) {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+    });
+
+    window.onload = function() {
+      render();
+    };
+  </script>
+</body>
+</html>
