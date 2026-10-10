@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>काल के प्रकार - अभ्यास कार्य (Hindi Grammar Exercise)</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Rozha One & Noto Sans Devanagari -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Yatra+One&display=swap" rel="stylesheet">
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    body {
+      font-family: 'Noto Sans Devanagari', sans-serif;
+      background-color: #f1f5f9;
+    }
+    
+    /* Exact textbook banner palette */
+    .exercise-card {
+      background-color: #cde6a5; /* Matching textbook soft green tint */
+      border-color: #b5d784;
+    }
+
+    .instruction-text {
+      color: #c2185b; /* Magenta / deep crimson tone from image */
+    }
+
+    /* Traditional textbook fill-in-the-blank line styling */
+    .ruled-line-input {
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid #8ba46c;
+      outline: none;
+      transition: all 0.25s ease;
+    }
+
+    .ruled-line-input:focus {
+      border-bottom-color: #c2185b;
+      background-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .ruled-line-input.correct {
+      border-bottom-color: #16a34a !important;
+      background-color: rgba(220, 252, 231, 0.6) !important;
+      color: #15803d;
+      font-weight: 600;
+    }
+
+    .ruled-line-input.incorrect {
+      border-bottom-color: #dc2626 !important;
+      background-color: rgba(254, 226, 226, 0.6) !important;
+      color: #b91c1c;
+    }
+
+    .pill-btn {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .pill-btn:active {
+      transform: scale(0.97);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-3 sm:p-6 lg:p-10 select-none text-slate-800">
+
+  <main class="w-full max-w-3xl">
+    
+    <!-- Top Bar with Quick Chips -->
+    <header class="flex flex-wrap items-center justify-between gap-3 mb-4 px-2">
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-600 text-white font-bold text-sm shadow">
+          <i class="fa-solid fa-book-open"></i>
+        </span>
+        <h1 class="text-xl sm:text-2xl font-bold text-slate-800">हिंदी व्याकरण अभ्यास</h1>
+      </div>
+      
+      <!-- Quick Options Chips for fast touch selection -->
+      <div class="flex flex-wrap items-center gap-1.5 text-xs sm:text-sm">
+        <span class="text-slate-600 font-medium mr-1 hidden sm:inline">विकल्प:</span>
+        <button type="button" onclick="insertOption('भूत काल')" class="px-2.5 py-1 bg-white border border-slate-300 hover:border-pink-500 rounded-full font-medium text-slate-700 shadow-sm active:bg-pink-50 transition">भूत काल</button>
+        <button type="button" onclick="insertOption('वर्तमान काल')" class="px-2.5 py-1 bg-white border border-slate-300 hover:border-pink-500 rounded-full font-medium text-slate-700 shadow-sm active:bg-pink-50 transition">वर्तमान काल</button>
+        <button type="button" onclick="insertOption('भविष्यत् काल')" class="px-2.5 py-1 bg-white border border-slate-300 hover:border-pink-500 rounded-full font-medium text-slate-700 shadow-sm active:bg-pink-50 transition">भविष्यत् काल</button>
+      </div>
+    </header>
+
+    <!-- Main Exercise Paper matching the original layout -->
+    <section class="exercise-card rounded-2xl shadow-xl p-5 sm:p-9 border-2 relative overflow-hidden transition-all duration-300">
+      
+      <!-- Original instruction heading -->
+      <div class="instruction-text text-lg sm:text-2xl font-semibold leading-relaxed tracking-wide mb-8">
+        काल के है तीन प्रकार: भूत, भविष्यत् और वर्तमान काल पाठ के इन वाक्यों का काल बताइए।
+      </div>
+
+      <div class="space-y-6 sm:space-y-7 text-base sm:text-xl font-medium text-slate-800">
+        
+        <!-- Question (क) -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-2.5 group">
+          <div class="flex items-start sm:items-center gap-3">
+            <span class="text-slate-700 font-bold shrink-0">(क)</span>
+            <span class="leading-relaxed">भगतसिंह का नाम स्वर्णाक्षरों में अंकित है।</span>
+          </div>
+          <div class="flex items-center gap-2 pl-7 md:pl-0">
+            <div class="relative w-full sm:w-60">
+              <input 
+                type="text" 
+                id="ans-ka" 
+                placeholder="यहाँ लिखें या नीचे चुनें" 
+                class="ruled-line-input w-full px-2 py-1.5 text-base sm:text-lg text-slate-900 placeholder:text-slate-500/70"
+                autocomplete="off"
+                onfocus="setActiveInput(this)"
+              />
+              <span id="badge-ka" class="absolute right-1 top-1.5 hidden text-base"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question (ख) -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-2.5 group">
+          <div class="flex items-start sm:items-center gap-3">
+            <span class="text-slate-700 font-bold shrink-0">(ख)</span>
+            <span class="leading-relaxed">उनके पिता लाहौर के सेन्ट्रल जेल में बंद थे।</span>
+          </div>
+          <div class="flex items-center gap-2 pl-7 md:pl-0">
+            <div class="relative w-full sm:w-60">
+              <input 
+                type="text" 
+                id="ans-kha" 
+                placeholder="यहाँ लिखें या नीचे चुनें" 
+                class="ruled-line-input w-full px-2 py-1.5 text-base sm:text-lg text-slate-900 placeholder:text-slate-500/70"
+                autocomplete="off"
+                onfocus="setActiveInput(this)"
+              />
+              <span id="badge-kha" class="absolute right-1 top-1.5 hidden text-base"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question (ग) -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-2.5 group">
+          <div class="flex items-start sm:items-center gap-3">
+            <span class="text-slate-700 font-bold shrink-0">(ग)</span>
+            <span class="leading-relaxed">यह दिन शहीद दिवस के रूप में मनाया जाता है।</span>
+          </div>
+          <div class="flex items-center gap-2 pl-7 md:pl-0">
+            <div class="relative w-full sm:w-60">
+              <input 
+                type="text" 
+                id="ans-ga" 
+                placeholder="यहाँ लिखें या नीचे चुनें" 
+                class="ruled-line-input w-full px-2 py-1.5 text-base sm:text-lg text-slate-900 placeholder:text-slate-500/70"
+                autocomplete="off"
+                onfocus="setActiveInput(this)"
+              />
+              <span id="badge-ga" class="absolute right-1 top-1.5 hidden text-base"></span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Result Banner Notification -->
+      <div id="feedbackBanner" class="mt-8 hidden p-4 rounded-xl text-center font-medium transition-all">
+        <p id="feedbackText" class="text-lg"></p>
+      </div>
+
+    </section>
+
+    <footer class="mt-6 flex flex-wrap items-center justify-center gap-3">
+      <!-- Check Answers -->
+      <button 
+        type="button" 
+        onclick="checkAnswers()" 
+        class="pill-btn flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-6 py-2.5 rounded-full shadow-md hover:shadow-lg focus:ring-4 focus:ring-emerald-200"
+      >
+        <i class="fa-solid fa-circle-check"></i>
+        <span>उत्तर जाँचें</span>
+      </button>
+
+      <!-- Show Answers -->
+      <button 
+        type="button" 
+        onclick="showCorrectAnswers()" 
+        class="pill-btn flex items-center gap-2 bg-amber-600 hover:bg-amber-700 text-white font-semibold px-5 py-2.5 rounded-full shadow-md hover:shadow-lg focus:ring-4 focus:ring-amber-200"
+      >
+        <i class="fa-solid fa-lightbulb"></i>
+        <span>सही उत्तर देखें</span>
+      </button>
+
+      <!-- Reset -->
+      <button 
+        type="button" 
+        onclick="resetExercise()" 
+        class="pill-btn flex items-center gap-2 bg-slate-700 hover:bg-slate-800 text-white font-semibold px-5 py-2.5 rounded-full shadow-md hover:shadow-lg focus:ring-4 focus:ring-slate-300"
+      >
+        <i class="fa-solid fa-rotate-right"></i>
+        <span>पुनः प्रयास करें</span>
+      </button>
+    </footer>
+
+    <!-- Instructions Tip -->
+    <p class="text-center text-xs sm:text-sm text-slate-500 mt-4">
+      <i class="fa-regular fa-lightbulb text-amber-500 mr-1"></i>
+      संकेत: किसी खाली रेखा पर क्लिक करें और ऊपर दिए गए विकल्पों पर टैप करके तुरंत भरें।
+    </p>
+
+  </main>
+
+  <script>
+    let activeInputId = 'ans-ka';
+
+    // Normalize Hindi strings for checking (remove trailing/leading whitespaces, multiple spaces)
+    function normalizeHindi(str) {
+      if (!str) return '';
+      return str.trim().replace(/\s+/g, ' ');
+    }
+
+    function setActiveInput(elem) {
+      activeInputId = elem.id;
+    }
+
+    // Helper to insert option from chips directly into the active or first blank field
+    function insertOption(text) {
+      const activeEl = document.getElementById(activeInputId) || document.getElementById('ans-ka');
+      if (activeEl) {
+        activeEl.value = text;
+        clearInputState(activeEl);
+        
+        // Auto focus next field
+        if (activeEl.id === 'ans-ka') {
+          const next = document.getElementById('ans-kha');
+          next.focus();
+          activeInputId = 'ans-kha';
+        } else if (activeEl.id === 'ans-kha') {
+          const next = document.getElementById('ans-ga');
+          next.focus();
+          activeInputId = 'ans-ga';
+        }
+      }
+    }
+
+    function clearInputState(input) {
+      input.classList.remove('correct', 'incorrect');
+      const badgeId = input.id.replace('ans-', 'badge-');
+      const badge = document.getElementById(badgeId);
+      if (badge) {
+        badge.classList.add('hidden');
+      }
+      document.getElementById('feedbackBanner').classList.add('hidden');
+    }
+
+    // Attach clear state listeners
+    ['ans-ka', 'ans-kha', 'ans-ga'].forEach(id => {
+      const el = document.getElementById(id);
+      el.addEventListener('input', () => clearInputState(el));
+    });
+
+    function checkAnswers() {
+      const ka = normalizeHindi(document.getElementById('ans-ka').value);
+      const kha = normalizeHindi(document.getElementById('ans-kha').value);
+      const ga = normalizeHindi(document.getElementById('ans-ga').value);
+
+      // Accepted answer variations
+      const isKaValid = (ka === 'वर्तमान काल' || ka === 'वर्तमान');
+      const isKhaValid = (kha === 'भूत काल' || kha === 'भूतकाल' || kha === 'भूत');
+      const isGaValid = (ga === 'वर्तमान काल' || ga === 'वर्तमान');
+
+      let score = 0;
+
+      // Update Ka
+      updateStatus('ans-ka', 'badge-ka', isKaValid);
+      if (isKaValid) score++;
+
+      // Update Kha
+      updateStatus('ans-kha', 'badge-kha', isKhaValid);
+      if (isKhaValid) score++;
+
+      // Update Ga
+      updateStatus('ans-ga', 'badge-ga', isGaValid);
+      if (isGaValid) score++;
+
+      // Banner Feedback
+      const banner = document.getElementById('feedbackBanner');
+      const text = document.getElementById('feedbackText');
+      banner.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-800', 'bg-amber-100', 'text-amber-800', 'bg-rose-100', 'text-rose-800');
+
+      if (score === 3) {
+        banner.classList.add('bg-emerald-100', 'text-emerald-800', 'border', 'border-emerald-300');
+        text.innerHTML = '<i class="fa-solid fa-trophy mr-2 text-emerald-600"></i><strong>बहुत बढ़िया!</strong> सभी उत्तर बिल्कुल सही हैं (3/3)';
+      } else if (score > 0) {
+        banner.classList.add('bg-amber-100', 'text-amber-800', 'border', 'border-amber-300');
+        text.innerHTML = `<i class="fa-solid fa-circle-exclamation mr-2 text-amber-600"></i>आपका स्कोर: ${score}/3। कृपया गलत उत्तरों को सुधारें।`;
+      } else {
+        banner.classList.add('bg-rose-100', 'text-rose-800', 'border', 'border-rose-300');
+        text.innerHTML = '<i class="fa-solid fa-circle-xmark mr-2 text-rose-600"></i>कृपया दिए गए वाक्यों को पुनः पढ़कर सही काल पहचानें।';
+      }
+    }
+
+    function updateStatus(inputId, badgeId, isCorrect) {
+      const input = document.getElementById(inputId);
+      const badge = document.getElementById(badgeId);
+      input.classList.remove('correct', 'incorrect');
+      badge.classList.remove('hidden');
+
+      if (isCorrect) {
+        input.classList.add('correct');
+        badge.innerHTML = '<i class="fa-solid fa-circle-check text-green-600"></i>';
+      } else {
+        input.classList.add('incorrect');
+        badge.innerHTML = '<i class="fa-solid fa-circle-xmark text-red-600"></i>';
+      }
+    }
+
+    function showCorrectAnswers() {
+      document.getElementById('ans-ka').value = 'वर्तमान काल';
+      document.getElementById('ans-kha').value = 'भूत काल';
+      document.getElementById('ans-ga').value = 'वर्तमान काल';
+
+      updateStatus('ans-ka', 'badge-ka', true);
+      updateStatus('ans-kha', 'badge-kha', true);
+      updateStatus('ans-ga', 'badge-ga', true);
+
+      const banner = document.getElementById('feedbackBanner');
+      const text = document.getElementById('feedbackText');
+      banner.classList.remove('hidden', 'bg-rose-100', 'text-rose-800');
+      banner.classList.add('bg-emerald-100', 'text-emerald-800', 'border', 'border-emerald-300');
+      text.innerHTML = '<i class="fa-solid fa-lightbulb mr-2 text-amber-600"></i>सही उत्तर प्रदर्शित कर दिए गए हैं।';
+    }
+
+    function resetExercise() {
+      ['ans-ka', 'ans-kha', 'ans-ga'].forEach(id => {
+        const input = document.getElementById(id);
+        input.value = '';
+        input.classList.remove('correct', 'incorrect');
+      });
+
+      ['badge-ka', 'badge-kha', 'badge-ga'].forEach(id => {
+        const badge = document.getElementById(id);
+        badge.classList.add('hidden');
+      });
+
+      document.getElementById('feedbackBanner').classList.add('hidden');
+      document.getElementById('ans-ka').focus();
+      activeInputId = 'ans-ka';
+    }
+
+    // Set initial focus
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('ans-ka').focus();
+    });
+  </script>
+</body>
+</html>

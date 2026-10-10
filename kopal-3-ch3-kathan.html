@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2. नीचे दिए गए कथन किसके द्वारा कहे गए हैं ?</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Devanagari typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&family=Yatra+One&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    body {
+      font-family: 'Mukta', sans-serif;
+      background: #f1f5f9;
+      min-height: 100vh;
+    }
+
+    /* Textbook Paper Sheet Styling */
+    .worksheet-paper {
+      background-color: #ffffff;
+      background-image: 
+        radial-gradient(#e2e8f0 0.8px, transparent 0.8px),
+        linear-gradient(to bottom, #fcfcfd, #ffffff);
+      background-size: 24px 24px, 100% 100%;
+      box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.07), 0 0 0 1px rgba(0, 0, 0, 0.04);
+    }
+
+    /* Authentic Ruled Textbook Answer Line */
+    .ruled-line {
+      border: none;
+      border-bottom: 2px solid #cbd5e1;
+      background: transparent;
+      outline: none;
+      transition: all 0.25s ease;
+      color: #047857; /* Matches handwriting tone */
+      font-weight: 700;
+    }
+
+    .ruled-line:focus {
+      border-bottom-color: #0284c7;
+      background-color: rgba(240, 249, 255, 0.6);
+      box-shadow: 0 3px 6px -2px rgba(2, 132, 199, 0.15);
+    }
+
+    .ruled-line.correct {
+      border-bottom-color: #16a34a !important;
+      color: #15803d !important;
+      background-color: rgba(220, 252, 231, 0.45) !important;
+    }
+
+    .ruled-line.incorrect {
+      border-bottom-color: #dc2626 !important;
+      color: #b91c1c !important;
+      background-color: rgba(254, 226, 226, 0.45) !important;
+    }
+
+    /* Print View Styling */
+    @media print {
+      body {
+        background: #ffffff !important;
+        padding: 0 !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .worksheet-paper {
+        box-shadow: none !important;
+        border: none !important;
+        padding: 24px !important;
+        max-width: 100% !important;
+      }
+      .ruled-line {
+        border-bottom: 1.5px solid #000000 !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="text-slate-800 p-3 sm:p-6 md:p-10 flex flex-col items-center justify-start min-h-screen">
+
+  <!-- Top Action Bar -->
+  <header class="w-full max-w-4xl flex flex-wrap items-center justify-between gap-3 mb-6 no-print">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-teal-600 text-white flex items-center justify-center font-bold text-lg shadow-sm">
+        २
+      </div>
+      <div>
+        <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight">हिंदी पाठ्यपुस्तक अभ्यास</h1>
+        <p class="text-xs text-slate-500 font-medium">कथन एवं पात्र पहचान (Dialogue Identification)</p>
+      </div>
+    </div>
+
+    <!-- Toolbar Buttons -->
+    <div class="flex flex-wrap items-center gap-2">
+      <button onclick="readAllSentences()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 shadow-xs transition" title="सभी वाक्य सुनें">
+        <i class="fa-solid fa-volume-high text-teal-600"></i>
+        <span>सुनें</span>
+      </button>
+
+      <button id="toggleHintBtn" onclick="toggleAnswers()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold bg-white hover:bg-amber-50 text-amber-700 border border-amber-300 shadow-xs transition">
+        <i class="fa-regular fa-lightbulb"></i>
+        <span id="hintBtnLabel">संकेत / उत्तर</span>
+      </button>
+
+      <button onclick="window.print()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 shadow-xs transition">
+        <i class="fa-solid fa-print"></i>
+        <span>प्रिंट</span>
+      </button>
+
+      <button onclick="resetExercise()" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-sm font-semibold bg-white hover:bg-rose-50 text-rose-600 border border-rose-300 shadow-xs transition" title="पुनः आरंभ करें">
+        <i class="fa-solid fa-arrow-rotate-right"></i>
+      </button>
+    </div>
+  </header>
+
+  <main class="w-full max-w-4xl">
+    <div class="worksheet-paper relative rounded-3xl p-6 sm:p-10 md:p-14 transition-all">
+
+      <!-- Exact Question Title From Image -->
+      <div class="mb-8 pb-4 border-b border-slate-200">
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 tracking-wide flex items-baseline gap-2.5">
+          <span>2.</span>
+          <span>नीचे दिए गए कथन किसके द्वारा कहे गए हैं ?</span>
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-500 mt-2">
+          प्रत्येक कथन को ध्यान से पढ़ें और सामने दी गई रेखा पर कहने वाले पात्र का नाम लिखें।
+        </p>
+      </div>
+
+      <!-- Option Chips (मंजूषा) -->
+      <div class="mb-8 p-3.5 sm:p-4 bg-slate-50/90 border border-slate-200 rounded-2xl no-print">
+        <div class="flex items-center justify-between mb-2.5">
+          <span class="text-xs sm:text-sm font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-hand-pointer text-teal-600"></i>
+            विकल्प (क्लिक करके खाली स्थान भरें):
+          </span>
+          <span class="text-[11px] text-slate-500 hidden sm:inline">शब्द पर क्लिक करते ही वह रिक्त स्थान में आ जाएगा</span>
+        </div>
+        <div class="flex flex-wrap gap-2.5" id="optionsBox">
+          <button type="button" onclick="insertOption('कछुआ')" class="px-4 py-2 bg-white hover:bg-teal-50 active:scale-95 border border-slate-300 hover:border-teal-400 rounded-xl text-base sm:text-lg font-bold text-slate-800 shadow-2xs transition">
+            कछुआ <span class="text-xs font-normal text-slate-500">(kachhua)</span>
+          </button>
+          <button type="button" onclick="insertOption('हंस')" class="px-4 py-2 bg-white hover:bg-teal-50 active:scale-95 border border-slate-300 hover:border-teal-400 rounded-xl text-base sm:text-lg font-bold text-slate-800 shadow-2xs transition">
+            हंस <span class="text-xs font-normal text-slate-500">(hans)</span>
+          </button>
+        </div>
+      </div>
+
+      <form id="statementsForm" onsubmit="event.preventDefault(); checkAnswers();" class="space-y-6 sm:space-y-8">
+
+        <!-- Statement (क) -->
+        <div class="question-row flex flex-col gap-1.5" data-key="क">
+          <div class="flex flex-col md:flex-row md:items-baseline justify-between gap-3 md:gap-6">
+            <div class="flex items-baseline gap-3 text-xl sm:text-2xl text-slate-900 font-semibold flex-1">
+              <span class="min-w-[2.2rem] text-slate-700 font-medium">(क)</span>
+              <span class="flex-1 leading-snug">मैं भी पानी के बिना नहीं रह सकता।</span>
+              <button type="button" onclick="speakText('मैं भी पानी के बिना नहीं रह सकता।')" class="no-print text-xs text-slate-400 hover:text-teal-600 p-1 transition" title="कथन सुनें">
+                <i class="fa-solid fa-volume-low"></i>
+              </button>
+            </div>
+            <!-- Ruled Fill-in line matching original image -->
+            <div class="w-full md:w-64 lg:w-72">
+              <input 
+                type="text" 
+                id="ans_ka" 
+                autocomplete="off" 
+                class="ruled-line w-full px-2 py-1 text-xl sm:text-2xl placeholder:text-slate-300" 
+                placeholder="यहाँ लिखें..."
+              />
+            </div>
+          </div>
+          <div class="hint-label hidden pl-11 text-xs sm:text-sm font-semibold text-emerald-700 flex items-center gap-1.5">
+            <i class="fa-solid fa-check text-emerald-600"></i> उत्तर: कछुआ
+          </div>
+        </div>
+
+        <!-- Statement (ख) -->
+        <div class="question-row flex flex-col gap-1.5" data-key="ख">
+          <div class="flex flex-col md:flex-row md:items-baseline justify-between gap-3 md:gap-6">
+            <div class="flex items-baseline gap-3 text-xl sm:text-2xl text-slate-900 font-semibold flex-1">
+              <span class="min-w-[2.2rem] text-slate-700 font-medium">(ख)</span>
+              <span class="flex-1 leading-snug">तुम इतनी दूर जाने में असमर्थ हो।</span>
+              <button type="button" onclick="speakText('तुम इतनी दूर जाने में असमर्थ हो।')" class="no-print text-xs text-slate-400 hover:text-teal-600 p-1 transition" title="कथन सुनें">
+                <i class="fa-solid fa-volume-low"></i>
+              </button>
+            </div>
+            <div class="w-full md:w-64 lg:w-72">
+              <input 
+                type="text" 
+                id="ans_kha" 
+                autocomplete="off" 
+                class="ruled-line w-full px-2 py-1 text-xl sm:text-2xl placeholder:text-slate-300" 
+                placeholder="यहाँ लिखें..."
+              />
+            </div>
+          </div>
+          <div class="hint-label hidden pl-11 text-xs sm:text-sm font-semibold text-emerald-700 flex items-center gap-1.5">
+            <i class="fa-solid fa-check text-emerald-600"></i> उत्तर: हंस
+          </div>
+        </div>
+
+        <!-- Statement (ग) -->
+        <div class="question-row flex flex-col gap-1.5" data-key="ग">
+          <div class="flex flex-col md:flex-row md:items-baseline justify-between gap-3 md:gap-6">
+            <div class="flex items-baseline gap-3 text-xl sm:text-2xl text-slate-900 font-semibold flex-1">
+              <span class="min-w-[2.2rem] text-slate-700 font-medium">(ग)</span>
+              <span class="flex-1 leading-snug">तीनों मित्र एक ही तालाब पर रहेंगे।</span>
+              <button type="button" onclick="speakText('तीनों मित्र एक ही तालाब पर रहेंगे।')" class="no-print text-xs text-slate-400 hover:text-teal-600 p-1 transition" title="कथन सुनें">
+                <i class="fa-solid fa-volume-low"></i>
+              </button>
+            </div>
+            <div class="w-full md:w-64 lg:w-72">
+              <input 
+                type="text" 
+                id="ans_ga" 
+                autocomplete="off" 
+                class="ruled-line w-full px-2 py-1 text-xl sm:text-2xl placeholder:text-slate-300" 
+                placeholder="यहाँ लिखें..."
+              />
+            </div>
+          </div>
+          <div class="hint-label hidden pl-11 text-xs sm:text-sm font-semibold text-emerald-700 flex items-center gap-1.5">
+            <i class="fa-solid fa-check text-emerald-600"></i> उत्तर: कछुआ
+          </div>
+        </div>
+
+        <!-- Statement (घ) -->
+        <div class="question-row flex flex-col gap-1.5" data-key="घ">
+          <div class="flex flex-col md:flex-row md:items-baseline justify-between gap-3 md:gap-6">
+            <div class="flex items-baseline gap-3 text-xl sm:text-2xl text-slate-900 font-semibold flex-1">
+              <span class="min-w-[2.2rem] text-slate-700 font-medium">(घ)</span>
+              <span class="flex-1 leading-snug">तुम्हारी योजना तो अच्छी है।</span>
+              <button type="button" onclick="speakText('तुम्हारी योजना तो अच्छी है।')" class="no-print text-xs text-slate-400 hover:text-teal-600 p-1 transition" title="कथन सुनें">
+                <i class="fa-solid fa-volume-low"></i>
+              </button>
+            </div>
+            <div class="w-full md:w-64 lg:w-72">
+              <input 
+                type="text" 
+                id="ans_gha" 
+                autocomplete="off" 
+                class="ruled-line w-full px-2 py-1 text-xl sm:text-2xl placeholder:text-slate-300" 
+                placeholder="यहाँ लिखें..."
+              />
+            </div>
+          </div>
+          <div class="hint-label hidden pl-11 text-xs sm:text-sm font-semibold text-emerald-700 flex items-center gap-1.5">
+            <i class="fa-solid fa-check text-emerald-600"></i> उत्तर: हंस
+          </div>
+        </div>
+
+        <div class="mt-12 pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
+          <p class="text-xs sm:text-sm text-slate-500">
+            <i class="fa-solid fa-circle-info text-teal-600 mr-1"></i>
+            आप पात्र का नाम टाइप कर सकते हैं या ऊपर दिए विकल्पों पर क्लिक कर सकते हैं।
+          </p>
+
+          <button 
+            type="button" 
+            onclick="checkAnswers()" 
+            class="w-full sm:w-auto px-7 py-2.5 bg-teal-600 hover:bg-teal-700 active:bg-teal-800 text-white font-bold rounded-xl shadow-md transition flex items-center justify-center gap-2 text-base">
+            <i class="fa-solid fa-check-circle"></i>
+            <span>जाँच कीजिए (Check)</span>
+          </button>
+        </div>
+      </form>
+
+      <!-- Feedback Banner Message -->
+      <div id="feedbackBanner" class="mt-5 hidden p-4 rounded-xl text-sm font-semibold transition-all"></div>
+
+    </div>
+  </main>
+
+  <script>
+    // Exact mapping of answers with acceptable variations (e.g. anusvara vs chandrabindu)
+    const answersData = {
+      'ans_ka': {
+        statement: 'मैं भी पानी के बिना नहीं रह सकता।',
+        expected: ['कछुआ', 'कछुवा'],
+        display: 'कछुआ'
+      },
+      'ans_kha': {
+        statement: 'तुम इतनी दूर जाने में असमर्थ हो।',
+        expected: ['हंस', 'हँस'],
+        display: 'हंस'
+      },
+      'ans_ga': {
+        statement: 'तीनों मित्र एक ही तालाब पर रहेंगे।',
+        expected: ['कछुआ', 'कछुवा'],
+        display: 'कछुआ'
+      },
+      'ans_gha': {
+        statement: 'तुम्हारी योजना तो अच्छी है।',
+        expected: ['हंस', 'हँस'],
+        display: 'हंस'
+      }
+    };
+
+    let activeInput = null;
+
+    // Track focused input
+    document.querySelectorAll('.ruled-line').forEach(input => {
+      input.addEventListener('focus', () => {
+        activeInput = input;
+      });
+
+      input.addEventListener('input', () => {
+        input.classList.remove('correct', 'incorrect');
+        const feedback = document.getElementById('feedbackBanner');
+        feedback.classList.add('hidden');
+      });
+    });
+
+    // Helper: insert option clicked by user
+    function insertOption(text) {
+      if (!activeInput || activeInput.value.trim() !== '') {
+        // Find first empty input
+        const emptyInput = Array.from(document.querySelectorAll('.ruled-line')).find(i => i.value.trim() === '');
+        if (emptyInput) {
+          activeInput = emptyInput;
+        } else if (!activeInput) {
+          activeInput = document.getElementById('ans_ka');
+        }
+      }
+
+      if (activeInput) {
+        activeInput.value = text;
+        activeInput.classList.remove('incorrect');
+        
+        // Auto-focus next empty blank
+        const allInputs = Array.from(document.querySelectorAll('.ruled-line'));
+        const nextBlank = allInputs.find(i => i.value.trim() === '');
+        if (nextBlank) {
+          nextBlank.focus();
+        } else {
+          activeInput.focus();
+        }
+      }
+    }
+
+    // Toggle hint visibility
+    let showingHints = false;
+    function toggleAnswers() {
+      showingHints = !showingHints;
+      document.querySelectorAll('.hint-label').forEach(el => {
+        if (showingHints) {
+          el.classList.remove('hidden');
+        } else {
+          el.classList.add('hidden');
+        }
+      });
+      document.getElementById('hintBtnLabel').textContent = showingHints ? 'संकेत छिपाएँ' : 'संकेत / उत्तर';
+    }
+
+    // Text to Speech for Hindi
+    function speakText(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'hi-IN';
+        utterance.rate = 0.85;
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+
+    // Read all sentences sequentially
+    function readAllSentences() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const sequence = [
+          'नीचे दिए गए कथन किसके द्वारा कहे गए हैं ?',
+          'मैं भी पानी के बिना नहीं रह सकता।',
+          'तुम इतनी दूर जाने में असमर्थ हो।',
+          'तीनों मित्र एक ही तालाब पर रहेंगे।',
+          'तुम्हारी योजना तो अच्छी है।'
+        ];
+        let i = 0;
+        function step() {
+          if (i < sequence.length) {
+            const u = new SpeechSynthesisUtterance(sequence[i]);
+            u.lang = 'hi-IN';
+            u.rate = 0.9;
+            u.onend = () => {
+              i++;
+              setTimeout(step, 400);
+            };
+            window.speechSynthesis.speak(u);
+          }
+        }
+        step();
+      }
+    }
+
+    // Normalize Hindi text (strip spaces, invisible characters)
+    function normalizeHindi(str) {
+      return str.trim()
+        .replace(/[\u200B-\u200D\uFEFF]/g, '')
+        .replace(/\s+/g, '');
+    }
+
+    // Answer validation
+    function checkAnswers() {
+      let score = 0;
+      let filled = 0;
+      const feedback = document.getElementById('feedbackBanner');
+
+      Object.keys(answersData).forEach(id => {
+        const input = document.getElementById(id);
+        const userText = normalizeHindi(input.value);
+        const data = answersData[id];
+
+        if (userText !== '') {
+          filled++;
+          const isCorrect = data.expected.some(exp => normalizeHindi(exp) === userText);
+          if (isCorrect) {
+            score++;
+            input.classList.remove('incorrect');
+            input.classList.add('correct');
+          } else {
+            input.classList.remove('correct');
+            input.classList.add('incorrect');
+          }
+        } else {
+          input.classList.remove('correct', 'incorrect');
+        }
+      });
+
+      feedback.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-900', 'border-emerald-300', 'bg-amber-100', 'text-amber-900', 'border-amber-300', 'bg-teal-100', 'text-teal-900', 'border-teal-300');
+
+      if (filled === 0) {
+        feedback.className = 'mt-5 p-4 rounded-xl text-sm font-semibold bg-amber-100 text-amber-900 border border-amber-300';
+        feedback.innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-2"></i> कृपया पहले खाली स्थानों में पात्र का नाम भरिए।';
+      } else if (score === 4) {
+        feedback.className = 'mt-5 p-4 rounded-xl text-sm font-semibold bg-emerald-100 text-emerald-900 border border-emerald-300';
+        feedback.innerHTML = '<i class="fa-solid fa-circle-check mr-2"></i> शाबाश! आपने सभी 4 कथनों के सही पात्र पहचाने हैं! 🌟 (4/4)';
+      } else {
+        feedback.className = 'mt-5 p-4 rounded-xl text-sm font-semibold bg-teal-100 text-teal-900 border border-teal-300';
+        feedback.innerHTML = `<i class="fa-solid fa-pen-nib mr-2"></i> आपने 4 में से ${score} सही उत्तर लिखे हैं। गलत उत्तरों को सुधारने के लिए 'संकेत' बटन देख सकते हैं।`;
+      }
+    }
+
+    // Reset worksheet
+    function resetExercise() {
+      document.querySelectorAll('.ruled-line').forEach(input => {
+        input.value = '';
+        input.classList.remove('correct', 'incorrect');
+      });
+      const feedback = document.getElementById('feedbackBanner');
+      feedback.classList.add('hidden');
+    }
+  </script>
+</body>
+</html>

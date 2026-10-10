@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>काल पहचानिए और लिखिए</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Devanagari typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&family=Yatra+One&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    body {
+      font-family: 'Mukta', sans-serif;
+      background: #f8fafc;
+      min-height: 100vh;
+    }
+
+    /* Textbook Paper Sheet Styling */
+    .worksheet-card {
+      background-color: #ffffff;
+      background-image: 
+        radial-gradient(#e2e8f0 0.8px, transparent 0.8px),
+        linear-gradient(to bottom, #ffffff, #fafafa);
+      background-size: 22px 22px, 100% 100%;
+      box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.07), 0 0 0 1px rgba(0, 0, 0, 0.04);
+    }
+
+    /* Authentic Textbook Ruled Line */
+    .ruled-blank {
+      border: none;
+      border-bottom: 2px solid #94a3b8;
+      background: transparent;
+      outline: none;
+      transition: all 0.25s ease;
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    .ruled-blank:focus {
+      border-bottom-color: #db2777;
+      background-color: rgba(253, 242, 248, 0.6);
+      box-shadow: 0 3px 6px -2px rgba(219, 39, 119, 0.15);
+    }
+
+    .ruled-blank.correct {
+      border-bottom-color: #16a34a !important;
+      color: #15803d !important;
+      background-color: rgba(220, 252, 231, 0.45) !important;
+    }
+
+    .ruled-blank.incorrect {
+      border-bottom-color: #dc2626 !important;
+      color: #b91c1c !important;
+      background-color: rgba(254, 226, 226, 0.45) !important;
+    }
+
+    /* Solved Example Line Style */
+    .example-line {
+      border-bottom: 2px solid #cbd5e1;
+      color: #475569;
+      font-weight: 700;
+    }
+
+    /* Print styles */
+    @media print {
+      body {
+        background: #ffffff !important;
+        padding: 0 !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .worksheet-card {
+        box-shadow: none !important;
+        border: none !important;
+        padding: 16px !important;
+        max-width: 100% !important;
+      }
+      .ruled-blank {
+        border-bottom: 1.5px solid #000000 !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="text-slate-800 p-3 sm:p-6 md:p-10 flex flex-col items-center justify-start min-h-screen">
+
+  <!-- Top Action Toolbar -->
+  <header class="w-full max-w-4xl flex flex-wrap items-center justify-between gap-3 mb-6 no-print">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-pink-600 text-white flex items-center justify-center font-bold text-lg shadow-sm">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+      </div>
+      <div>
+        <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight">हिंदी व्याकरण अभ्यास</h1>
+        <p class="text-xs text-slate-500 font-medium">काल की पहचान (Tense Identification)</p>
+      </div>
+    </div>
+
+    <!-- Action Toolbar Buttons -->
+    <div class="flex flex-wrap items-center gap-2">
+      <button onclick="readAllSentences()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold bg-white hover:bg-pink-50 text-pink-700 border border-pink-200 shadow-xs transition" title="सभी वाक्य सुनें">
+        <i class="fa-solid fa-volume-high text-pink-600"></i>
+        <span>सुनें</span>
+      </button>
+
+      <button id="toggleHintBtn" onclick="toggleHintAnswers()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold bg-white hover:bg-amber-50 text-amber-700 border border-amber-300 shadow-xs transition">
+        <i class="fa-regular fa-lightbulb"></i>
+        <span id="hintBtnLabel">संकेत / उत्तर</span>
+      </button>
+
+      <button onclick="window.print()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 shadow-xs transition">
+        <i class="fa-solid fa-print"></i>
+        <span>प्रिंट</span>
+      </button>
+
+      <button onclick="resetExercise()" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-sm font-semibold bg-white hover:bg-rose-50 text-rose-600 border border-rose-300 shadow-xs transition" title="पुनः आरंभ करें">
+        <i class="fa-solid fa-arrow-rotate-right"></i>
+      </button>
+    </div>
+  </header>
+
+  <main class="w-full max-w-4xl">
+    <div class="worksheet-card relative rounded-3xl p-6 sm:p-10 md:p-12 transition-all">
+
+      <!-- Worksheet Instructions exactly matching image text and color -->
+      <div class="mb-8 pb-5 border-b border-slate-200">
+        <h2 class="text-xl sm:text-2xl md:text-3xl font-extrabold text-[#be185d] leading-relaxed tracking-wide">
+          बच्चो! काल तीन तरह के होते हैं। भूतकाल, वर्तमान काल और भविष्यत् काल। यहाँ तीनों काल पहचानिए और लिखिए-
+        </h2>
+      </div>
+
+      <!-- Quick Option Chips Bank (मंजूषा) -->
+      <div class="mb-8 p-3.5 sm:p-4 bg-slate-50/90 border border-slate-200 rounded-2xl no-print">
+        <div class="flex items-center justify-between mb-2.5">
+          <span class="text-xs sm:text-sm font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-hand-pointer text-pink-600"></i>
+            विकल्प (क्लिक करके खाली स्थान भरें):
+          </span>
+          <span class="text-[11px] text-slate-500 hidden sm:inline">शब्द पर क्लिक करते ही वह रिक्त स्थान में भर जाएगा</span>
+        </div>
+        <div class="flex flex-wrap gap-2.5" id="optionsBox">
+          <button type="button" onclick="insertOption('भूतकाल')" class="px-4 py-2 bg-white hover:bg-pink-50 active:scale-95 border border-slate-300 hover:border-pink-400 rounded-xl text-base sm:text-lg font-bold text-slate-800 shadow-2xs transition">
+            भूतकाल <span class="text-xs font-normal text-slate-500">(Past Tense)</span>
+          </button>
+          <button type="button" onclick="insertOption('वर्तमान काल')" class="px-4 py-2 bg-white hover:bg-pink-50 active:scale-95 border border-slate-300 hover:border-pink-400 rounded-xl text-base sm:text-lg font-bold text-slate-800 shadow-2xs transition">
+            वर्तमान काल <span class="text-xs font-normal text-slate-500">(Present Tense)</span>
+          </button>
+          <button type="button" onclick="insertOption('भविष्यत् काल')" class="px-4 py-2 bg-white hover:bg-pink-50 active:scale-95 border border-slate-300 hover:border-pink-400 rounded-xl text-base sm:text-lg font-bold text-slate-800 shadow-2xs transition">
+            भविष्यत् काल <span class="text-xs font-normal text-slate-500">(Future Tense)</span>
+          </button>
+        </div>
+      </div>
+
+      <form id="kaalForm" onsubmit="event.preventDefault(); checkAnswers();" class="space-y-6 sm:space-y-7">
+
+        <!-- (क) Solved Example from the image -->
+        <div class="question-row flex flex-col gap-1.5 p-2 rounded-xl bg-slate-50/60 sm:bg-transparent">
+          <div class="flex flex-col md:flex-row md:items-baseline justify-between gap-3 md:gap-6">
+            <div class="flex items-baseline gap-3 text-xl sm:text-2xl text-slate-900 font-medium flex-1">
+              <span class="min-w-[2.2rem] text-slate-700">(क)</span>
+              <span class="flex-1 leading-snug">माँ सो गईं।</span>
+              <button type="button" onclick="speakText('माँ सो गईं।')" class="no-print text-xs text-slate-400 hover:text-pink-600 p-1 transition" title="वाक्य सुनें">
+                <i class="fa-solid fa-volume-low"></i>
+              </button>
+            </div>
+            <div class="w-full md:w-72 lg:w-80">
+              <div class="example-line w-full px-2 py-1 text-xl sm:text-2xl flex items-center justify-between">
+                <span>भूतकाल</span>
+                <span class="text-xs font-semibold px-2 py-0.5 bg-slate-200 text-slate-700 rounded no-print">उदाहरण</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- (ख) Question row -->
+        <div class="question-row flex flex-col gap-1.5" data-key="ख">
+          <div class="flex flex-col md:flex-row md:items-baseline justify-between gap-3 md:gap-6">
+            <div class="flex items-baseline gap-3 text-xl sm:text-2xl text-slate-900 font-medium flex-1">
+              <span class="min-w-[2.2rem] text-slate-700">(ख)</span>
+              <span class="flex-1 leading-snug">मैं गीत सुन रहा हूँ।</span>
+              <button type="button" onclick="speakText('मैं गीत सुन रहा हूँ।')" class="no-print text-xs text-slate-400 hover:text-pink-600 p-1 transition" title="वाक्य सुनें">
+                <i class="fa-solid fa-volume-low"></i>
+              </button>
+            </div>
+            <div class="w-full md:w-72 lg:w-80">
+              <input 
+                type="text" 
+                id="ans_kha" 
+                autocomplete="off" 
+                class="ruled-blank w-full px-2 py-1 text-xl sm:text-2xl placeholder:text-slate-300" 
+                placeholder="यहाँ लिखें..."
+              />
+            </div>
+          </div>
+          <div class="hint-msg hidden pl-11 text-xs sm:text-sm font-semibold text-emerald-700 flex items-center gap-1.5">
+            <i class="fa-solid fa-circle-check text-emerald-600"></i> उत्तर: वर्तमान काल (कार्य वर्तमान में चल रहा है)
+          </div>
+        </div>
+
+        <!-- (ग) Question row -->
+        <div class="question-row flex flex-col gap-1.5" data-key="ग">
+          <div class="flex flex-col md:flex-row md:items-baseline justify-between gap-3 md:gap-6">
+            <div class="flex items-baseline gap-3 text-xl sm:text-2xl text-slate-900 font-medium flex-1">
+              <span class="min-w-[2.2rem] text-slate-700">(ग)</span>
+              <span class="flex-1 leading-snug">आज बहुत वर्षा हुई।</span>
+              <button type="button" onclick="speakText('आज बहुत वर्षा हुई।')" class="no-print text-xs text-slate-400 hover:text-pink-600 p-1 transition" title="वाक्य सुनें">
+                <i class="fa-solid fa-volume-low"></i>
+              </button>
+            </div>
+            <div class="w-full md:w-72 lg:w-80">
+              <input 
+                type="text" 
+                id="ans_ga" 
+                autocomplete="off" 
+                class="ruled-blank w-full px-2 py-1 text-xl sm:text-2xl placeholder:text-slate-300" 
+                placeholder="यहाँ लिखें..."
+              />
+            </div>
+          </div>
+          <div class="hint-msg hidden pl-11 text-xs sm:text-sm font-semibold text-emerald-700 flex items-center gap-1.5">
+            <i class="fa-solid fa-circle-check text-emerald-600"></i> उत्तर: भूतकाल (वर्षा होने की क्रिया समाप्त हो चुकी है)
+          </div>
+        </div>
+
+        <!-- (घ) Question row -->
+        <div class="question-row flex flex-col gap-1.5" data-key="घ">
+          <div class="flex flex-col md:flex-row md:items-baseline justify-between gap-3 md:gap-6">
+            <div class="flex items-baseline gap-3 text-xl sm:text-2xl text-slate-900 font-medium flex-1">
+              <span class="min-w-[2.2rem] text-slate-700">(घ)</span>
+              <span class="flex-1 leading-snug">कल भी वर्षा होगी।</span>
+              <button type="button" onclick="speakText('कल भी वर्षा होगी।')" class="no-print text-xs text-slate-400 hover:text-pink-600 p-1 transition" title="वाक्य सुनें">
+                <i class="fa-solid fa-volume-low"></i>
+              </button>
+            </div>
+            <div class="w-full md:w-72 lg:w-80">
+              <input 
+                type="text" 
+                id="ans_gha" 
+                autocomplete="off" 
+                class="ruled-blank w-full px-2 py-1 text-xl sm:text-2xl placeholder:text-slate-300" 
+                placeholder="यहाँ लिखें..."
+              />
+            </div>
+          </div>
+          <div class="hint-msg hidden pl-11 text-xs sm:text-sm font-semibold text-emerald-700 flex items-center gap-1.5">
+            <i class="fa-solid fa-circle-check text-emerald-600"></i> उत्तर: भविष्यत् काल (आने वाले समय में वर्षा होने की संभावना है)
+          </div>
+        </div>
+
+        <!-- (ङ) Question row -->
+        <div class="question-row flex flex-col gap-1.5" data-key="ङ">
+          <div class="flex flex-col md:flex-row md:items-baseline justify-between gap-3 md:gap-6">
+            <div class="flex items-baseline gap-3 text-xl sm:text-2xl text-slate-900 font-medium flex-1">
+              <span class="min-w-[2.2rem] text-slate-700">(ङ)</span>
+              <span class="flex-1 leading-snug">शायद, दोपहर को मामा जी आएँगे।</span>
+              <button type="button" onclick="speakText('शायद, दोपहर को मामा जी आएँगे।')" class="no-print text-xs text-slate-400 hover:text-pink-600 p-1 transition" title="वाक्य सुनें">
+                <i class="fa-solid fa-volume-low"></i>
+              </button>
+            </div>
+            <div class="w-full md:w-72 lg:w-80">
+              <input 
+                type="text" 
+                id="ans_nga" 
+                autocomplete="off" 
+                class="ruled-blank w-full px-2 py-1 text-xl sm:text-2xl placeholder:text-slate-300" 
+                placeholder="यहाँ लिखें..."
+              />
+            </div>
+          </div>
+          <div class="hint-msg hidden pl-11 text-xs sm:text-sm font-semibold text-emerald-700 flex items-center gap-1.5">
+            <i class="fa-solid fa-circle-check text-emerald-600"></i> उत्तर: भविष्यत् काल (कार्य आने वाले समय में होगा)
+          </div>
+        </div>
+
+        <div class="pt-8 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
+          <p class="text-xs sm:text-sm text-slate-500">
+            <i class="fa-solid fa-circle-info text-pink-600 mr-1.5"></i>
+            आप काल का नाम टाइप कर सकते हैं या ऊपर दिए विकल्पों पर क्लिक कर सकते हैं।
+          </p>
+
+          <button 
+            type="button" 
+            onclick="checkAnswers()" 
+            class="w-full sm:w-auto px-8 py-3 bg-pink-600 hover:bg-pink-700 active:bg-pink-800 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition flex items-center justify-center gap-2 text-base">
+            <i class="fa-solid fa-check"></i>
+            <span>जाँच कीजिए (Check)</span>
+          </button>
+        </div>
+
+      </form>
+
+      <!-- Feedback Area -->
+      <div id="feedbackBanner" class="mt-6 hidden p-4 rounded-xl text-sm font-semibold transition-all"></div>
+
+    </div>
+  </main>
+
+  <script>
+    // Answer validation dictionary with flexible variations (with/without space, halant variations)
+    const answersData = {
+      'ans_kha': {
+        sentence: 'मैं गीत सुन रहा हूँ।',
+        valid: ['वर्तमान काल', 'वर्तमानकाल', 'वर्तमान'],
+        display: 'वर्तमान काल'
+      },
+      'ans_ga': {
+        sentence: 'आज बहुत वर्षा हुई।',
+        valid: ['भूतकाल', 'भूत काल', 'भूत'],
+        display: 'भूतकाल'
+      },
+      'ans_gha': {
+        sentence: 'कल भी वर्षा होगी।',
+        valid: ['भविष्यत् काल', 'भविष्यत काल', 'भविष्य काल', 'भविष्यत्काल', 'भविष्यतकाल', 'भविष्यकाल', 'भविष्यत्', 'भविष्यत', 'भविष्य'],
+        display: 'भविष्यत् काल'
+      },
+      'ans_nga': {
+        sentence: 'शायद, दोपहर को मामा जी आएँगे।',
+        valid: ['भविष्यत् काल', 'भविष्यत काल', 'भविष्य काल', 'भविष्यत्काल', 'भविष्यतकाल', 'भविष्यकाल', 'भविष्यत्', 'भविष्यत', 'भविष्य'],
+        display: 'भविष्यत् काल'
+      }
+    };
+
+    let activeInput = null;
+
+    // Set active input tracking
+    document.querySelectorAll('.ruled-blank').forEach(input => {
+      input.addEventListener('focus', () => {
+        activeInput = input;
+      });
+
+      input.addEventListener('input', () => {
+        input.classList.remove('correct', 'incorrect');
+        const feedback = document.getElementById('feedbackBanner');
+        feedback.classList.add('hidden');
+      });
+    });
+
+    // Insert option into currently focused or next empty input
+    function insertOption(text) {
+      if (!activeInput || activeInput.value.trim() !== '') {
+        // Find first empty input
+        const emptyInput = Array.from(document.querySelectorAll('.ruled-blank')).find(i => i.value.trim() === '');
+        if (emptyInput) {
+          activeInput = emptyInput;
+        } else if (!activeInput) {
+          activeInput = document.getElementById('ans_kha');
+        }
+      }
+
+      if (activeInput) {
+        activeInput.value = text;
+        activeInput.classList.remove('incorrect');
+
+        // Automatically advance focus to the next empty input
+        const allInputs = Array.from(document.querySelectorAll('.ruled-blank'));
+        const nextBlank = allInputs.find(i => i.value.trim() === '');
+        if (nextBlank) {
+          nextBlank.focus();
+        } else {
+          activeInput.focus();
+        }
+      }
+    }
+
+    // Toggle hint visibility
+    let showingHints = false;
+    function toggleHintAnswers() {
+      showingHints = !showingHints;
+      document.querySelectorAll('.hint-msg').forEach(el => {
+        if (showingHints) {
+          el.classList.remove('hidden');
+        } else {
+          el.classList.add('hidden');
+        }
+      });
+      document.getElementById('hintBtnLabel').textContent = showingHints ? 'संकेत छिपाएँ' : 'संकेत / उत्तर';
+    }
+
+    // Helper: Normalize Devanagari text
+    function normalizeHindi(str) {
+      return str.trim()
+        .replace(/[\u200B-\u200D\uFEFF]/g, '')
+        .replace(/\s+/g, '')
+        .replace(/्/g, ''); // soft match for halant
+    }
+
+    // Answer Validation
+    function checkAnswers() {
+      let score = 0;
+      let filled = 0;
+      const feedback = document.getElementById('feedbackBanner');
+
+      Object.keys(answersData).forEach(id => {
+        const input = document.getElementById(id);
+        const userText = normalizeHindi(input.value);
+        const data = answersData[id];
+
+        if (userText !== '') {
+          filled++;
+          const isCorrect = data.valid.some(validOpt => normalizeHindi(validOpt) === userText);
+          if (isCorrect) {
+            score++;
+            input.classList.remove('incorrect');
+            input.classList.add('correct');
+          } else {
+            input.classList.remove('correct');
+            input.classList.add('incorrect');
+          }
+        } else {
+          input.classList.remove('correct', 'incorrect');
+        }
+      });
+
+      feedback.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-900', 'border-emerald-300', 'bg-amber-100', 'text-amber-900', 'border-amber-300', 'bg-pink-100', 'text-pink-900', 'border-pink-300');
+
+      if (filled === 0) {
+        feedback.className = 'mt-6 p-4 rounded-xl text-sm font-semibold bg-amber-100 text-amber-900 border border-amber-300';
+        feedback.innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-2"></i> कृपया पहले खाली स्थानों में काल का नाम लिखिए।';
+      } else if (score === 4) {
+        feedback.className = 'mt-6 p-4 rounded-xl text-sm font-semibold bg-emerald-100 text-emerald-900 border border-emerald-300';
+        feedback.innerHTML = '<i class="fa-solid fa-circle-check mr-2"></i> बहुत बढ़िया! आपने सभी 4 प्रश्नों के बिल्कुल सही काल पहचाने हैं! 🌟 (4/4)';
+      } else {
+        feedback.className = 'mt-6 p-4 rounded-xl text-sm font-semibold bg-pink-100 text-pink-900 border border-pink-300';
+        feedback.innerHTML = `<i class="fa-solid fa-pen-nib mr-2"></i> आपने 4 में से ${score} सही उत्तर लिखे हैं। लाल रेखा वाले उत्तर सुधारने के लिए 'संकेत' बटन देख सकते हैं।`;
+      }
+    }
+
+    // Speech Synthesis
+    function speakText(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'hi-IN';
+        utterance.rate = 0.85;
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+
+    // Read full sequence of sentences
+    function readAllSentences() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const sequence = [
+          'बच्चो! काल तीन तरह के होते हैं। भूतकाल, वर्तमान काल और भविष्यत् काल। यहाँ तीनों काल पहचानिए और लिखिए-',
+          'क. माँ सो गईं। भूतकाल।',
+          'ख. मैं गीत सुन रहा हूँ।',
+          'ग. आज बहुत वर्षा हुई।',
+          'घ. कल भी वर्षा होगी।',
+          'ङ. शायद, दोपहर को मामा जी आएँगे।'
+        ];
+        let idx = 0;
+        function step() {
+          if (idx < sequence.length) {
+            const u = new SpeechSynthesisUtterance(sequence[idx]);
+            u.lang = 'hi-IN';
+            u.rate = 0.88;
+            u.onend = () => {
+              idx++;
+              setTimeout(step, 400);
+            };
+            window.speechSynthesis.speak(u);
+          }
+        }
+        step();
+      }
+    }
+
+    // Reset worksheet
+    function resetExercise() {
+      document.querySelectorAll('.ruled-blank').forEach(input => {
+        input.value = '';
+        input.classList.remove('correct', 'incorrect');
+      });
+      document.querySelectorAll('.hint-msg').forEach(el => el.classList.add('hidden'));
+      showingHints = false;
+      document.getElementById('hintBtnLabel').textContent = 'संकेत / उत्तर';
+
+      const feedback = document.getElementById('feedbackBanner');
+      feedback.classList.add('hidden');
+    }
+  </script>
+</body>
+</html>

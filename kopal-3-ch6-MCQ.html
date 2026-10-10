@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>सही विकल्प पर सही (✓) का निशान लगाएँ-</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Devanagari typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&family=Yatra+One&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    body {
+      font-family: 'Mukta', sans-serif;
+      background: #f8fafc;
+      min-height: 100vh;
+    }
+
+    /* Textbook Paper Sheet Styling */
+    .worksheet-card {
+      background-color: #ffffff;
+      background-image: 
+        radial-gradient(#e2e8f0 0.75px, transparent 0.75px),
+        linear-gradient(to bottom, #ffffff, #fafafa);
+      background-size: 20px 20px, 100% 100%;
+      box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04);
+    }
+
+    /* Authentic textbook checkbox styled like the printed image */
+    .option-checkbox {
+      width: 28px;
+      height: 28px;
+      border: 1.8px solid #ec4899;
+      border-radius: 4px;
+      background-color: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+      flex-shrink: 0;
+    }
+
+    .option-row:hover .option-checkbox {
+      border-color: #db2777;
+      background-color: #fdf2f8;
+      box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.15);
+    }
+
+    /* Selected state */
+    .option-row.selected .option-checkbox {
+      background-color: #ec4899;
+      border-color: #be185d;
+      color: #ffffff;
+    }
+
+    .option-row.selected.correct-choice .option-checkbox {
+      background-color: #16a34a !important;
+      border-color: #15803d !important;
+      color: #ffffff !important;
+    }
+
+    .option-row.selected.wrong-choice .option-checkbox {
+      background-color: #dc2626 !important;
+      border-color: #b91c1c !important;
+      color: #ffffff !important;
+    }
+
+    .option-row.is-correct-hint .option-checkbox {
+      border-color: #16a34a;
+      box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.3);
+      background-color: #f0fdf4;
+    }
+
+    /* Blank line inside sentences */
+    .blank-underline {
+      display: inline-block;
+      min-width: 140px;
+      border-bottom: 1.5px solid #64748b;
+      margin: 0 6px;
+      vertical-align: middle;
+      text-align: center;
+      color: #be185d;
+      font-weight: 700;
+    }
+
+    /* Print styles */
+    @media print {
+      body {
+        background: #ffffff !important;
+        padding: 0 !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .worksheet-card {
+        box-shadow: none !important;
+        border: none !important;
+        padding: 16px !important;
+        max-width: 100% !important;
+      }
+      .option-checkbox {
+        border-color: #000000 !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="text-slate-800 p-3 sm:p-6 md:p-10 flex flex-col items-center justify-start min-h-screen">
+
+  <!-- Top Action Toolbar -->
+  <header class="w-full max-w-4xl flex flex-wrap items-center justify-between gap-3 mb-6 no-print">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-pink-600 text-white flex items-center justify-center font-bold text-lg shadow-sm">
+        <i class="fa-solid fa-check-double text-base"></i>
+      </div>
+      <div>
+        <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight">हिंदी पाठ्यपुस्तक अभ्यास</h1>
+        <p class="text-xs text-slate-500 font-medium">निर्णयन-क्षमता कौशल (Decision-Making Skills)</p>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex flex-wrap items-center gap-2">
+      <button onclick="readAllQuestions()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold bg-white hover:bg-pink-50 text-pink-700 border border-pink-200 shadow-xs transition" title="सभी प्रश्न सुनें">
+        <i class="fa-solid fa-volume-high text-pink-600"></i>
+        <span>सुनें</span>
+      </button>
+
+      <button id="toggleHintBtn" onclick="toggleHintAnswers()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold bg-white hover:bg-amber-50 text-amber-700 border border-amber-300 shadow-xs transition">
+        <i class="fa-regular fa-lightbulb"></i>
+        <span id="hintBtnLabel">संकेत / उत्तर</span>
+      </button>
+
+      <button onclick="window.print()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 shadow-xs transition">
+        <i class="fa-solid fa-print"></i>
+        <span>प्रिंट</span>
+      </button>
+
+      <button onclick="resetExercise()" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-sm font-semibold bg-white hover:bg-rose-50 text-rose-600 border border-rose-300 shadow-xs transition" title="पुनः आरंभ करें">
+        <i class="fa-solid fa-arrow-rotate-right"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Worksheet Card -->
+  <main class="w-full max-w-4xl">
+    <div class="worksheet-card relative rounded-3xl p-6 sm:p-10 md:p-12 transition-all">
+
+      <!-- Worksheet Header exactly matching image -->
+      <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-6 mb-8 border-b border-slate-200">
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#d92276] tracking-wide flex items-center gap-2">
+            <span>सही विकल्प पर सही (✓) का निशान लगाएँ-</span>
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-500 mt-1.5">
+            प्रत्येक प्रश्न को पढ़कर सही उत्तर वाले विकल्प के सामने बने बॉक्स पर क्लिक करें।
+          </p>
+        </div>
+
+        <!-- Top Right Skills Badge from Original Image -->
+        <div class="sm:text-right flex flex-col items-start sm:items-end">
+          <div class="inline-flex flex-col items-center sm:items-end">
+            <span class="text-emerald-800 text-sm sm:text-base font-bold tracking-wide flex items-center gap-1.5">
+              <i class="fa-solid fa-lightbulb text-emerald-600 text-xs"></i>
+              निर्णयन-क्षमता कौशल
+            </span>
+            <div class="w-full border-t border-dotted border-emerald-600 my-0.5"></div>
+            <span class="text-emerald-900 text-xs sm:text-sm font-extrabold tracking-tight">
+              Decision-Making Skills
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <form id="quizForm" onsubmit="event.preventDefault(); checkAnswers();" class="space-y-8 sm:space-y-10">
+
+        <!-- Question (क) -->
+        <div class="question-block p-3 sm:p-4 rounded-2xl transition" data-qid="q1" data-correct="ii">
+          <div class="flex items-baseline gap-2.5 text-xl sm:text-2xl text-slate-900 font-semibold mb-4">
+            <span class="text-slate-800 font-medium min-w-[2.2rem]">(क)</span>
+            <span class="flex-1 leading-snug">
+              प्राचीनकाल में <span class="blank-underline" id="blank_q1"></span> नाम के एक राजा थे।
+            </span>
+            <button type="button" onclick="speakText('प्राचीनकाल में नाम के एक राजा थे।')" class="no-print text-xs text-slate-400 hover:text-pink-600 p-1" title="प्रश्न सुनें">
+              <i class="fa-solid fa-volume-low"></i>
+            </button>
+          </div>
+
+          <!-- Options Row -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6 pl-8 sm:pl-10 text-lg sm:text-xl font-medium text-slate-800">
+            <!-- (i) -->
+            <label class="option-row flex items-center justify-between p-2.5 sm:p-3 rounded-xl border border-slate-200 bg-white hover:bg-pink-50/50 cursor-pointer transition" onclick="selectOption('q1', 'i', 'सिद्धार्थ')">
+              <span class="flex items-center gap-2">
+                <span class="text-slate-600">(i)</span>
+                <span class="font-semibold">सिद्धार्थ</span>
+              </span>
+              <div class="option-checkbox" id="box_q1_i"></div>
+            </label>
+            <!-- (ii) Correct -->
+            <label class="option-row flex items-center justify-between p-2.5 sm:p-3 rounded-xl border border-slate-200 bg-white hover:bg-pink-50/50 cursor-pointer transition" onclick="selectOption('q1', 'ii', 'शुद्धोदन')">
+              <span class="flex items-center gap-2">
+                <span class="text-slate-600">(ii)</span>
+                <span class="font-semibold">शुद्धोदन</span>
+              </span>
+              <div class="option-checkbox" id="box_q1_ii"></div>
+            </label>
+            <!-- (iii) -->
+            <label class="option-row flex items-center justify-between p-2.5 sm:p-3 rounded-xl border border-slate-200 bg-white hover:bg-pink-50/50 cursor-pointer transition" onclick="selectOption('q1', 'iii', 'देवदत्त')">
+              <span class="flex items-center gap-2">
+                <span class="text-slate-600">(iii)</span>
+                <span class="font-semibold">देवदत्त</span>
+              </span>
+              <div class="option-checkbox" id="box_q1_iii"></div>
+            </label>
+          </div>
+          <div class="hint-msg hidden pl-10 mt-2 text-xs sm:text-sm font-semibold text-emerald-700 flex items-center gap-1.5">
+            <i class="fa-solid fa-circle-check"></i> सही उत्तर: (ii) शुद्धोदन (महाराजा शुद्धोदन कपिलवस्तु के राजा थे)
+          </div>
+        </div>
+
+        <!-- Question (ख) -->
+        <div class="question-block p-3 sm:p-4 rounded-2xl transition" data-qid="q2" data-correct="iii">
+          <div class="flex items-baseline gap-2.5 text-xl sm:text-2xl text-slate-900 font-semibold mb-4">
+            <span class="text-slate-800 font-medium min-w-[2.2rem]">(ख)</span>
+            <span class="flex-1 leading-snug">
+              राजकुमार सिद्धार्थ के पैर के पास एक घायल <span class="blank-underline" id="blank_q2"></span> आकर गिरा।
+            </span>
+            <button type="button" onclick="speakText('राजकुमार सिद्धार्थ के पैर के पास एक घायल आकर गिरा।')" class="no-print text-xs text-slate-400 hover:text-pink-600 p-1" title="प्रश्न सुनें">
+              <i class="fa-solid fa-volume-low"></i>
+            </button>
+          </div>
+
+          <!-- Options Row -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6 pl-8 sm:pl-10 text-lg sm:text-xl font-medium text-slate-800">
+            <!-- (i) -->
+            <label class="option-row flex items-center justify-between p-2.5 sm:p-3 rounded-xl border border-slate-200 bg-white hover:bg-pink-50/50 cursor-pointer transition" onclick="selectOption('q2', 'i', 'सारस')">
+              <span class="flex items-center gap-2">
+                <span class="text-slate-600">(i)</span>
+                <span class="font-semibold">सारस</span>
+              </span>
+              <div class="option-checkbox" id="box_q2_i"></div>
+            </label>
+            <!-- (ii) -->
+            <label class="option-row flex items-center justify-between p-2.5 sm:p-3 rounded-xl border border-slate-200 bg-white hover:bg-pink-50/50 cursor-pointer transition" onclick="selectOption('q2', 'ii', 'बतख')">
+              <span class="flex items-center gap-2">
+                <span class="text-slate-600">(ii)</span>
+                <span class="font-semibold">बतख</span>
+              </span>
+              <div class="option-checkbox" id="box_q2_ii"></div>
+            </label>
+            <!-- (iii) Correct -->
+            <label class="option-row flex items-center justify-between p-2.5 sm:p-3 rounded-xl border border-slate-200 bg-white hover:bg-pink-50/50 cursor-pointer transition" onclick="selectOption('q2', 'iii', 'हंस')">
+              <span class="flex items-center gap-2">
+                <span class="text-slate-600">(iii)</span>
+                <span class="font-semibold">हंस</span>
+              </span>
+              <div class="option-checkbox" id="box_q2_iii"></div>
+            </label>
+          </div>
+          <div class="hint-msg hidden pl-10 mt-2 text-xs sm:text-sm font-semibold text-emerald-700 flex items-center gap-1.5">
+            <i class="fa-solid fa-circle-check"></i> सही उत्तर: (iii) हंस (देवदत्त के बाण से घायल हंस गिरा था)
+          </div>
+        </div>
+
+        <!-- Question (ग) -->
+        <div class="question-block p-3 sm:p-4 rounded-2xl transition" data-qid="q3" data-correct="ii">
+          <div class="flex items-baseline gap-2.5 text-xl sm:text-2xl text-slate-900 font-semibold mb-4">
+            <span class="text-slate-800 font-medium min-w-[2.2rem]">(ग)</span>
+            <span class="flex-1 leading-snug">
+              ‘उनकी आँखों से आँसू बह निकले’ में सर्वनाम है-
+            </span>
+            <button type="button" onclick="speakText('उनकी आँखों से आँसू बह निकले में सर्वनाम है-')" class="no-print text-xs text-slate-400 hover:text-pink-600 p-1" title="प्रश्न सुनें">
+              <i class="fa-solid fa-volume-low"></i>
+            </button>
+          </div>
+
+          <!-- Options Row -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6 pl-8 sm:pl-10 text-lg sm:text-xl font-medium text-slate-800">
+            <!-- (i) -->
+            <label class="option-row flex items-center justify-between p-2.5 sm:p-3 rounded-xl border border-slate-200 bg-white hover:bg-pink-50/50 cursor-pointer transition" onclick="selectOption('q3', 'i', '')">
+              <span class="flex items-center gap-2">
+                <span class="text-slate-600">(i)</span>
+                <span class="font-semibold">आँसू</span>
+              </span>
+              <div class="option-checkbox" id="box_q3_i"></div>
+            </label>
+            <!-- (ii) Correct -->
+            <label class="option-row flex items-center justify-between p-2.5 sm:p-3 rounded-xl border border-slate-200 bg-white hover:bg-pink-50/50 cursor-pointer transition" onclick="selectOption('q3', 'ii', '')">
+              <span class="flex items-center gap-2">
+                <span class="text-slate-600">(ii)</span>
+                <span class="font-semibold">उनकी</span>
+              </span>
+              <div class="option-checkbox" id="box_q3_ii"></div>
+            </label>
+            <!-- (iii) -->
+            <label class="option-row flex items-center justify-between p-2.5 sm:p-3 rounded-xl border border-slate-200 bg-white hover:bg-pink-50/50 cursor-pointer transition" onclick="selectOption('q3', 'iii', '')">
+              <span class="flex items-center gap-2">
+                <span class="text-slate-600">(iii)</span>
+                <span class="font-semibold">आँखों</span>
+              </span>
+              <div class="option-checkbox" id="box_q3_iii"></div>
+            </label>
+          </div>
+          <div class="hint-msg hidden pl-10 mt-2 text-xs sm:text-sm font-semibold text-emerald-700 flex items-center gap-1.5">
+            <i class="fa-solid fa-circle-check"></i> सही उत्तर: (ii) उनकी ('उनकी' अन्य पुरुषवाचक सर्वनाम है)
+          </div>
+        </div>
+
+        <!-- Question (घ) -->
+        <div class="question-block p-3 sm:p-4 rounded-2xl transition" data-qid="q4" data-correct="i">
+          <div class="flex items-baseline gap-2.5 text-xl sm:text-2xl text-slate-900 font-semibold mb-4">
+            <span class="text-slate-800 font-medium min-w-[2.2rem]">(घ)</span>
+            <span class="flex-1 leading-snug">
+              ‘दयालु’ का विलोम शब्द है-
+            </span>
+            <button type="button" onclick="speakText('दयालु का विलोम शब्द है-')" class="no-print text-xs text-slate-400 hover:text-pink-600 p-1" title="प्रश्न सुनें">
+              <i class="fa-solid fa-volume-low"></i>
+            </button>
+          </div>
+
+          <!-- Options Row -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6 pl-8 sm:pl-10 text-lg sm:text-xl font-medium text-slate-800">
+            <!-- (i) Correct -->
+            <label class="option-row flex items-center justify-between p-2.5 sm:p-3 rounded-xl border border-slate-200 bg-white hover:bg-pink-50/50 cursor-pointer transition" onclick="selectOption('q4', 'i', '')">
+              <span class="flex items-center gap-2">
+                <span class="text-slate-600">(i)</span>
+                <span class="font-semibold">कठोर</span>
+              </span>
+              <div class="option-checkbox" id="box_q4_i"></div>
+            </label>
+            <!-- (ii) -->
+            <label class="option-row flex items-center justify-between p-2.5 sm:p-3 rounded-xl border border-slate-200 bg-white hover:bg-pink-50/50 cursor-pointer transition" onclick="selectOption('q4', 'ii', '')">
+              <span class="flex items-center gap-2">
+                <span class="text-slate-600">(ii)</span>
+                <span class="font-semibold">नम्र</span>
+              </span>
+              <div class="option-checkbox" id="box_q4_ii"></div>
+            </label>
+            <!-- (iii) -->
+            <label class="option-row flex items-center justify-between p-2.5 sm:p-3 rounded-xl border border-slate-200 bg-white hover:bg-pink-50/50 cursor-pointer transition" onclick="selectOption('q4', 'iii', '')">
+              <span class="flex items-center gap-2">
+                <span class="text-slate-600">(iii)</span>
+                <span class="font-semibold">दूषित</span>
+              </span>
+              <div class="option-checkbox" id="box_q4_iii"></div>
+            </label>
+          </div>
+          <div class="hint-msg hidden pl-10 mt-2 text-xs sm:text-sm font-semibold text-emerald-700 flex items-center gap-1.5">
+            <i class="fa-solid fa-circle-check"></i> सही उत्तर: (i) कठोर (दयालु का विलोम 'कठोर / निर्दयी' होता है)
+          </div>
+        </div>
+
+        <!-- Submit & Evaluation Section -->
+        <div class="pt-8 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
+          <p class="text-xs sm:text-sm text-slate-500">
+            <i class="fa-solid fa-circle-info text-pink-600 mr-1.5"></i>
+            प्रत्येक प्रश्न में उपयुक्त विकल्प के सामने सही (✓) का निशान लगाएँ।
+          </p>
+
+          <button 
+            type="button" 
+            onclick="checkAnswers()" 
+            class="w-full sm:w-auto px-8 py-3 bg-pink-600 hover:bg-pink-700 active:bg-pink-800 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition flex items-center justify-center gap-2 text-base">
+            <i class="fa-solid fa-check"></i>
+            <span>जाँच कीजिए (Check)</span>
+          </button>
+        </div>
+
+      </form>
+
+      <!-- Feedback Area -->
+      <div id="feedbackBanner" class="mt-6 hidden p-4 rounded-xl text-sm font-semibold transition-all"></div>
+
+    </div>
+  </main>
+
+  <script>
+    // State of user selections
+    const userSelections = {
+      q1: null,
+      q2: null,
+      q3: null,
+      q4: null
+    };
+
+    // Correct Answers Key
+    const correctAnswers = {
+      q1: 'ii',  // शुद्धोदन
+      q2: 'iii', // हंस
+      q3: 'ii',  // उनकी
+      q4: 'i'    // कठोर
+    };
+
+    // Option selection handler
+    function selectOption(qid, optKey, wordText) {
+      userSelections[qid] = optKey;
+
+      // Update UI checkboxes for this question
+      const keys = ['i', 'ii', 'iii'];
+      keys.forEach(k => {
+        const box = document.getElementById(`box_${qid}_${k}`);
+        const parentRow = box.closest('.option-row');
+        
+        parentRow.classList.remove('selected', 'correct-choice', 'wrong-choice');
+        box.innerHTML = '';
+
+        if (k === optKey) {
+          parentRow.classList.add('selected');
+          box.innerHTML = '<i class="fa-solid fa-check text-sm"></i>';
+        }
+      });
+
+      // Update inline blank if applicable (q1 and q2)
+      if (wordText) {
+        const blank = document.getElementById(`blank_${qid}`);
+        if (blank) {
+          blank.textContent = wordText;
+        }
+      }
+
+      // Hide feedback banner while answering
+      const feedback = document.getElementById('feedbackBanner');
+      feedback.classList.add('hidden');
+    }
+
+    // Toggle hint answers
+    let hintsOpen = false;
+    function toggleHintAnswers() {
+      hintsOpen = !hintsOpen;
+      document.querySelectorAll('.hint-msg').forEach(el => {
+        if (hintsOpen) {
+          el.classList.remove('hidden');
+        } else {
+          el.classList.add('hidden');
+        }
+      });
+
+      // Highlight correct option boxes with a subtle green border
+      Object.keys(correctAnswers).forEach(qid => {
+        const cKey = correctAnswers[qid];
+        const cBox = document.getElementById(`box_${qid}_${cKey}`);
+        if (cBox) {
+          const row = cBox.closest('.option-row');
+          if (hintsOpen) {
+            row.classList.add('is-correct-hint');
+          } else {
+            row.classList.remove('is-correct-hint');
+          }
+        }
+      });
+
+      document.getElementById('hintBtnLabel').textContent = hintsOpen ? 'संकेत छिपाएँ' : 'संकेत / उत्तर';
+    }
+
+    // Check Answers Logic
+    function checkAnswers() {
+      let score = 0;
+      let attempted = 0;
+      const feedback = document.getElementById('feedbackBanner');
+
+      Object.keys(correctAnswers).forEach(qid => {
+        const selected = userSelections[qid];
+        const correct = correctAnswers[qid];
+
+        if (selected) {
+          attempted++;
+          const selectedBox = document.getElementById(`box_${qid}_${selected}`);
+          const row = selectedBox.closest('.option-row');
+
+          if (selected === correct) {
+            score++;
+            row.classList.add('correct-choice');
+            row.classList.remove('wrong-choice');
+          } else {
+            row.classList.add('wrong-choice');
+            row.classList.remove('correct-choice');
+
+            // Also visibly indicate the correct one
+            const correctBox = document.getElementById(`box_${qid}_${correct}`);
+            correctBox.closest('.option-row').classList.add('is-correct-hint');
+          }
+        }
+      });
+
+      feedback.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-900', 'border-emerald-300', 'bg-amber-100', 'text-amber-900', 'border-amber-300', 'bg-pink-100', 'text-pink-900', 'border-pink-300');
+
+      if (attempted === 0) {
+        feedback.className = 'mt-6 p-4 rounded-xl text-sm font-semibold bg-amber-100 text-amber-900 border border-amber-300';
+        feedback.innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-2"></i> कृपया पहले प्रश्नों के विकल्पों में से किसी एक पर सही (✓) का निशान लगाएँ।';
+      } else if (score === 4) {
+        feedback.className = 'mt-6 p-4 rounded-xl text-sm font-semibold bg-emerald-100 text-emerald-900 border border-emerald-300';
+        feedback.innerHTML = '<i class="fa-solid fa-circle-check mr-2"></i> बहुत बढ़िया! आपने सभी 4 प्रश्नों के बिल्कुल सही विकल्प चुने हैं! 🌟 (4/4)';
+      } else {
+        feedback.className = 'mt-6 p-4 rounded-xl text-sm font-semibold bg-pink-100 text-pink-900 border border-pink-300';
+        feedback.innerHTML = `<i class="fa-solid fa-pen-nib mr-2"></i> आपने 4 में से ${score} सही उत्तर चुने हैं। लाल रंग वाले गलत विकल्पों को सुधारने के लिए 'संकेत' बटन देख सकते हैं।`;
+      }
+    }
+
+    // Text to Speech
+    function speakText(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'hi-IN';
+        utterance.rate = 0.85;
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+
+    // Read full sequence of questions
+    function readAllQuestions() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const sequence = [
+          'सही विकल्प पर सही का निशान लगाएँ',
+          'प्राचीनकाल में किस नाम के एक राजा थे? सिद्धार्थ, शुद्धोदन, या देवदत्त?',
+          'राजकुमार सिद्धार्थ के पैर के पास एक घायल क्या आकर गिरा? सारस, बतख, या हंस?',
+          'उनकी आँखों से आँसू बह निकले में सर्वनाम क्या है? आँसू, उनकी, या आँखों?',
+          'दयालु का विलोम शब्द क्या है? कठोर, नम्र, या दूषित?'
+        ];
+        let idx = 0;
+        function next() {
+          if (idx < sequence.length) {
+            const u = new SpeechSynthesisUtterance(sequence[idx]);
+            u.lang = 'hi-IN';
+            u.rate = 0.88;
+            u.onend = () => {
+              idx++;
+              setTimeout(next, 400);
+            };
+            window.speechSynthesis.speak(u);
+          }
+        }
+        next();
+      }
+    }
+
+    // Reset everything
+    function resetExercise() {
+      ['q1', 'q2', 'q3', 'q4'].forEach(qid => {
+        userSelections[qid] = null;
+        ['i', 'ii', 'iii'].forEach(k => {
+          const box = document.getElementById(`box_${qid}_${k}`);
+          const row = box.closest('.option-row');
+          row.classList.remove('selected', 'correct-choice', 'wrong-choice', 'is-correct-hint');
+          box.innerHTML = '';
+        });
+      });
+
+      // Clear blanks
+      const b1 = document.getElementById('blank_q1');
+      if (b1) b1.textContent = '';
+      const b2 = document.getElementById('blank_q2');
+      if (b2) b2.textContent = '';
+
+      // Hide hints & banner
+      document.querySelectorAll('.hint-msg').forEach(el => el.classList.add('hidden'));
+      hintsOpen = false;
+      document.getElementById('hintBtnLabel').textContent = 'संकेत / उत्तर';
+
+      const feedback = document.getElementById('feedbackBanner');
+      feedback.classList.add('hidden');
+    }
+  </script>
+</body>
+</html>
