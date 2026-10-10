@@ -1,88 +1,425 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>रिक्त स्थान पूर्ण कीजिए</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;padding:18px;font-family:"Noto Sans Devanagari","Mangal",Arial,sans-serif;background:#d9f8fb;color:#17334a}
-.exercise{max-width:960px;margin:0 auto;padding:20px 24px 18px;background:#fff;border:3px solid #00afd0;border-radius:24px}
-h1{margin:0 0 14px;color:#00a6d2;font-size:clamp(24px,4vw,36px);font-weight:600}
-.word-bank{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;background:#e0f8fc;padding:12px;border-radius:14px;margin-bottom:15px}
-.word{background:#fff;border:1.5px solid #00aee0;border-radius:10px;padding:7px 13px;font:inherit;font-size:17px;cursor:grab;user-select:none;touch-action:none}
-.word:active{cursor:grabbing}.word.dragging{opacity:.45}
-.question{display:flex;align-items:center;flex-wrap:wrap;gap:9px;min-height:76px;margin:9px 0;padding:13px 14px;border:1.5px solid #00b5d9;border-radius:14px;background:#effbfe;font-size:clamp(18px,2.5vw,23px)}
-.q-label{white-space:nowrap}
-.blank{min-width:105px;min-height:53px;display:inline-flex;align-items:center;justify-content:center;padding:4px 8px;background:#fff;border:2px dashed #ff705e;border-radius:9px;color:#007fa8;font-size:19px}
-.blank:empty::after{content:"________";color:#18384a;font-size:17px}
-.blank.drag-over{background:#d8f7ff;border-color:#008eb4;border-style:solid;box-shadow:0 0 0 3px #b9effa}
-.blank.correct{border:2px solid #20a66a;background:#e9fff3}.blank.incorrect{border:2px solid #e34b4b;background:#fff0f0}
-.controls{display:flex;justify-content:center;gap:10px;margin-top:22px}
-.action{border:1.5px solid #ff1680;border-radius:11px;background:#fff;padding:8px 19px;font:inherit;font-size:16px;cursor:pointer}
-.action:hover{background:#fff0f7}
-#score{text-align:center;color:#0073bd;font-size:20px;font-weight:700;margin:8px 0 0}
-#message{text-align:center;min-height:24px;margin-top:6px}.hint{font-size:14px;color:#4d6877;text-align:center;margin:8px 0 0}
-@media(max-width:520px){body{padding:8px}.exercise{padding:15px 11px;border-radius:18px}.question{gap:6px;padding:10px}.blank{min-width:86px}.word{padding:6px 9px;font-size:16px}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>हिंदी व्याकरण अभ्यास - रिक्त स्थान पूर्ति</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Noto Sans Devanagari & Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Noto Sans Devanagari', 'Poppins', sans-serif;
+      background: radial-gradient(circle at top left, #f8fafc, #edf2f7);
+    }
+    
+    .paper-texture {
+      background-color: #ffffff;
+      background-image: radial-gradient(#cbd5e1 0.75px, transparent 0.75px);
+      background-size: 16px 16px;
+    }
+
+    .blank-slot {
+      min-width: 130px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 2px dashed #94a3b8;
+      transition: all 0.25s ease;
+      font-weight: 600;
+    }
+
+    .blank-slot.filled {
+      border-bottom: 2px solid #0284c7;
+      color: #0369a1;
+      background-color: #f0f9ff;
+      border-radius: 6px 6px 0 0;
+      padding: 0 10px;
+    }
+
+    .blank-slot.correct {
+      border-bottom: 2px solid #16a34a;
+      color: #15803d;
+      background-color: #f0fdf4;
+    }
+
+    .blank-slot.incorrect {
+      border-bottom: 2px solid #dc2626;
+      color: #b91c1c;
+      background-color: #fef2f2;
+    }
+
+    .option-btn {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .option-btn:hover {
+      transform: translateY(-1px);
+    }
+  </style>
 </head>
-<body>
-<main class="exercise">
-<h1>रिक्त स्थान पूर्ण कीजिए–</h1>
-<div class="word-bank" id="wordBank" aria-label="शब्दों को खींचकर रिक्त स्थान में डालें">
-  <span class="word" draggable="true" data-word="मुझे">मुझे</span>
-  <span class="word" draggable="true" data-word="मेरे को">मेरे को</span>
-  <span class="word" draggable="true" data-word="हमें">हमें</span>
-  <span class="word" draggable="true" data-word="हमारे को">हमारे को</span>
-  <span class="word" draggable="true" data-word="काट लिया">काट लिया</span>
-  <span class="word" draggable="true" data-word="काटा">काटा</span>
-  <span class="word" draggable="true" data-word="चलने से">चलने से</span>
-  <span class="word" draggable="true" data-word="चलने पर">चलने पर</span>
-</div>
-<section class="question"><span class="q-label">(क)</span><span class="blank" data-answer="मुझे" aria-label="प्रश्न क का रिक्त स्थान"></span><span>आपके साथ चलना है।</span><span>(मुझे / मेरे को)</span></section>
-<section class="question"><span class="q-label">(ख)</span><span class="blank" data-answer="हमें" aria-label="प्रश्न ख का रिक्त स्थान"></span><span>कसरत करनी है।</span><span>(हमारे को / हमें)</span></section>
-<section class="question"><span class="q-label">(ग)</span><span class="blank" data-answer="काटा" aria-label="प्रश्न ग का रिक्त स्थान"></span><span>मेरे कुत्ते ने</span><span>(काटा / काट लिया)</span></section>
-<section class="question"><span class="q-label">(घ)</span><span class="blank" data-answer="चलने से" aria-label="प्रश्न घ का रिक्त स्थान"></span><span>बहुत थकावट होती है।</span><span>(चलने से / चलने पर)</span></section>
-<div class="controls"><button class="action" id="submit">Submit</button><button class="action" id="reset">Reset</button></div>
-<div id="score">Score: 0 / 4</div><div id="message" role="status"></div>
-<p class="hint">ऊपर दिए गए शब्द को खींचकर खाली स्थान में छोड़ें (Drag &amp; Drop)।</p>
-</main>
-<script>
-const words=[...document.querySelectorAll('.word')];
-const blanks=[...document.querySelectorAll('.blank')];
-let draggedWord='';
-words.forEach(word=>{
-  word.addEventListener('dragstart',e=>{
-    draggedWord=word.dataset.word;
-    word.classList.add('dragging');
-    if(e.dataTransfer){e.dataTransfer.setData('text/plain',draggedWord);e.dataTransfer.effectAllowed='copy';}
-  });
-  word.addEventListener('dragend',()=>word.classList.remove('dragging'));
-});
-blanks.forEach(blank=>{
-  blank.addEventListener('dragover',e=>{e.preventDefault();blank.classList.add('drag-over');if(e.dataTransfer)e.dataTransfer.dropEffect='copy';});
-  blank.addEventListener('dragleave',()=>blank.classList.remove('drag-over'));
-  blank.addEventListener('drop',e=>{
-    e.preventDefault();blank.classList.remove('drag-over');
-    const value=(e.dataTransfer&&e.dataTransfer.getData('text/plain'))||draggedWord;
-    if(!value)return;
-    blank.textContent=value;blank.dataset.value=value;blank.classList.remove('correct','incorrect');
-    document.getElementById('message').textContent=`“${value}” रिक्त स्थान में रखा गया।`;
-  });
-});
-document.getElementById('submit').addEventListener('click',()=>{
-  let score=0;
-  blanks.forEach(blank=>{
-    const correct=blank.dataset.value===blank.dataset.answer;
-    blank.classList.toggle('correct',correct);blank.classList.toggle('incorrect',!correct);
-    if(correct)score++;
-  });
-  document.getElementById('score').textContent=`Score: ${score} / ${blanks.length}`;
-  document.getElementById('message').textContent=score===blanks.length?'बहुत अच्छा! सभी उत्तर सही हैं।':'लाल बॉर्डर वाले उत्तर फिर से जाँचिए।';
-});
-document.getElementById('reset').addEventListener('click',()=>{
-  blanks.forEach(blank=>{blank.textContent='';delete blank.dataset.value;blank.classList.remove('correct','incorrect','drag-over');});
-  document.getElementById('score').textContent='Score: 0 / 4';document.getElementById('message').textContent='';
-});
-</script>
-</body></html>
+<body class="min-h-screen text-slate-800 flex flex-col justify-between py-6 px-4 sm:px-6">
+
+  <main class="max-w-3xl mx-auto w-full my-auto">
+    <!-- Outer Card -->
+    <div class="paper-texture border border-slate-200/90 rounded-2xl shadow-xl overflow-hidden">
+      
+      <!-- Top Title Bar -->
+      <header class="bg-gradient-to-r from-sky-600 via-indigo-600 to-blue-700 p-5 sm:p-6 text-white flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div class="bg-white/20 p-2.5 rounded-xl backdrop-blur-sm">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+            </svg>
+          </div>
+          <div>
+            <span class="text-xs uppercase tracking-wider font-semibold text-sky-100">हिंदी व्याकरण • सर्वनाम प्रयोग</span>
+            <h1 class="text-lg sm:text-2xl font-bold tracking-tight">अभ्यास कार्य</h1>
+          </div>
+        </div>
+        <div class="bg-white/15 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-medium backdrop-blur-sm border border-white/20">
+          कुल प्रश्न: 4
+        </div>
+      </header>
+
+      <section class="p-6 sm:p-8">
+        <!-- Question Instructions exactly from image -->
+        <div class="flex items-center gap-3 pb-5 border-b border-slate-200">
+          <div class="flex-shrink-0 w-3 h-8 bg-sky-500 rounded-full"></div>
+          <h2 class="text-xl sm:text-2xl font-bold text-sky-800 tracking-wide">
+            4. रिक्त स्थान पूर्ति कीजिए-
+          </h2>
+        </div>
+
+        <p class="text-xs sm:text-sm text-slate-500 mt-2 mb-6">
+          कोष्ठक में दिए गए सही सर्वनाम शब्द पर क्लिक करके रिक्त स्थान भरें।
+        </p>
+
+        <div id="exercise-list" class="space-y-4 sm:space-y-5">
+          <!-- Question (क) -->
+          <div class="exercise-row p-4 sm:p-5 rounded-xl border border-slate-200 bg-white/80 hover:bg-slate-50 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4" id="row-ka">
+            <div class="flex items-baseline gap-3 text-lg sm:text-xl font-medium text-slate-800 flex-1 flex-wrap">
+              <span class="font-bold text-slate-700 min-w-[2.2rem]">(क)</span>
+              <span id="slot-ka" class="blank-slot mx-1 pb-0.5 text-center px-3 cursor-pointer text-slate-400 font-normal italic select-none" onclick="clearSlot('ka')" title="क्लिक करके रिक्त स्थान साफ़ करें">
+                _________
+              </span>
+              <span>आपके साथ चलना है।</span>
+            </div>
+            
+            <div class="flex items-center gap-2 self-end md:self-center bg-slate-100/90 p-1.5 rounded-xl border border-slate-200">
+              <span class="text-slate-400 font-medium px-1">(</span>
+              <button type="button" onclick="chooseOption('ka', 'मुझे')" id="opt-ka-1" class="option-btn px-3 py-1.5 rounded-lg text-base font-semibold text-slate-700 hover:bg-white hover:text-sky-700 hover:shadow-sm">
+                मुझे
+              </button>
+              <span class="text-slate-400">/</span>
+              <button type="button" onclick="chooseOption('ka', 'मेरे को')" id="opt-ka-2" class="option-btn px-3 py-1.5 rounded-lg text-base font-semibold text-slate-700 hover:bg-white hover:text-sky-700 hover:shadow-sm">
+                मेरे को
+              </button>
+              <span class="text-slate-400 font-medium px-1">)</span>
+            </div>
+          </div>
+
+          <!-- Question (ख) -->
+          <div class="exercise-row p-4 sm:p-5 rounded-xl border border-slate-200 bg-white/80 hover:bg-slate-50 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4" id="row-kha">
+            <div class="flex items-baseline gap-3 text-lg sm:text-xl font-medium text-slate-800 flex-1 flex-wrap">
+              <span class="font-bold text-slate-700 min-w-[2.2rem]">(ख)</span>
+              <span id="slot-kha" class="blank-slot mx-1 pb-0.5 text-center px-3 cursor-pointer text-slate-400 font-normal italic select-none" onclick="clearSlot('kha')" title="क्लिक करके रिक्त स्थान साफ़ करें">
+                _________
+              </span>
+              <span>कोलकाता जाना है।</span>
+            </div>
+            
+            <div class="flex items-center gap-2 self-end md:self-center bg-slate-100/90 p-1.5 rounded-xl border border-slate-200">
+              <span class="text-slate-400 font-medium px-1">(</span>
+              <button type="button" onclick="chooseOption('kha', 'हमारे को')" id="opt-kha-1" class="option-btn px-3 py-1.5 rounded-lg text-base font-semibold text-slate-700 hover:bg-white hover:text-sky-700 hover:shadow-sm">
+                हमारे को
+              </button>
+              <span class="text-slate-400">/</span>
+              <button type="button" onclick="chooseOption('kha', 'हमें')" id="opt-kha-2" class="option-btn px-3 py-1.5 rounded-lg text-base font-semibold text-slate-700 hover:bg-white hover:text-sky-700 hover:shadow-sm">
+                हमें
+              </button>
+              <span class="text-slate-400 font-medium px-1">)</span>
+            </div>
+          </div>
+
+          <!-- Question (ग) -->
+          <div class="exercise-row p-4 sm:p-5 rounded-xl border border-slate-200 bg-white/80 hover:bg-slate-50 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4" id="row-ga">
+            <div class="flex items-baseline gap-3 text-lg sm:text-xl font-medium text-slate-800 flex-1 flex-wrap">
+              <span class="font-bold text-slate-700 min-w-[2.2rem]">(ग)</span>
+              <span id="slot-ga" class="blank-slot mx-1 pb-0.5 text-center px-3 cursor-pointer text-slate-400 font-normal italic select-none" onclick="clearSlot('ga')" title="क्लिक करके रिक्त स्थान साफ़ करें">
+                _________
+              </span>
+              <span>मेरी पुस्तक ले ली।</span>
+            </div>
+            
+            <div class="flex items-center gap-2 self-end md:self-center bg-slate-100/90 p-1.5 rounded-xl border border-slate-200">
+              <span class="text-slate-400 font-medium px-1">(</span>
+              <button type="button" onclick="chooseOption('ga', 'वह')" id="opt-ga-1" class="option-btn px-3 py-1.5 rounded-lg text-base font-semibold text-slate-700 hover:bg-white hover:text-sky-700 hover:shadow-sm">
+                वह
+              </button>
+              <span class="text-slate-400">/</span>
+              <button type="button" onclick="chooseOption('ga', 'उसने')" id="opt-ga-2" class="option-btn px-3 py-1.5 rounded-lg text-base font-semibold text-slate-700 hover:bg-white hover:text-sky-700 hover:shadow-sm">
+                उसने
+              </button>
+              <span class="text-slate-400 font-medium px-1">)</span>
+            </div>
+          </div>
+
+          <!-- Question (घ) -->
+          <div class="exercise-row p-4 sm:p-5 rounded-xl border border-slate-200 bg-white/80 hover:bg-slate-50 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4" id="row-gha">
+            <div class="flex items-baseline gap-3 text-lg sm:text-xl font-medium text-slate-800 flex-1 flex-wrap">
+              <span class="font-bold text-slate-700 min-w-[2.2rem]">(घ)</span>
+              <span id="slot-gha" class="blank-slot mx-1 pb-0.5 text-center px-3 cursor-pointer text-slate-400 font-normal italic select-none" onclick="clearSlot('gha')" title="क्लिक करके रिक्त स्थान साफ़ करें">
+                _________
+              </span>
+              <span>सुंदर कविता सुनाई।</span>
+            </div>
+            
+            <div class="flex items-center gap-2 self-end md:self-center bg-slate-100/90 p-1.5 rounded-xl border border-slate-200">
+              <span class="text-slate-400 font-medium px-1">(</span>
+              <button type="button" onclick="chooseOption('gha', 'उन्होंने')" id="opt-gha-1" class="option-btn px-3 py-1.5 rounded-lg text-base font-semibold text-slate-700 hover:bg-white hover:text-sky-700 hover:shadow-sm">
+                उन्होंने
+              </button>
+              <span class="text-slate-400">/</span>
+              <button type="button" onclick="chooseOption('gha', 'वे')" id="opt-gha-2" class="option-btn px-3 py-1.5 rounded-lg text-base font-semibold text-slate-700 hover:bg-white hover:text-sky-700 hover:shadow-sm">
+                वे
+              </button>
+              <span class="text-slate-400 font-medium px-1">)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 pt-6 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <button onclick="checkAnswers()" class="px-6 py-2.5 bg-sky-600 hover:bg-sky-700 active:bg-sky-800 text-white font-semibold rounded-xl shadow-md shadow-sky-600/20 transition-all flex items-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <span>उत्तर जाँचें</span>
+            </button>
+            <button onclick="resetExercise()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 font-semibold rounded-xl transition-all flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+              </svg>
+              <span>पुनः प्रयास करें</span>
+            </button>
+          </div>
+
+          <div id="status-badge" class="hidden px-4 py-2 rounded-xl text-sm font-semibold"></div>
+        </div>
+
+        <!-- Explanations Box -->
+        <div id="explanation-box" class="hidden mt-6 p-5 rounded-xl border border-sky-200 bg-sky-50/80 text-sm space-y-3">
+          <h3 class="font-bold text-base text-sky-900 flex items-center gap-2">
+            <span>व्याकरण स्पष्टीकरण (शुद्ध रूप):</span>
+          </h3>
+          <ul class="space-y-2 text-slate-700 list-disc list-inside">
+            <li><strong>(क) मुझे:</strong> मानक हिंदी में 'मेरे को' का प्रयोग अशुद्ध माना जाता है, शुद्ध रूप <em>'मुझे'</em> होता है।</li>
+            <li><strong>(ख) हमें:</strong> 'हमारे को' अमानक व अशुद्ध प्रयोग है, इसके स्थान पर <em>'हमें'</em> का प्रयोग सही है।</li>
+            <li><strong>(ग) उसने:</strong> भूतकाल में सकर्मक क्रिया ('ले ली') होने के कारण कर्ता के साथ 'ने' परसर्ग जुड़कर <em>'उसने'</em> बनता है।</li>
+            <li><strong>(घ) उन्होंने:</strong> सकर्मक भूतकालिक क्रिया ('सुनाई') के साथ आदरसूचक/बहुवचन रूप में 'वे + ने' मिलकर <em>'उन्होंने'</em> बनता है।</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-6 text-center text-xs text-slate-400">
+    कक्षा अभ्यास कार्य • शुद्ध सर्वनाम प्रयोग
+  </footer>
+
+  <script>
+    // State of selected answers
+    const userSelections = {
+      ka: null,
+      kha: null,
+      ga: null,
+      gha: null
+    };
+
+    // Correct grammatical answers
+    const correctAnswers = {
+      ka: 'मुझे',
+      kha: 'हमें',
+      ga: 'उसने',
+      gha: 'उन्होंने'
+    };
+
+    // Options mapping per question
+    const questionOptions = {
+      ka: ['मुझे', 'मेरे को'],
+      kha: ['हमारे को', 'हमें'],
+      ga: ['वह', 'उसने'],
+      gha: ['उन्होंने', 'वे']
+    };
+
+    // Web Audio Synthesizer
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playTone(freq, type = 'sine', duration = 0.12) {
+      try {
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.14, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {
+        // Audio error handling
+      }
+    }
+
+    // Handle option click
+    function chooseOption(qid, value) {
+      playTone(480);
+      userSelections[qid] = value;
+      renderState();
+    }
+
+    // Clear slot
+    function clearSlot(qid) {
+      if (userSelections[qid]) {
+        playTone(300);
+        userSelections[qid] = null;
+        renderState();
+      }
+    }
+
+    // Render UI based on user selections
+    function renderState() {
+      const qids = ['ka', 'kha', 'ga', 'gha'];
+
+      qids.forEach(qid => {
+        const selected = userSelections[qid];
+        const slot = document.getElementById(`slot-${qid}`);
+        const opt1Btn = document.getElementById(`opt-${qid}-1`);
+        const opt2Btn = document.getElementById(`opt-${qid}-2`);
+        const [opt1Val, opt2Val] = questionOptions[qid];
+
+        // Reset option button styles
+        opt1Btn.className = 'option-btn px-3 py-1.5 rounded-lg text-base font-semibold text-slate-700 hover:bg-white hover:text-sky-700';
+        opt2Btn.className = 'option-btn px-3 py-1.5 rounded-lg text-base font-semibold text-slate-700 hover:bg-white hover:text-sky-700';
+
+        if (selected) {
+          slot.textContent = selected;
+          slot.classList.add('filled');
+          slot.classList.remove('italic', 'text-slate-400');
+          slot.title = 'क्लिक करके रिक्त स्थान साफ़ करें';
+
+          // Highlight selected button
+          if (selected === opt1Val) {
+            opt1Btn.className = 'option-btn px-3 py-1.5 rounded-lg text-base font-semibold bg-sky-600 text-white shadow-sm';
+          } else if (selected === opt2Val) {
+            opt2Btn.className = 'option-btn px-3 py-1.5 rounded-lg text-base font-semibold bg-sky-600 text-white shadow-sm';
+          }
+        } else {
+          slot.textContent = '_________';
+          slot.classList.remove('filled', 'correct', 'incorrect');
+          slot.classList.add('italic', 'text-slate-400');
+          slot.title = 'विकल्पों में से एक चुनें';
+        }
+      });
+    }
+
+    // Evaluate answers
+    function checkAnswers() {
+      const qids = ['ka', 'kha', 'ga', 'gha'];
+      let answeredCount = 0;
+      let score = 0;
+
+      qids.forEach(qid => {
+        if (userSelections[qid] !== null) answeredCount++;
+      });
+
+      if (answeredCount === 0) {
+        showStatus('कृपया पहले रिक्त स्थानों के लिए विकल्प चुनें!', 'warning');
+        return;
+      }
+
+      qids.forEach(qid => {
+        const slot = document.getElementById(`slot-${qid}`);
+        const row = document.getElementById(`row-${qid}`);
+        const userVal = userSelections[qid];
+        const isCorrect = userVal === correctAnswers[qid];
+
+        slot.classList.remove('correct', 'incorrect');
+        row.classList.remove('border-emerald-400', 'bg-emerald-50/40', 'border-rose-400', 'bg-rose-50/40');
+
+        if (userVal !== null) {
+          if (isCorrect) {
+            score++;
+            slot.classList.add('correct');
+            row.classList.add('border-emerald-400', 'bg-emerald-50/40');
+          } else {
+            slot.classList.add('incorrect');
+            row.classList.add('border-rose-400', 'bg-rose-50/40');
+          }
+        }
+      });
+
+      // Show result status & play audio chime
+      if (score === 4) {
+        playTone(660, 'triangle', 0.2);
+        setTimeout(() => playTone(880, 'triangle', 0.35), 140);
+        showStatus('उत्कृष्ट! आपके सभी 4 उत्तर सही हैं! (4/4)', 'success');
+      } else {
+        playTone(320, 'sawtooth', 0.25);
+        showStatus(`आपने 4 में से ${score} सही उत्तर दिए हैं। नीचे दी गई व्याख्या देखें।`, 'info');
+      }
+
+      // Show explanation box
+      document.getElementById('explanation-box').classList.remove('hidden');
+    }
+
+    function showStatus(message, type) {
+      const badge = document.getElementById('status-badge');
+      badge.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-800', 'border-emerald-300', 'bg-amber-100', 'text-amber-800', 'border-amber-300', 'bg-sky-100', 'text-sky-800', 'border-sky-300');
+      badge.classList.add('border');
+
+      if (type === 'success') {
+        badge.classList.add('bg-emerald-100', 'text-emerald-800', 'border-emerald-300');
+      } else if (type === 'warning') {
+        badge.classList.add('bg-amber-100', 'text-amber-800', 'border-amber-300');
+      } else {
+        badge.classList.add('bg-sky-100', 'text-sky-800', 'border-sky-300');
+      }
+
+      badge.textContent = message;
+    }
+
+    // Reset exercise
+    function resetExercise() {
+      playTone(400);
+      for (const qid in userSelections) {
+        userSelections[qid] = null;
+      }
+      renderState();
+
+      // Reset row highlights & slots
+      document.querySelectorAll('.exercise-row').forEach(el => {
+        el.classList.remove('border-emerald-400', 'bg-emerald-50/40', 'border-rose-400', 'bg-rose-50/40');
+      });
+      document.querySelectorAll('.blank-slot').forEach(el => {
+        el.classList.remove('correct', 'incorrect');
+      });
+
+      document.getElementById('status-badge').classList.add('hidden');
+      document.getElementById('explanation-box').classList.add('hidden');
+    }
+
+    // Initial render
+    renderState();
+  </script>
+</body>
+</html>
