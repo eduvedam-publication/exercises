@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>हिंदी व्याकरण अभ्यास - सही विकल्प पर सही (✓) का चिह्न लगाइए</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts for Devanagari -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Noto Sans Devanagari', 'Poppins', sans-serif;
+      background: radial-gradient(circle at top left, #f8fafc, #edf2f7);
+    }
+    
+    .paper-texture {
+      background-color: #ffffff;
+      background-image: radial-gradient(#cbd5e1 0.75px, transparent 0.75px);
+      background-size: 16px 16px;
+    }
+
+    .custom-check-box {
+      width: 44px;
+      height: 28px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      user-select: none;
+      background-color: #ffffff;
+    }
+
+    .custom-check-box:hover {
+      border-color: #0284c7;
+      background-color: #f0f9ff;
+    }
+
+    .custom-check-box.checked {
+      border-color: #0284c7;
+      background-color: #0284c7;
+      color: #ffffff;
+      box-shadow: 0 2px 4px rgba(2, 132, 199, 0.25);
+    }
+
+    .custom-check-box.correct {
+      border-color: #16a34a !important;
+      background-color: #16a34a !important;
+      color: #ffffff !important;
+    }
+
+    .custom-check-box.incorrect {
+      border-color: #dc2626 !important;
+      background-color: #dc2626 !important;
+      color: #ffffff !important;
+    }
+
+    .option-card {
+      transition: all 0.2s ease;
+    }
+    .option-card:hover {
+      background-color: #f8fafc;
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-800 flex flex-col justify-between py-6 px-4 sm:px-6">
+
+  <main class="max-w-3xl mx-auto w-full my-auto">
+    <!-- Outer Card -->
+    <div class="paper-texture border border-slate-200/90 rounded-2xl shadow-xl overflow-hidden">
+      
+      <!-- Top Title Bar -->
+      <header class="bg-gradient-to-r from-sky-600 via-indigo-600 to-blue-700 p-5 sm:p-6 text-white flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div class="bg-white/20 p-2.5 rounded-xl backdrop-blur-sm">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <div>
+            <span class="text-xs uppercase tracking-wider font-semibold text-sky-100">हिंदी व्याकरण • विलोम शब्द</span>
+            <h1 class="text-lg sm:text-2xl font-bold tracking-tight">अभ्यास कार्य</h1>
+          </div>
+        </div>
+        <div class="bg-white/15 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-medium backdrop-blur-sm border border-white/20">
+          कुल प्रश्न: 4
+        </div>
+      </header>
+
+      <section class="p-6 sm:p-8">
+        <!-- Main Exercise Header exactly from image -->
+        <div class="flex items-center gap-3 pb-5 border-b border-slate-200">
+          <div class="flex-shrink-0 w-3 h-8 bg-sky-500 rounded-full"></div>
+          <h2 class="text-xl sm:text-2xl font-bold text-sky-800 tracking-wide">
+            1. सही विकल्प पर सही (✓) का चिह्न लगाइए-
+          </h2>
+        </div>
+
+        <p class="text-xs sm:text-sm text-slate-500 mt-2 mb-6">
+          प्रत्येक प्रश्न में सही उत्तर के सामने दिए गए बॉक्स पर क्लिक करके सही (✓) का चिह्न लगाएं।
+        </p>
+
+        <div id="exercise-list" class="space-y-6">
+          
+          <!-- Question (क) -->
+          <div class="exercise-item p-4 sm:p-5 rounded-xl border border-slate-200 bg-white/80 transition-all" id="item-ka">
+            <div class="text-lg sm:text-xl font-medium text-slate-800 mb-4 flex items-baseline gap-2">
+              <span class="font-bold text-slate-700 min-w-[2.2rem]">(क)</span>
+              <span>उल्टा अर्थ देने वाले शब्दों को कहते हैं-</span>
+            </div>
+
+            <!-- Options Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <!-- (अ) -->
+              <div onclick="selectOption('ka', 'a')" class="option-card flex items-center justify-between p-3 rounded-xl border border-slate-200 cursor-pointer hover:border-sky-300">
+                <span class="text-base sm:text-lg font-medium text-slate-700">(अ) अनेकार्थी</span>
+                <div id="box-ka-a" class="custom-check-box"></div>
+              </div>
+              <!-- (ब) -->
+              <div onclick="selectOption('ka', 'b')" class="option-card flex items-center justify-between p-3 rounded-xl border border-slate-200 cursor-pointer hover:border-sky-300">
+                <span class="text-base sm:text-lg font-medium text-slate-700">(ब) पर्यायवाची</span>
+                <div id="box-ka-b" class="custom-check-box"></div>
+              </div>
+              <!-- (स) -->
+              <div onclick="selectOption('ka', 'c')" class="option-card flex items-center justify-between p-3 rounded-xl border border-slate-200 cursor-pointer hover:border-sky-300">
+                <span class="text-base sm:text-lg font-medium text-slate-700">(स) विलोम</span>
+                <div id="box-ka-c" class="custom-check-box"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Question (ख) -->
+          <div class="exercise-item p-4 sm:p-5 rounded-xl border border-slate-200 bg-white/80 transition-all" id="item-kha">
+            <div class="text-lg sm:text-xl font-medium text-slate-800 mb-4 flex items-baseline gap-2">
+              <span class="font-bold text-slate-700 min-w-[2.2rem]">(ख)</span>
+              <span>विलोम शब्दों को कहते हैं-</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <!-- (अ) -->
+              <div onclick="selectOption('kha', 'a')" class="option-card flex items-center justify-between p-3 rounded-xl border border-slate-200 cursor-pointer hover:border-sky-300">
+                <span class="text-base sm:text-lg font-medium text-slate-700">(अ) भिन्नार्थी भी</span>
+                <div id="box-kha-a" class="custom-check-box"></div>
+              </div>
+              <!-- (ब) -->
+              <div onclick="selectOption('kha', 'b')" class="option-card flex items-center justify-between p-3 rounded-xl border border-slate-200 cursor-pointer hover:border-sky-300">
+                <span class="text-base sm:text-lg font-medium text-slate-700">(ब) विपरीतार्थी भी</span>
+                <div id="box-kha-b" class="custom-check-box"></div>
+              </div>
+              <!-- (स) -->
+              <div onclick="selectOption('kha', 'c')" class="option-card flex items-center justify-between p-3 rounded-xl border border-slate-200 cursor-pointer hover:border-sky-300">
+                <span class="text-base sm:text-lg font-medium text-slate-700">(स) समानार्थी भी</span>
+                <div id="box-kha-c" class="custom-check-box"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Question (ग) -->
+          <div class="exercise-item p-4 sm:p-5 rounded-xl border border-slate-200 bg-white/80 transition-all" id="item-ga">
+            <div class="text-lg sm:text-xl font-medium text-slate-800 mb-4 flex items-baseline gap-2">
+              <span class="font-bold text-slate-700 min-w-[2.2rem]">(ग)</span>
+              <span>‘सच’ का विपरीतार्थक है-</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <!-- (अ) -->
+              <div onclick="selectOption('ga', 'a')" class="option-card flex items-center justify-between p-3 rounded-xl border border-slate-200 cursor-pointer hover:border-sky-300">
+                <span class="text-base sm:text-lg font-medium text-slate-700">(अ) झूठ</span>
+                <div id="box-ga-a" class="custom-check-box"></div>
+              </div>
+              <!-- (ब) -->
+              <div onclick="selectOption('ga', 'b')" class="option-card flex items-center justify-between p-3 rounded-xl border border-slate-200 cursor-pointer hover:border-sky-300">
+                <span class="text-base sm:text-lg font-medium text-slate-700">(ब) मिथ्या</span>
+                <div id="box-ga-b" class="custom-check-box"></div>
+              </div>
+              <!-- (स) -->
+              <div onclick="selectOption('ga', 'c')" class="option-card flex items-center justify-between p-3 rounded-xl border border-slate-200 cursor-pointer hover:border-sky-300">
+                <span class="text-base sm:text-lg font-medium text-slate-700">(स) असत्य</span>
+                <div id="box-ga-c" class="custom-check-box"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Question (घ) -->
+          <div class="exercise-item p-4 sm:p-5 rounded-xl border border-slate-200 bg-white/80 transition-all" id="item-gha">
+            <div class="text-lg sm:text-xl font-medium text-slate-800 mb-4 flex items-baseline gap-2">
+              <span class="font-bold text-slate-700 min-w-[2.2rem]">(घ)</span>
+              <span>सिर ऊपर है परंतु पैर है-</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <!-- (अ) -->
+              <div onclick="selectOption('gha', 'a')" class="option-card flex items-center justify-between p-3 rounded-xl border border-slate-200 cursor-pointer hover:border-sky-300">
+                <span class="text-base sm:text-lg font-medium text-slate-700">(अ) बाएँ</span>
+                <div id="box-gha-a" class="custom-check-box"></div>
+              </div>
+              <!-- (ब) -->
+              <div onclick="selectOption('gha', 'b')" class="option-card flex items-center justify-between p-3 rounded-xl border border-slate-200 cursor-pointer hover:border-sky-300">
+                <span class="text-base sm:text-lg font-medium text-slate-700">(ब) दाएँ</span>
+                <div id="box-gha-b" class="custom-check-box"></div>
+              </div>
+              <!-- (स) -->
+              <div onclick="selectOption('gha', 'c')" class="option-card flex items-center justify-between p-3 rounded-xl border border-slate-200 cursor-pointer hover:border-sky-300">
+                <span class="text-base sm:text-lg font-medium text-slate-700">(स) नीचे</span>
+                <div id="box-gha-c" class="custom-check-box"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="mt-8 pt-6 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <button type="button" onclick="checkAnswers()" class="px-6 py-2.5 bg-sky-600 hover:bg-sky-700 active:bg-sky-800 text-white font-semibold rounded-xl shadow-md shadow-sky-600/20 transition-all flex items-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <span>उत्तर जाँचें</span>
+            </button>
+            <button type="button" onclick="resetExercise()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 font-semibold rounded-xl transition-all flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+              </svg>
+              <span>पुनः प्रयास करें</span>
+            </button>
+          </div>
+
+          <div id="status-badge" class="hidden px-4 py-2 rounded-xl text-sm font-semibold"></div>
+        </div>
+
+        <!-- Explanations Box -->
+        <div id="explanation-box" class="hidden mt-6 p-5 rounded-xl border border-sky-200 bg-sky-50/80 text-sm space-y-3">
+          <h3 class="font-bold text-base text-sky-900 flex items-center gap-2">
+            <span>व्याकरण स्पष्टीकरण:</span>
+          </h3>
+          <ul class="space-y-2 text-slate-700 list-disc list-inside">
+            <li><strong>(क) विलोम:</strong> जो शब्द एक-दूसरे का उल्टा अथवा विपरीत अर्थ प्रकट करते हैं, उन्हें 'विलोम शब्द' कहते हैं।</li>
+            <li><strong>(ख) विपरीतार्थी भी:</strong> विलोम शब्दों को विपरीत अर्थ देने के कारण 'विपरीतार्थी शब्द' भी कहा जाता है।</li>
+            <li><strong>(ग) झूठ:</strong> 'सच' (तद्भव) का सही विपरीतार्थक 'झूठ' होता है। (सत्य का विलोम 'असत्य' या 'मिथ्या' होता है)।</li>
+            <li><strong>(घ) नीचे:</strong> 'ऊपर' का विलोम शब्द 'नीचे' होता है। अतः सिर ऊपर है तो पैर नीचे हैं।</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-6 text-center text-xs text-slate-400">
+    कक्षा अभ्यास कार्य • सही विकल्प चयन
+  </footer>
+
+  <script>
+    // State of user choices
+    const userSelections = {
+      ka: null,
+      kha: null,
+      ga: null,
+      gha: null
+    };
+
+    // Correct Answers
+    const correctAnswers = {
+      ka: 'c',   // विलोम
+      kha: 'b',  // विपरीतार्थी भी
+      ga: 'a',   // झूठ
+      gha: 'c'   // नीचे
+    };
+
+    const qids = ['ka', 'kha', 'ga', 'gha'];
+    const options = ['a', 'b', 'c'];
+
+    // Web Audio Synthesizer
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playTone(freq, type = 'sine', duration = 0.12) {
+      try {
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.14, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {
+        // Audio error handling
+      }
+    }
+
+    // Toggle or select option
+    function selectOption(qid, optKey) {
+      playTone(520);
+      
+      // If clicked again, toggle off; otherwise select new
+      if (userSelections[qid] === optKey) {
+        userSelections[qid] = null;
+      } else {
+        userSelections[qid] = optKey;
+      }
+
+      renderUI();
+    }
+
+    // Update checkboxes state
+    function renderUI() {
+      qids.forEach(qid => {
+        options.forEach(opt => {
+          const box = document.getElementById(`box-${qid}-${opt}`);
+          if (userSelections[qid] === opt) {
+            box.classList.add('checked');
+            box.innerHTML = `<svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>`;
+          } else {
+            box.classList.remove('checked', 'correct', 'incorrect');
+            box.innerHTML = '';
+          }
+        });
+      });
+    }
+
+    // Evaluate answers
+    function checkAnswers() {
+      let answeredCount = 0;
+      let score = 0;
+
+      qids.forEach(qid => {
+        if (userSelections[qid] !== null) answeredCount++;
+      });
+
+      if (answeredCount === 0) {
+        showStatus('कृपया पहले प्रश्नों के उत्तर चुनें!', 'warning');
+        return;
+      }
+
+      qids.forEach(qid => {
+        const item = document.getElementById(`item-${qid}`);
+        const userChoice = userSelections[qid];
+        const correctChoice = correctAnswers[qid];
+
+        // Reset borders
+        item.classList.remove('border-emerald-400', 'bg-emerald-50/40', 'border-rose-400', 'bg-rose-50/40');
+        
+        // Reset option box states
+        options.forEach(opt => {
+          const box = document.getElementById(`box-${qid}-${opt}`);
+          box.classList.remove('correct', 'incorrect');
+        });
+
+        if (userChoice !== null) {
+          const userBox = document.getElementById(`box-${qid}-${userChoice}`);
+          if (userChoice === correctChoice) {
+            score++;
+            userBox.classList.add('correct');
+            item.classList.add('border-emerald-400', 'bg-emerald-50/40');
+          } else {
+            userBox.classList.add('incorrect');
+            // Also highlight the actual correct answer for clarity
+            const correctBox = document.getElementById(`box-${qid}-${correctChoice}`);
+            correctBox.classList.add('correct');
+            correctBox.innerHTML = `<svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>`;
+            item.classList.add('border-rose-400', 'bg-rose-50/40');
+          }
+        }
+      });
+
+      if (score === 4) {
+        playTone(660, 'triangle', 0.2);
+        setTimeout(() => playTone(880, 'triangle', 0.35), 140);
+        showStatus('शाबाश! आपके सभी 4 उत्तर सही हैं! (4/4)', 'success');
+      } else {
+        playTone(320, 'sawtooth', 0.25);
+        showStatus(`आपने 4 में से ${score} सही उत्तर दिए हैं। नीचे व्याख्या देखें।`, 'info');
+      }
+
+      document.getElementById('explanation-box').classList.remove('hidden');
+    }
+
+    function showStatus(message, type) {
+      const badge = document.getElementById('status-badge');
+      badge.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-800', 'border-emerald-300', 'bg-amber-100', 'text-amber-800', 'border-amber-300', 'bg-sky-100', 'text-sky-800', 'border-sky-300');
+      badge.classList.add('border');
+
+      if (type === 'success') {
+        badge.classList.add('bg-emerald-100', 'text-emerald-800', 'border-emerald-300');
+      } else if (type === 'warning') {
+        badge.classList.add('bg-amber-100', 'text-amber-800', 'border-amber-300');
+      } else {
+        badge.classList.add('bg-sky-100', 'text-sky-800', 'border-sky-300');
+      }
+
+      badge.textContent = message;
+    }
+
+    // Reset whole exercise
+    function resetExercise() {
+      playTone(400);
+      qids.forEach(qid => {
+        userSelections[qid] = null;
+        const item = document.getElementById(`item-${qid}`);
+        item.classList.remove('border-emerald-400', 'bg-emerald-50/40', 'border-rose-400', 'bg-rose-50/40');
+      });
+
+      renderUI();
+
+      document.getElementById('status-badge').classList.add('hidden');
+      document.getElementById('explanation-box').classList.add('hidden');
+    }
+
+    // Initial run
+    renderUI();
+  </script>
+</body>
+</html>

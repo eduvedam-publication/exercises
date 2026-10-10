@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>रिक्त स्थान पूर्ति कीजिए-</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts for Devanagari & Latin -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Noto Sans Devanagari', 'Poppins', sans-serif;
+      background: radial-gradient(circle at top left, #f8fafc, #edf2f7);
+    }
+
+    .paper-texture {
+      background-color: #ffffff;
+      background-image: radial-gradient(#cbd5e1 0.75px, transparent 0.75px);
+      background-size: 16px 16px;
+    }
+
+    /* Input styled as an elegant notebook blank line */
+    .fill-blank-input {
+      border: none;
+      border-bottom: 2px dashed #94a3b8;
+      background: transparent;
+      outline: none;
+      text-align: center;
+      transition: all 0.2s ease;
+      color: #0f172a;
+      font-weight: 600;
+    }
+
+    .fill-blank-input:focus {
+      border-bottom: 2px solid #0284c7;
+      background-color: #f0f9ff;
+      border-radius: 4px 4px 0 0;
+    }
+
+    .fill-blank-input.correct {
+      border-bottom: 2px solid #16a34a !important;
+      background-color: #ecfdf5 !important;
+      color: #166534 !important;
+    }
+
+    .fill-blank-input.incorrect {
+      border-bottom: 2px solid #dc2626 !important;
+      background-color: #fef2f2 !important;
+      color: #991b1b !important;
+    }
+
+    .word-chip {
+      transition: all 0.15s ease;
+    }
+    .word-chip:hover {
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-800 flex flex-col justify-between p-3 sm:p-6">
+
+  <main class="max-w-3xl mx-auto w-full my-auto">
+    <!-- Card Container -->
+    <div class="paper-texture border border-slate-200/90 rounded-2xl shadow-xl overflow-hidden">
+
+      <!-- Top Title Bar -->
+      <header class="bg-gradient-to-r from-sky-600 via-cyan-600 to-teal-700 p-4 sm:p-5 text-white flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div class="bg-white/20 p-2 rounded-xl backdrop-blur-sm">
+            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+            </svg>
+          </div>
+          <div>
+            <span class="text-xs uppercase tracking-wider font-semibold text-sky-100">हिंदी व्याकरण • विलोम शब्द अभ्यास</span>
+            <h1 class="text-base sm:text-xl font-bold tracking-tight">रिक्त स्थान पूर्ति</h1>
+          </div>
+        </div>
+        <div class="bg-white/15 px-3 py-1 rounded-full text-xs sm:text-sm font-medium backdrop-blur-sm border border-white/20">
+          कुल प्रश्न: 4
+        </div>
+      </header>
+
+      <section class="p-4 sm:p-6 md:p-8">
+        <!-- Main Exercise Header -->
+        <div class="flex items-center gap-2.5 pb-3 border-b border-slate-200">
+          <div class="flex-shrink-0 w-2.5 h-6 bg-sky-500 rounded-full"></div>
+          <h2 class="text-xl sm:text-2xl font-bold text-sky-600 tracking-wide">
+            रिक्त स्थान पूर्ति कीजिए-
+          </h2>
+        </div>
+
+        <p class="text-xs sm:text-sm text-slate-500 mt-2 mb-4 leading-relaxed">
+          रंगीन शब्द के सही विलोम (उलटे अर्थ वाले शब्द) से खाली जगह भरिए। आप सीधे टाइप कर सकते हैं या नीचे दिए गए शब्द-बैंक से चुन सकते हैं।
+        </p>
+
+        <!-- Word Bank / Quick Select Assist -->
+        <div class="mb-5 p-3 rounded-xl bg-slate-50 border border-slate-200/80 flex flex-wrap items-center gap-2">
+          <span class="text-xs sm:text-sm font-semibold text-slate-500 flex items-center gap-1.5 mr-1">
+            <svg class="w-4 h-4 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+            </svg>
+            शब्द सहायता:
+          </span>
+          <button type="button" onclick="fillFocused('पीछे')" class="word-chip px-3 py-1 rounded-lg text-sm font-semibold bg-white border border-slate-300 hover:border-sky-500 hover:text-sky-600 shadow-sm cursor-pointer">पीछे</button>
+          <button type="button" onclick="fillFocused('बड़ा')" class="word-chip px-3 py-1 rounded-lg text-sm font-semibold bg-white border border-slate-300 hover:border-sky-500 hover:text-sky-600 shadow-sm cursor-pointer">बड़ा</button>
+          <button type="button" onclick="fillFocused('कल')" class="word-chip px-3 py-1 rounded-lg text-sm font-semibold bg-white border border-slate-300 hover:border-sky-500 hover:text-sky-600 shadow-sm cursor-pointer">कल</button>
+          <button type="button" onclick="fillFocused('बाहर')" class="word-chip px-3 py-1 rounded-lg text-sm font-semibold bg-white border border-slate-300 hover:border-sky-500 hover:text-sky-600 shadow-sm cursor-pointer">बाहर</button>
+        </div>
+
+        <div id="exercise-list" class="space-y-3.5">
+
+          <!-- Sentence (क) -->
+          <div class="exercise-item p-3.5 sm:p-4 rounded-xl border border-slate-200 bg-white/95 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-2.5" id="item-ka">
+            <div class="text-base sm:text-lg font-medium text-slate-800 flex flex-wrap items-baseline gap-x-1.5 gap-y-1">
+              <span class="font-bold text-slate-600 min-w-[2rem]">(क)</span>
+              <span>मेरा पैर <span class="text-pink-600 font-semibold">आगे</span> है, आपका</span>
+              <input 
+                type="text" 
+                id="input-ka" 
+                data-qid="ka"
+                class="fill-blank-input w-28 sm:w-36 px-2 py-0.5 text-base sm:text-lg" 
+                placeholder="यहाँ लिखें" 
+                autocomplete="off"
+                onfocus="currentFocusedInput = 'input-ka'"
+                onkeydown="handleKey(event, 'input-kha')"
+              />
+              <span>।</span>
+            </div>
+            <div id="badge-ka" class="text-xs font-semibold px-2.5 py-1 rounded-md hidden self-start sm:self-center"></div>
+          </div>
+
+          <!-- Sentence (ख) -->
+          <div class="exercise-item p-3.5 sm:p-4 rounded-xl border border-slate-200 bg-white/95 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-2.5" id="item-kha">
+            <div class="text-base sm:text-lg font-medium text-slate-800 flex flex-wrap items-baseline gap-x-1.5 gap-y-1">
+              <span class="font-bold text-slate-600 min-w-[2rem]">(ख)</span>
+              <span>रमेश दिनेश से <span class="text-pink-600 font-semibold">छोटा</span> है और दिनेश रमेश से</span>
+              <input 
+                type="text" 
+                id="input-kha" 
+                data-qid="kha"
+                class="fill-blank-input w-28 sm:w-36 px-2 py-0.5 text-base sm:text-lg" 
+                placeholder="यहाँ लिखें" 
+                autocomplete="off"
+                onfocus="currentFocusedInput = 'input-kha'"
+                onkeydown="handleKey(event, 'input-ga')"
+              />
+              <span>है।</span>
+            </div>
+            <div id="badge-kha" class="text-xs font-semibold px-2.5 py-1 rounded-md hidden self-start sm:self-center"></div>
+          </div>
+
+          <!-- Sentence (ग) -->
+          <div class="exercise-item p-3.5 sm:p-4 rounded-xl border border-slate-200 bg-white/95 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-2.5" id="item-ga">
+            <div class="text-base sm:text-lg font-medium text-slate-800 flex flex-wrap items-baseline gap-x-1.5 gap-y-1">
+              <span class="font-bold text-slate-600 min-w-[2rem]">(ग)</span>
+              <span>आप <span class="text-pink-600 font-semibold">आज</span> नहीं</span>
+              <input 
+                type="text" 
+                id="input-ga" 
+                data-qid="ga"
+                class="fill-blank-input w-28 sm:w-36 px-2 py-0.5 text-base sm:text-lg" 
+                placeholder="यहाँ लिखें" 
+                autocomplete="off"
+                onfocus="currentFocusedInput = 'input-ga'"
+                onkeydown="handleKey(event, 'input-gha')"
+              />
+              <span>जाइएगा।</span>
+            </div>
+            <div id="badge-ga" class="text-xs font-semibold px-2.5 py-1 rounded-md hidden self-start sm:self-center"></div>
+          </div>
+
+          <!-- Sentence (घ) -->
+          <div class="exercise-item p-3.5 sm:p-4 rounded-xl border border-slate-200 bg-white/95 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-2.5" id="item-gha">
+            <div class="text-base sm:text-lg font-medium text-slate-800 flex flex-wrap items-baseline gap-x-1.5 gap-y-1">
+              <span class="font-bold text-slate-600 min-w-[2rem]">(घ)</span>
+              <span>सारा सामान <span class="text-pink-600 font-semibold">अंदर</span> से उठाकर</span>
+              <input 
+                type="text" 
+                id="input-gha" 
+                data-qid="gha"
+                class="fill-blank-input w-28 sm:w-36 px-2 py-0.5 text-base sm:text-lg" 
+                placeholder="यहाँ लिखें" 
+                autocomplete="off"
+                onfocus="currentFocusedInput = 'input-gha'"
+                onkeydown="handleKey(event, null)"
+              />
+              <span>रख दो।</span>
+            </div>
+            <div id="badge-gha" class="text-xs font-semibold px-2.5 py-1 rounded-md hidden self-start sm:self-center"></div>
+          </div>
+
+        </div>
+
+        <div class="mt-6 pt-4 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-2.5">
+            <button type="button" onclick="checkAnswers()" class="px-5 py-2 bg-sky-600 hover:bg-sky-700 active:bg-sky-800 text-white font-semibold rounded-xl shadow-md shadow-sky-600/25 transition-all flex items-center gap-1.5 cursor-pointer text-sm sm:text-base">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <span>उत्तर जाँचें</span>
+            </button>
+            <button type="button" onclick="resetExercise()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 font-semibold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer text-sm sm:text-base">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+              </svg>
+              <span>पुनः प्रयास करें</span>
+            </button>
+          </div>
+
+          <div id="status-badge" class="hidden px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold"></div>
+        </div>
+
+        <!-- Explanations Box -->
+        <div id="explanation-box" class="hidden mt-5 p-4 rounded-xl border border-sky-200 bg-sky-50/80 text-xs sm:text-sm space-y-2">
+          <h3 class="font-bold text-sm sm:text-base text-sky-900 flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span>व्याकरण स्पष्टीकरण (विलोम शब्द):</span>
+          </h3>
+          <ul class="space-y-1.5 text-slate-700 list-disc list-inside">
+            <li><strong>(क) आगे का विलोम:</strong> 'आगे' का विपरीतार्थक शब्द <strong>'पीछे'</strong> होता है। (मेरा पैर आगे है, आपका पीछे।)</li>
+            <li><strong>(ख) छोटा का विलोम:</strong> 'छोटा' का विपरीतार्थक शब्द <strong>'बड़ा'</strong> होता है। (रमेश दिनेश से छोटा है और दिनेश रमेश से बड़ा है।)</li>
+            <li><strong>(ग) आज का विलोम:</strong> 'आज' का विपरीतार्थक शब्द <strong>'कल'</strong> होता है। (आप आज नहीं कल जाइएगा।)</li>
+            <li><strong>(घ) अंदर का विलोम:</strong> 'अंदर' का विपरीतार्थक शब्द <strong>'बाहर'</strong> होता है। (सारा सामान अंदर से उठाकर बाहर रख दो।)</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-4 text-center text-xs text-slate-400">
+    कक्षा अभ्यास कार्य • रिक्त स्थान पूर्ति कीजिए-
+  </footer>
+
+  <script>
+    // Correct accepted answers
+    const expectedAnswers = {
+      ka: ['पीछे'],
+      kha: ['बड़ा'],
+      ga: ['कल'],
+      gha: ['बाहर']
+    };
+
+    const qids = ['ka', 'kha', 'ga', 'gha'];
+    let currentFocusedInput = 'input-ka';
+
+    // Web Audio Synthesizer for feedback
+    let audioCtx = null;
+    function getAudioContext() {
+      if (!audioCtx) {
+        const AudioClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioClass) audioCtx = new AudioClass();
+      }
+      return audioCtx;
+    }
+
+    function playTone(freq, type = 'sine', duration = 0.12) {
+      try {
+        const ctx = getAudioContext();
+        if (!ctx) return;
+        if (ctx.state === 'suspended') {
+          ctx.resume();
+        }
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        gain.gain.setValueAtTime(0.1, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + duration);
+      } catch (e) {
+        // Audio unavailable
+      }
+    }
+
+    // Enter key moves to next input or checks answers
+    function handleKey(e, nextId) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        if (nextId) {
+          const next = document.getElementById(nextId);
+          if (next) next.focus();
+        } else {
+          checkAnswers();
+        }
+      }
+    }
+
+    // Helper to fill word from chip into focused or first empty blank
+    function fillFocused(word) {
+      playTone(520);
+      let targetInput = document.getElementById(currentFocusedInput);
+      
+      // If current focused input already has text, look for first empty one
+      if (targetInput && targetInput.value.trim() !== '') {
+        for (let qid of qids) {
+          const inp = document.getElementById(`input-${qid}`);
+          if (inp && inp.value.trim() === '') {
+            targetInput = inp;
+            currentFocusedInput = `input-${qid}`;
+            break;
+          }
+        }
+      }
+
+      if (targetInput) {
+        targetInput.value = word;
+        targetInput.focus();
+      }
+    }
+
+    function checkAnswers() {
+      let filledCount = 0;
+      let score = 0;
+
+      qids.forEach(qid => {
+        const inp = document.getElementById(`input-${qid}`);
+        if (inp && inp.value.trim() !== '') {
+          filledCount++;
+        }
+      });
+
+      if (filledCount === 0) {
+        showStatus('कृपया पहले रिक्त स्थानों में उत्तर भरें!', 'warning');
+        playTone(300, 'triangle', 0.2);
+        return;
+      }
+
+      qids.forEach(qid => {
+        const item = document.getElementById(`item-${qid}`);
+        const inp = document.getElementById(`input-${qid}`);
+        const badge = document.getElementById(`badge-${qid}`);
+        if (!item || !inp || !badge) return;
+
+        const userVal = inp.value.trim();
+
+        // Reset previous style markers
+        item.classList.remove('border-emerald-400', 'bg-emerald-50/40', 'border-rose-400', 'bg-rose-50/40');
+        inp.classList.remove('correct', 'incorrect');
+        badge.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-800', 'bg-rose-100', 'text-rose-800');
+
+        const validList = expectedAnswers[qid];
+        const isCorrect = validList.includes(userVal);
+
+        if (isCorrect) {
+          score++;
+          inp.classList.add('correct');
+          item.classList.add('border-emerald-400', 'bg-emerald-50/40');
+          badge.classList.add('bg-emerald-100', 'text-emerald-800');
+          badge.innerHTML = `✓ सही`;
+          badge.classList.remove('hidden');
+        } else {
+          inp.classList.add('incorrect');
+          item.classList.add('border-rose-400', 'bg-rose-50/40');
+          badge.classList.add('bg-rose-100', 'text-rose-800');
+          badge.innerHTML = `✗ सही: <strong>${validList[0]}</strong>`;
+          badge.classList.remove('hidden');
+        }
+      });
+
+      if (score === 4) {
+        playTone(660, 'triangle', 0.18);
+        setTimeout(() => playTone(880, 'triangle', 0.3), 150);
+        showStatus('शाबाश! आपके सभी 4 उत्तर बिल्कुल सही हैं! (4/4)', 'success');
+      } else {
+        playTone(320, 'sawtooth', 0.25);
+        showStatus(`आपने 4 में से ${score} सही उत्तर दिए हैं। नीचे व्याख्या देखें।`, 'info');
+      }
+
+      const explanation = document.getElementById('explanation-box');
+      if (explanation) explanation.classList.remove('hidden');
+    }
+
+    function showStatus(message, type) {
+      const badge = document.getElementById('status-badge');
+      if (!badge) return;
+      badge.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-800', 'border-emerald-300', 'bg-amber-100', 'text-amber-800', 'border-amber-300', 'bg-sky-100', 'text-sky-800', 'border-sky-300');
+      badge.classList.add('border');
+
+      if (type === 'success') {
+        badge.classList.add('bg-emerald-100', 'text-emerald-800', 'border-emerald-300');
+      } else if (type === 'warning') {
+        badge.classList.add('bg-amber-100', 'text-amber-800', 'border-amber-300');
+      } else {
+        badge.classList.add('bg-sky-100', 'text-sky-800', 'border-sky-300');
+      }
+
+      badge.textContent = message;
+    }
+
+    function resetExercise() {
+      playTone(420);
+      qids.forEach(qid => {
+        const item = document.getElementById(`item-${qid}`);
+        const inp = document.getElementById(`input-${qid}`);
+        const badge = document.getElementById(`badge-${qid}`);
+
+        if (inp) {
+          inp.value = '';
+          inp.classList.remove('correct', 'incorrect');
+        }
+        if (item) {
+          item.classList.remove('border-emerald-400', 'bg-emerald-50/40', 'border-rose-400', 'bg-rose-50/40');
+        }
+        if (badge) {
+          badge.classList.add('hidden');
+          badge.innerHTML = '';
+        }
+      });
+
+      const badge = document.getElementById('status-badge');
+      if (badge) badge.classList.add('hidden');
+      const exp = document.getElementById('explanation-box');
+      if (exp) exp.classList.add('hidden');
+      
+      const firstInput = document.getElementById('input-ka');
+      if (firstInput) firstInput.focus();
+    }
+  </script>
+</body>
+</html>

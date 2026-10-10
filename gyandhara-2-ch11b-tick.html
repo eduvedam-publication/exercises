@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>विलोम शब्द अभ्यास</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Noto Sans Devanagari & Baloo 2 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Canvas Confetti for celebration -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Noto Sans Devanagari', 'Baloo 2', sans-serif;
+      background: radial-gradient(circle at top left, #f0fdfa, #f8fafc 50%, #eff6ff);
+    }
+    .heading-font {
+      font-family: 'Baloo 2', 'Noto Sans Devanagari', sans-serif;
+    }
+    .highlight-pink {
+      color: #e11d48;
+      font-weight: 600;
+    }
+    .choice-btn {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .choice-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+    }
+    .choice-btn:active:not(:disabled) {
+      transform: scale(0.96);
+    }
+    .card-shadow {
+      box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.06), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-800 flex flex-col justify-between py-6 px-4 sm:px-6 lg:px-8">
+
+  <main class="max-w-3xl w-full mx-auto my-auto">
+    <!-- Main Exercise Card -->
+    <div class="bg-white rounded-3xl p-6 sm:p-10 card-shadow border border-slate-100">
+      
+      <!-- Subject Header & Progress Bar -->
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
+        <div class="flex items-center gap-2 text-sm font-semibold text-sky-600 bg-sky-50 px-3 py-1 rounded-full">
+          <span>📚</span>
+          <span>हिंदी व्याकरण अभ्यास</span>
+        </div>
+        <div id="statusBadge" class="text-xs sm:text-sm font-medium text-slate-500 bg-slate-100 px-3 py-1 rounded-full">
+          कुल प्रश्न: 4
+        </div>
+      </div>
+
+      <!-- Instruction Title Exactly As Provided -->
+      <div class="mb-8">
+        <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-sky-500 leading-snug tracking-tight">
+          निम्नलिखित कथनों में विलोम शब्द की दृष्टि से सही (<span class="text-sky-600">✓</span>) या गलत (<span class="text-sky-600">✗</span>) का चिह्न लगाइए-
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-500 mt-2">
+          प्रत्येक कथन को ध्यान से पढ़ें और उपयुक्त चिह्न का चयन करें।
+        </p>
+      </div>
+
+      <div class="space-y-4" id="questionsList">
+
+        <!-- Question 1: (क) -->
+        <div class="question-row p-4 sm:p-5 rounded-2xl bg-slate-50/80 hover:bg-slate-50 transition border border-slate-200/70" data-index="0" data-correct="true">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="text-base sm:text-lg text-slate-800 font-medium leading-relaxed">
+              <span class="font-semibold text-slate-500 mr-2">(क)</span>
+              <span>उल्टे अर्थ वाले शब्द विलोम शब्द होते हैं।</span>
+            </div>
+            <div class="flex items-center gap-2 self-end sm:self-center shrink-0">
+              <button type="button" onclick="selectAnswer(0, true)" class="choice-btn tick-btn w-12 h-12 rounded-xl flex items-center justify-center font-bold text-xl border-2 border-slate-300 text-slate-600 hover:border-emerald-500 hover:text-emerald-600 hover:bg-emerald-50 bg-white" title="सही (✓)">
+                ✓
+              </button>
+              <button type="button" onclick="selectAnswer(0, false)" class="choice-btn cross-btn w-12 h-12 rounded-xl flex items-center justify-center font-bold text-xl border-2 border-slate-300 text-slate-600 hover:border-rose-500 hover:text-rose-600 hover:bg-rose-50 bg-white" title="गलत (✗)">
+                ✗
+              </button>
+            </div>
+          </div>
+          <div class="feedback-msg hidden mt-3 pt-3 border-t border-slate-200/80 text-sm font-medium"></div>
+        </div>
+
+        <!-- Question 2: (ख) -->
+        <div class="question-row p-4 sm:p-5 rounded-2xl bg-slate-50/80 hover:bg-slate-50 transition border border-slate-200/70" data-index="1" data-correct="true">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="text-base sm:text-lg text-slate-800 font-medium leading-relaxed">
+              <span class="font-semibold text-slate-500 mr-2">(ख)</span>
+              <span><span class="highlight-pink">सच</span> का विलोम <span class="highlight-pink">झूठ</span> है।</span>
+            </div>
+            <div class="flex items-center gap-2 self-end sm:self-center shrink-0">
+              <button type="button" onclick="selectAnswer(1, true)" class="choice-btn tick-btn w-12 h-12 rounded-xl flex items-center justify-center font-bold text-xl border-2 border-slate-300 text-slate-600 hover:border-emerald-500 hover:text-emerald-600 hover:bg-emerald-50 bg-white" title="सही (✓)">
+                ✓
+              </button>
+              <button type="button" onclick="selectAnswer(1, false)" class="choice-btn cross-btn w-12 h-12 rounded-xl flex items-center justify-center font-bold text-xl border-2 border-slate-300 text-slate-600 hover:border-rose-500 hover:text-rose-600 hover:bg-rose-50 bg-white" title="गलत (✗)">
+                ✗
+              </button>
+            </div>
+          </div>
+          <div class="feedback-msg hidden mt-3 pt-3 border-t border-slate-200/80 text-sm font-medium"></div>
+        </div>
+
+        <!-- Question 3: (ग) -->
+        <div class="question-row p-4 sm:p-5 rounded-2xl bg-slate-50/80 hover:bg-slate-50 transition border border-slate-200/70" data-index="2" data-correct="false">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="text-base sm:text-lg text-slate-800 font-medium leading-relaxed">
+              <span class="font-semibold text-slate-500 mr-2">(ग)</span>
+              <span><span class="highlight-pink">उजाला</span> का विलोम <span class="highlight-pink">रात</span> होगा।</span>
+            </div>
+            <div class="flex items-center gap-2 self-end sm:self-center shrink-0">
+              <button type="button" onclick="selectAnswer(2, true)" class="choice-btn tick-btn w-12 h-12 rounded-xl flex items-center justify-center font-bold text-xl border-2 border-slate-300 text-slate-600 hover:border-emerald-500 hover:text-emerald-600 hover:bg-emerald-50 bg-white" title="सही (✓)">
+                ✓
+              </button>
+              <button type="button" onclick="selectAnswer(2, false)" class="choice-btn cross-btn w-12 h-12 rounded-xl flex items-center justify-center font-bold text-xl border-2 border-slate-300 text-slate-600 hover:border-rose-500 hover:text-rose-600 hover:bg-rose-50 bg-white" title="गलत (✗)">
+                ✗
+              </button>
+            </div>
+          </div>
+          <div class="feedback-msg hidden mt-3 pt-3 border-t border-slate-200/80 text-sm font-medium"></div>
+        </div>
+
+        <!-- Question 4: (घ) -->
+        <div class="question-row p-4 sm:p-5 rounded-2xl bg-slate-50/80 hover:bg-slate-50 transition border border-slate-200/70" data-index="3" data-correct="true">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="text-base sm:text-lg text-slate-800 font-medium leading-relaxed">
+              <span class="font-semibold text-slate-500 mr-2">(घ)</span>
+              <span>चूहा बिल के <span class="highlight-pink">अंदर</span> था और बिल्ली <span class="highlight-pink">बाहर</span> बैठी थी।</span>
+            </div>
+            <div class="flex items-center gap-2 self-end sm:self-center shrink-0">
+              <button type="button" onclick="selectAnswer(3, true)" class="choice-btn tick-btn w-12 h-12 rounded-xl flex items-center justify-center font-bold text-xl border-2 border-slate-300 text-slate-600 hover:border-emerald-500 hover:text-emerald-600 hover:bg-emerald-50 bg-white" title="सही (✓)">
+                ✓
+              </button>
+              <button type="button" onclick="selectAnswer(3, false)" class="choice-btn cross-btn w-12 h-12 rounded-xl flex items-center justify-center font-bold text-xl border-2 border-slate-300 text-slate-600 hover:border-rose-500 hover:text-rose-600 hover:bg-rose-50 bg-white" title="गलत (✗)">
+                ✗
+              </button>
+            </div>
+          </div>
+          <div class="feedback-msg hidden mt-3 pt-3 border-t border-slate-200/80 text-sm font-medium"></div>
+        </div>
+
+      </div>
+
+      <div class="mt-8 pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div id="resultSummary" class="text-sm sm:text-base font-semibold text-slate-600">
+          कृपया सभी प्रश्नों के उत्तर चुनें।
+        </div>
+
+        <div class="flex items-center gap-3 w-full sm:w-auto">
+          <button id="resetBtn" onclick="resetExercise()" type="button" class="flex-1 sm:flex-none px-5 py-3 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-50 font-medium text-sm transition">
+            पुनः प्रयास (Reset)
+          </button>
+          <button id="checkBtn" onclick="checkAnswers()" type="button" class="flex-1 sm:flex-none px-6 py-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-semibold text-sm shadow-md shadow-sky-600/20 transition">
+            जाँच करें (Check Answers)
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="text-center text-xs text-slate-400 mt-6">
+    कक्षा अभ्यास पत्र • विलोम शब्द
+  </footer>
+
+  <script>
+    // State storage for user choices
+    const userAnswers = [null, null, null, null];
+    
+    // Explanations for each statement
+    const explanations = [
+      {
+        correct: true,
+        reason: "सही (✓) — विपरीत या उल्टे अर्थ बताने वाले शब्दों को विलोम शब्द (विपरीतार्थक) कहते हैं।"
+      },
+      {
+        correct: true,
+        reason: "सही (✓) — 'सच' का विलोम शब्द 'झूठ' ही होता है।"
+      },
+      {
+        correct: false,
+        reason: "गलत (✗) — 'उजाला' का विलोम शब्द 'अंधेरा' होता है ('रात' का विलोम 'दिन' होता है)।"
+      },
+      {
+        correct: true,
+        reason: "सही (✓) — वाक्य में 'अंदर' और 'बाहर' परस्पर सही विलोम शब्द युग्म हैं।"
+      }
+    ];
+
+    // Handle user selection of Tick or Cross
+    function selectAnswer(index, value) {
+      userAnswers[index] = value;
+      const row = document.querySelector(`.question-row[data-index="${index}"]`);
+      const tickBtn = row.querySelector('.tick-btn');
+      const crossBtn = row.querySelector('.cross-btn');
+
+      if (value === true) {
+        // Selected Tick (✓)
+        tickBtn.className = "choice-btn tick-btn w-12 h-12 rounded-xl flex items-center justify-center font-bold text-xl border-2 border-emerald-500 bg-emerald-500 text-white shadow-md shadow-emerald-500/20";
+        crossBtn.className = "choice-btn cross-btn w-12 h-12 rounded-xl flex items-center justify-center font-bold text-xl border-2 border-slate-300 text-slate-600 hover:border-rose-500 hover:text-rose-600 hover:bg-rose-50 bg-white";
+      } else {
+        // Selected Cross (✗)
+        crossBtn.className = "choice-btn cross-btn w-12 h-12 rounded-xl flex items-center justify-center font-bold text-xl border-2 border-rose-500 bg-rose-500 text-white shadow-md shadow-rose-500/20";
+        tickBtn.className = "choice-btn tick-btn w-12 h-12 rounded-xl flex items-center justify-center font-bold text-xl border-2 border-slate-300 text-slate-600 hover:border-emerald-500 hover:text-emerald-600 hover:bg-emerald-50 bg-white";
+      }
+
+      // Clear previous feedback on modification
+      const feedback = row.querySelector('.feedback-msg');
+      feedback.classList.add('hidden');
+      row.classList.remove('bg-emerald-50/50', 'border-emerald-300', 'bg-rose-50/50', 'border-rose-300');
+
+      updateProgress();
+    }
+
+    // Update status text
+    function updateProgress() {
+      const answeredCount = userAnswers.filter(a => a !== null).length;
+      const statusBadge = document.getElementById('statusBadge');
+      statusBadge.innerText = `हल किए गए: ${answeredCount}/4`;
+
+      const summary = document.getElementById('resultSummary');
+      if (answeredCount === 4) {
+        summary.innerHTML = '<span class="text-sky-600">सभी उत्तर चुन लिए गए हैं। जाँचने के लिए बटन दबाएँ।</span>';
+      } else {
+        summary.innerHTML = `<span>कृपया सभी प्रश्नों के उत्तर चुनें (${answeredCount}/4 पूर्ण)।</span>`;
+      }
+    }
+
+    // Validate answers and show feedback
+    function checkAnswers() {
+      const answeredCount = userAnswers.filter(a => a !== null).length;
+      if (answeredCount < 4) {
+        const summary = document.getElementById('resultSummary');
+        summary.innerHTML = '<span class="text-amber-600 font-semibold">⚠️ कृपया पहले सभी 4 प्रश्नों का उत्तर दें!</span>';
+        return;
+      }
+
+      let score = 0;
+
+      explanations.forEach((item, idx) => {
+        const row = document.querySelector(`.question-row[data-index="${idx}"]`);
+        const feedback = row.querySelector('.feedback-msg');
+        const isUserCorrect = (userAnswers[idx] === item.correct);
+
+        feedback.classList.remove('hidden');
+
+        if (isUserCorrect) {
+          score++;
+          row.classList.remove('bg-rose-50/50', 'border-rose-300');
+          row.classList.add('bg-emerald-50/50', 'border-emerald-300');
+          feedback.className = 'feedback-msg mt-3 pt-3 border-t border-emerald-200 text-emerald-800 text-sm font-medium flex items-center gap-2';
+          feedback.innerHTML = `<span>🎉 बिल्कुल सही!</span> <span class="text-emerald-700 text-xs sm:text-sm">(${item.reason})</span>`;
+        } else {
+          row.classList.remove('bg-emerald-50/50', 'border-emerald-300');
+          row.classList.add('bg-rose-50/50', 'border-rose-300');
+          feedback.className = 'feedback-msg mt-3 pt-3 border-t border-rose-200 text-rose-800 text-sm font-medium flex items-center gap-2';
+          feedback.innerHTML = `<span>❌ उत्तर गलत है।</span> <span class="text-rose-700 text-xs sm:text-sm">(${item.reason})</span>`;
+        }
+      });
+
+      const summary = document.getElementById('resultSummary');
+      if (score === 4) {
+        summary.innerHTML = `<span class="text-emerald-600 text-lg">शानदार! आपने सभी 4/4 सही उत्तर दिए! 🌟</span>`;
+        // Trigger celebratory confetti
+        if (typeof confetti === 'function') {
+          confetti({
+            particleCount: 80,
+            spread: 70,
+            origin: { y: 0.6 }
+          });
+        }
+      } else {
+        summary.innerHTML = `<span class="text-slate-800 font-bold">आपका स्कोर: <span class="text-sky-600">${score}/4</span> सही। सुधार के लिए स्पष्टीकरण देखें।</span>`;
+      }
+    }
+
+    // Reset whole exercise
+    function resetExercise() {
+      for (let i = 0; i < 4; i++) {
+        userAnswers[i] = null;
+        const row = document.querySelector(`.question-row[data-index="${i}"]`);
+        const tickBtn = row.querySelector('.tick-btn');
+        const crossBtn = row.querySelector('.cross-btn');
+        const feedback = row.querySelector('.feedback-msg');
+
+        tickBtn.className = "choice-btn tick-btn w-12 h-12 rounded-xl flex items-center justify-center font-bold text-xl border-2 border-slate-300 text-slate-600 hover:border-emerald-500 hover:text-emerald-600 hover:bg-emerald-50 bg-white";
+        crossBtn.className = "choice-btn cross-btn w-12 h-12 rounded-xl flex items-center justify-center font-bold text-xl border-2 border-slate-300 text-slate-600 hover:border-rose-500 hover:text-rose-600 hover:bg-rose-50 bg-white";
+
+        feedback.classList.add('hidden');
+        feedback.innerHTML = '';
+        row.classList.remove('bg-emerald-50/50', 'border-emerald-300', 'bg-rose-50/50', 'border-rose-300');
+      }
+
+      document.getElementById('statusBadge').innerText = "कुल प्रश्न: 4";
+      document.getElementById('resultSummary').innerHTML = "कृपया सभी प्रश्नों के उत्तर चुनें।";
+    }
+  </script>
+</body>
+</html>
