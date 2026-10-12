@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>अभ्यास 1 - सही विकल्प पर सही (✓) का चिह्न लगाइए-</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Mukta', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Clean paper styling for physical classroom copies */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            body {
+                background: white !important;
+                color: #000 !important;
+                padding: 0 !important;
+            }
+            .worksheet-card {
+                box-shadow: none !important;
+                border: 1px solid #111 !important;
+                padding: 1.5rem !important;
+                max-width: 100% !important;
+            }
+            .checkbox-target {
+                border: 1.8px solid #000 !important;
+                background-color: transparent !important;
+                color: #000 !important;
+            }
+        }
+
+        .checkbox-target {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="bg-amber-50/40 text-slate-800 min-h-screen py-6 px-3 sm:px-6 md:px-8">
+
+    <div class="max-w-4xl mx-auto">
+        <!-- Interactive Header Toolbar (Hidden during print) -->
+        <header class="no-print mb-6 flex flex-wrap items-center justify-between gap-4 bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
+            <div class="flex items-center gap-3">
+                <span class="p-2.5 bg-amber-100 text-amber-900 rounded-xl">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                </span>
+                <div>
+                    <h1 class="text-xl font-bold text-slate-900 leading-tight">हिंदी व्याकरण अभ्यास कार्यपत्रिका</h1>
+                    <p class="text-xs text-slate-500 font-medium">वाक्यांश के लिए एक शब्द • बहुविकल्पीय प्रश्न</p>
+                </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="flex items-center flex-wrap gap-2 text-sm font-semibold">
+                <button onclick="checkAnswers()" class="flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white rounded-xl shadow-sm transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    उत्तर जाँचें (Check)
+                </button>
+                <button onclick="resetAnswers()" class="flex items-center gap-1.5 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 rounded-xl transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                    रीसेट (Reset)
+                </button>
+                <button onclick="window.print()" class="flex items-center gap-1.5 px-3.5 py-2 bg-amber-100 hover:bg-amber-200 text-amber-900 rounded-xl transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                    </svg>
+                    प्रिंट करें (Print)
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Worksheet Container -->
+        <main class="worksheet-card bg-white rounded-3xl p-6 sm:p-10 md:p-14 shadow-md border border-slate-200 relative">
+            
+            <!-- Result Toast Notification -->
+            <div id="result-toast" class="hidden no-print mb-8 p-4 rounded-2xl text-center font-medium transition-all"></div>
+
+            <!-- Exercise Instruction (Verbatim from image) -->
+            <div class="mb-10 flex items-start gap-3">
+                <span class="text-2xl sm:text-3xl font-bold text-slate-900 select-none">1.</span>
+                <h2 class="text-xl sm:text-2xl md:text-[26px] font-bold text-slate-900 leading-relaxed tracking-wide">
+                    सही विकल्प पर सही (<span class="text-emerald-700 font-extrabold">✓</span>) का चिह्न लगाइए-
+                </h2>
+            </div>
+
+            <!-- Questions Container -->
+            <div class="space-y-8 sm:space-y-10" id="mcq-container">
+
+                <!-- Question (क) -->
+                <div class="p-4 sm:p-6 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50/50 transition">
+                    <div class="flex items-start gap-3 mb-5">
+                        <span class="text-xl sm:text-2xl font-bold text-slate-800 shrink-0">(क)</span>
+                        <p class="text-xl sm:text-2xl text-slate-800 leading-relaxed font-semibold">
+                            वाक्यांश के लिए एक शब्द के प्रयोग से भाषा बनती है-
+                        </p>
+                    </div>
+
+                    <!-- Options Grid (अ), (ब), (स) -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+                        <!-- Option (अ) -->
+                        <div onclick="selectOption('q1', 'अ')" id="opt-q1-अ" class="cursor-pointer flex items-center justify-between p-3.5 rounded-xl border-2 border-slate-200 hover:border-slate-400 bg-white transition group">
+                            <span class="text-lg sm:text-xl font-medium text-slate-800 group-hover:text-slate-900">
+                                <span class="font-bold text-slate-500 mr-1.5">(अ)</span> कुरूप
+                            </span>
+                            <div id="box-q1-अ" class="checkbox-target w-8 h-8 sm:w-9 sm:h-9 border-2 border-slate-700 rounded-lg bg-white flex items-center justify-center text-xl sm:text-2xl font-black select-none shrink-0 ml-2"></div>
+                        </div>
+
+                        <!-- Option (ब) -->
+                        <div onclick="selectOption('q1', 'ब')" id="opt-q1-ब" class="cursor-pointer flex items-center justify-between p-3.5 rounded-xl border-2 border-slate-200 hover:border-slate-400 bg-white transition group">
+                            <span class="text-lg sm:text-xl font-medium text-slate-800 group-hover:text-slate-900">
+                                <span class="font-bold text-slate-500 mr-1.5">(ब)</span> असुंदर
+                            </span>
+                            <div id="box-q1-ब" class="checkbox-target w-8 h-8 sm:w-9 sm:h-9 border-2 border-slate-700 rounded-lg bg-white flex items-center justify-center text-xl sm:text-2xl font-black select-none shrink-0 ml-2"></div>
+                        </div>
+
+                        <!-- Option (स) -->
+                        <div onclick="selectOption('q1', 'स')" id="opt-q1-स" class="cursor-pointer flex items-center justify-between p-3.5 rounded-xl border-2 border-slate-200 hover:border-slate-400 bg-white transition group">
+                            <span class="text-lg sm:text-xl font-medium text-slate-800 group-hover:text-slate-900">
+                                <span class="font-bold text-slate-500 mr-1.5">(स)</span> सुंदर
+                            </span>
+                            <div id="box-q1-स" class="checkbox-target w-8 h-8 sm:w-9 sm:h-9 border-2 border-slate-700 rounded-lg bg-white flex items-center justify-center text-xl sm:text-2xl font-black select-none shrink-0 ml-2"></div>
+                        </div>
+                    </div>
+                    <!-- Feedback box -->
+                    <div id="feedback-q1" class="hidden mt-4 pt-3 border-t border-slate-100 text-sm sm:text-base text-slate-600"></div>
+                </div>
+
+                <!-- Question (ख) -->
+                <div class="p-4 sm:p-6 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50/50 transition">
+                    <div class="flex items-start gap-3 mb-5">
+                        <span class="text-xl sm:text-2xl font-bold text-slate-800 shrink-0">(ख)</span>
+                        <p class="text-xl sm:text-2xl text-slate-800 leading-relaxed font-semibold">
+                            भाषा को सरल और प्रभावशाली बनाने के लिए प्रयोग करना चाहिए-
+                        </p>
+                    </div>
+
+                    <!-- Options Layout (Row 1: (अ), (ब); Row 2: (स)) -->
+                    <div class="space-y-3 sm:space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+                            <!-- Option (अ) -->
+                            <div onclick="selectOption('q2', 'अ')" id="opt-q2-अ" class="cursor-pointer flex items-center justify-between p-3.5 rounded-xl border-2 border-slate-200 hover:border-slate-400 bg-white transition group">
+                                <span class="text-lg sm:text-xl font-medium text-slate-800 group-hover:text-slate-900">
+                                    <span class="font-bold text-slate-500 mr-1.5">(अ)</span> वाक्यांश के लिए एक शब्द
+                                </span>
+                                <div id="box-q2-अ" class="checkbox-target w-8 h-8 sm:w-9 sm:h-9 border-2 border-slate-700 rounded-lg bg-white flex items-center justify-center text-xl sm:text-2xl font-black shrink-0 ml-2 select-none"></div>
+                            </div>
+
+                            <!-- Option (ब) -->
+                            <div onclick="selectOption('q2', 'ब')" id="opt-q2-ब" class="cursor-pointer flex items-center justify-between p-3.5 rounded-xl border-2 border-slate-200 hover:border-slate-400 bg-white transition group">
+                                <span class="text-lg sm:text-xl font-medium text-slate-800 group-hover:text-slate-900">
+                                    <span class="font-bold text-slate-500 mr-1.5">(ब)</span> एक शब्द के स्थान पर अनेक शब्द
+                                </span>
+                                <div id="box-q2-ब" class="checkbox-target w-8 h-8 sm:w-9 sm:h-9 border-2 border-slate-700 rounded-lg bg-white flex items-center justify-center text-xl sm:text-2xl font-black shrink-0 ml-2 select-none"></div>
+                            </div>
+                        </div>
+
+                        <!-- Option (स) -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+                            <div onclick="selectOption('q2', 'स')" id="opt-q2-स" class="cursor-pointer flex items-center justify-between p-3.5 rounded-xl border-2 border-slate-200 hover:border-slate-400 bg-white transition group">
+                                <span class="text-lg sm:text-xl font-medium text-slate-800 group-hover:text-slate-900">
+                                    <span class="font-bold text-slate-500 mr-1.5">(स)</span> दोनों
+                                </span>
+                                <div id="box-q2-स" class="checkbox-target w-8 h-8 sm:w-9 sm:h-9 border-2 border-slate-700 rounded-lg bg-white flex items-center justify-center text-xl sm:text-2xl font-black shrink-0 ml-2 select-none"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="feedback-q2" class="hidden mt-4 pt-3 border-t border-slate-100 text-sm sm:text-base text-slate-600"></div>
+                </div>
+
+                <!-- Question (ग) -->
+                <div class="p-4 sm:p-6 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50/50 transition">
+                    <div class="flex items-start gap-3 mb-5">
+                        <span class="text-xl sm:text-2xl font-bold text-slate-800 shrink-0">(ग)</span>
+                        <p class="text-xl sm:text-2xl text-slate-800 leading-relaxed font-semibold">
+                            वाक्यांश के स्थान पर एक शब्द का प्रयोग भाषा को बनाता है-
+                        </p>
+                    </div>
+
+                    <!-- Options Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+                        <!-- Option (अ) -->
+                        <div onclick="selectOption('q3', 'अ')" id="opt-q3-अ" class="cursor-pointer flex items-center justify-between p-3.5 rounded-xl border-2 border-slate-200 hover:border-slate-400 bg-white transition group">
+                            <span class="text-lg sm:text-xl font-medium text-slate-800 group-hover:text-slate-900">
+                                <span class="font-bold text-slate-500 mr-1.5">(अ)</span> विशाल
+                            </span>
+                            <div id="box-q3-अ" class="checkbox-target w-8 h-8 sm:w-9 sm:h-9 border-2 border-slate-700 rounded-lg bg-white flex items-center justify-center text-xl sm:text-2xl font-black shrink-0 ml-2 select-none"></div>
+                        </div>
+
+                        <!-- Option (ब) -->
+                        <div onclick="selectOption('q3', 'ब')" id="opt-q3-ब" class="cursor-pointer flex items-center justify-between p-3.5 rounded-xl border-2 border-slate-200 hover:border-slate-400 bg-white transition group">
+                            <span class="text-lg sm:text-xl font-medium text-slate-800 group-hover:text-slate-900">
+                                <span class="font-bold text-slate-500 mr-1.5">(ब)</span> संक्षिप्त
+                            </span>
+                            <div id="box-q3-ब" class="checkbox-target w-8 h-8 sm:w-9 sm:h-9 border-2 border-slate-700 rounded-lg bg-white flex items-center justify-center text-xl sm:text-2xl font-black shrink-0 ml-2 select-none"></div>
+                        </div>
+
+                        <!-- Option (स) -->
+                        <div onclick="selectOption('q3', 'स')" id="opt-q3-स" class="cursor-pointer flex items-center justify-between p-3.5 rounded-xl border-2 border-slate-200 hover:border-slate-400 bg-white transition group">
+                            <span class="text-lg sm:text-xl font-medium text-slate-800 group-hover:text-slate-900">
+                                <span class="font-bold text-slate-500 mr-1.5">(स)</span> विस्तृत
+                            </span>
+                            <div id="box-q3-स" class="checkbox-target w-8 h-8 sm:w-9 sm:h-9 border-2 border-slate-700 rounded-lg bg-white flex items-center justify-center text-xl sm:text-2xl font-black shrink-0 ml-2 select-none"></div>
+                        </div>
+                    </div>
+                    <div id="feedback-q3" class="hidden mt-4 pt-3 border-t border-slate-100 text-sm sm:text-base text-slate-600"></div>
+                </div>
+
+                <!-- Question (घ) -->
+                <div class="p-4 sm:p-6 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50/50 transition">
+                    <div class="flex items-start gap-3 mb-5">
+                        <span class="text-xl sm:text-2xl font-bold text-slate-800 shrink-0">(घ)</span>
+                        <p class="text-xl sm:text-2xl text-slate-800 leading-relaxed font-semibold">
+                            फल-सब्ज़ी खाने वाले को कहते हैं-
+                        </p>
+                    </div>
+
+                    <!-- Options Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+                        <!-- Option (अ) -->
+                        <div onclick="selectOption('q4', 'अ')" id="opt-q4-अ" class="cursor-pointer flex items-center justify-between p-3.5 rounded-xl border-2 border-slate-200 hover:border-slate-400 bg-white transition group">
+                            <span class="text-lg sm:text-xl font-medium text-slate-800 group-hover:text-slate-900">
+                                <span class="font-bold text-slate-500 mr-1.5">(अ)</span> मांसाहारी
+                            </span>
+                            <div id="box-q4-अ" class="checkbox-target w-8 h-8 sm:w-9 sm:h-9 border-2 border-slate-700 rounded-lg bg-white flex items-center justify-center text-xl sm:text-2xl font-black shrink-0 ml-2 select-none"></div>
+                        </div>
+
+                        <!-- Option (ब) -->
+                        <div onclick="selectOption('q4', 'ब')" id="opt-q4-ब" class="cursor-pointer flex items-center justify-between p-3.5 rounded-xl border-2 border-slate-200 hover:border-slate-400 bg-white transition group">
+                            <span class="text-lg sm:text-xl font-medium text-slate-800 group-hover:text-slate-900">
+                                <span class="font-bold text-slate-500 mr-1.5">(ब)</span> देशी
+                            </span>
+                            <div id="box-q4-ब" class="checkbox-target w-8 h-8 sm:w-9 sm:h-9 border-2 border-slate-700 rounded-lg bg-white flex items-center justify-center text-xl sm:text-2xl font-black shrink-0 ml-2 select-none"></div>
+                        </div>
+
+                        <!-- Option (स) -->
+                        <div onclick="selectOption('q4', 'स')" id="opt-q4-स" class="cursor-pointer flex items-center justify-between p-3.5 rounded-xl border-2 border-slate-200 hover:border-slate-400 bg-white transition group">
+                            <span class="text-lg sm:text-xl font-medium text-slate-800 group-hover:text-slate-900">
+                                <span class="font-bold text-slate-500 mr-1.5">(स)</span> शाकाहारी
+                            </span>
+                            <div id="box-q4-स" class="checkbox-target w-8 h-8 sm:w-9 sm:h-9 border-2 border-slate-700 rounded-lg bg-white flex items-center justify-center text-xl sm:text-2xl font-black shrink-0 ml-2 select-none"></div>
+                        </div>
+                    </div>
+                    <div id="feedback-q4" class="hidden mt-4 pt-3 border-t border-slate-100 text-sm sm:text-base text-slate-600"></div>
+                </div>
+
+            </div>
+
+            <!-- Worksheet Footer -->
+            <footer class="mt-12 pt-6 border-t border-slate-200 flex flex-wrap items-center justify-between text-xs text-slate-500 gap-3">
+                <span>पाठ्य सामग्री: हिंदी व्याकरण • वाक्यांश के लिए एक शब्द</span>
+                <span>अभ्यास कार्यपत्रिका 1 • सही विकल्प पर सही (✓) का चिह्न लगाइए-</span>
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        // State store for selected user choices
+        const userSelections = {
+            q1: null,
+            q2: null,
+            q3: null,
+            q4: null
+        };
+
+        // Standard answer key based on Hindi grammar curriculum
+        const answerKey = {
+            q1: {
+                correct: 'स',
+                correctLabel: '(स) सुंदर',
+                explanation: 'वाक्यांश के लिए एक शब्द के प्रयोग से भाषा संक्षिप्त, सुगठित और <strong>सुंदर</strong> बनती है।'
+            },
+            q2: {
+                correct: 'अ',
+                correctLabel: '(अ) वाक्यांश के लिए एक शब्द',
+                explanation: 'भाषा को सरल और प्रभावशाली बनाने के लिए <strong>वाक्यांश के लिए एक शब्द</strong> का प्रयोग करना चाहिए।'
+            },
+            q3: {
+                correct: 'ब',
+                correctLabel: '(ब) संक्षिप्त',
+                explanation: 'वाक्यांश के स्थान पर एक शब्द का प्रयोग भाषा को <strong>संक्षिप्त</strong> (कम शब्दों में प्रभावशाली) बनाता है।'
+            },
+            q4: {
+                correct: 'स',
+                correctLabel: '(स) शाकाहारी',
+                explanation: 'फल-सब्ज़ी और अन्न खाने वाले को <strong>शाकाहारी</strong> कहते हैं।'
+            }
+        };
+
+        // Handle option selection
+        function selectOption(qid, optKey) {
+            const options = ['अ', 'ब', 'स'];
+            const currentSelected = userSelections[qid];
+
+            // If tapped already selected option, toggle off
+            if (currentSelected === optKey) {
+                userSelections[qid] = null;
+                const card = document.getElementById(`opt-${qid}-${optKey}`);
+                const box = document.getElementById(`box-${qid}-${optKey}`);
+                card.classList.remove('border-amber-600', 'bg-amber-50/50');
+                box.textContent = '';
+                box.classList.remove('text-emerald-700', 'border-emerald-700', 'bg-emerald-50');
+                return;
+            }
+
+            // Set new selection
+            userSelections[qid] = optKey;
+
+            // Reset other options for this question
+            options.forEach(opt => {
+                const card = document.getElementById(`opt-${qid}-${opt}`);
+                const box = document.getElementById(`box-${qid}-${opt}`);
+
+                if (card && box) {
+                    card.className = 'cursor-pointer flex items-center justify-between p-3.5 rounded-xl border-2 border-slate-200 hover:border-slate-400 bg-white transition group';
+                    box.className = 'checkbox-target w-8 h-8 sm:w-9 sm:h-9 border-2 border-slate-700 rounded-lg bg-white flex items-center justify-center text-xl sm:text-2xl font-black select-none shrink-0 ml-2';
+                    box.textContent = '';
+                }
+            });
+
+            // Mark the selected option
+            const chosenCard = document.getElementById(`opt-${qid}-${optKey}`);
+            const chosenBox = document.getElementById(`box-${qid}-${optKey}`);
+
+            chosenCard.classList.add('border-amber-600', 'bg-amber-50/50');
+            chosenBox.textContent = '✓';
+            chosenBox.classList.add('text-emerald-700', 'border-emerald-700', 'bg-emerald-50');
+
+            // Hide evaluation toast on new selection
+            document.getElementById('result-toast').classList.add('hidden');
+        }
+
+        // Validate all answers
+        function checkAnswers() {
+            let correctCount = 0;
+            const total = Object.keys(answerKey).length;
+
+            Object.keys(answerKey).forEach(qid => {
+                const userChoice = userSelections[qid];
+                const expected = answerKey[qid].correct;
+                const feedback = document.getElementById(`feedback-${qid}`);
+                feedback.classList.remove('hidden');
+
+                const options = ['अ', 'ब', 'स'];
+                options.forEach(opt => {
+                    const card = document.getElementById(`opt-${qid}-${opt}`);
+                    const box = document.getElementById(`box-${qid}-${opt}`);
+
+                    if (!card || !box) return;
+
+                    if (opt === expected) {
+                        card.classList.add('border-emerald-600', 'bg-emerald-50/60');
+                        box.classList.add('border-emerald-600', 'text-emerald-700');
+                    } else if (opt === userChoice && userChoice !== expected) {
+                        card.classList.add('border-rose-500', 'bg-rose-50/60');
+                        box.classList.add('border-rose-500', 'text-rose-600');
+                    }
+                });
+
+                if (userChoice === expected) {
+                    correctCount++;
+                    feedback.innerHTML = `<span class="text-emerald-700 font-bold">✓ सही उत्तर!</span> ${answerKey[qid].explanation}`;
+                } else if (userChoice !== null) {
+                    feedback.innerHTML = `<span class="text-rose-600 font-bold">✕ अशुद्ध! सही विकल्प: [${answerKey[qid].correctLabel}]</span> — ${answerKey[qid].explanation}`;
+                } else {
+                    feedback.innerHTML = `<span class="text-amber-700 font-bold">! उत्तर नहीं चुना गया। सही विकल्प: [${answerKey[qid].correctLabel}]</span> — ${answerKey[qid].explanation}`;
+                }
+            });
+
+            const toast = document.getElementById('result-toast');
+            toast.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-900', 'bg-amber-100', 'text-amber-900');
+
+            if (correctCount === total) {
+                toast.classList.add('bg-emerald-100', 'text-emerald-900');
+                toast.innerHTML = `🎉 <strong>अति उत्तम!</strong> आपके सभी <strong>${correctCount}/${total}</strong> उत्तर सही हैं!`;
+                if (typeof confetti === 'function') {
+                    confetti({
+                        particleCount: 80,
+                        spread: 70,
+                        origin: { y: 0.6 }
+                    });
+                }
+            } else {
+                toast.classList.add('bg-amber-100', 'text-amber-900');
+                toast.innerHTML = `📝 आपका स्कोर: <strong>${correctCount}/${total}</strong> सही। नीचे दिए गए स्पष्टीकरण को पढ़ें।`;
+            }
+
+            toast.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // Reset the worksheet to starting state
+        function resetAnswers() {
+            const options = ['अ', 'ब', 'स'];
+            Object.keys(answerKey).forEach(qid => {
+                userSelections[qid] = null;
+                const feedback = document.getElementById(`feedback-${qid}`);
+                feedback.classList.add('hidden');
+                feedback.innerHTML = '';
+
+                options.forEach(opt => {
+                    const card = document.getElementById(`opt-${qid}-${opt}`);
+                    const box = document.getElementById(`box-${qid}-${opt}`);
+                    if (card && box) {
+                        card.className = 'cursor-pointer flex items-center justify-between p-3.5 rounded-xl border-2 border-slate-200 hover:border-slate-400 bg-white transition group';
+                        box.className = 'checkbox-target w-8 h-8 sm:w-9 sm:h-9 border-2 border-slate-700 rounded-lg bg-white flex items-center justify-center text-xl sm:text-2xl font-black select-none shrink-0 ml-2';
+                        box.textContent = '';
+                    }
+                });
+            });
+
+            document.getElementById('result-toast').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>अभ्यास 2 - 'हाँ' या 'नहीं' लिखिए</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&family=Yatra+One&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Mukta', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Printable worksheet styles for physical handouts */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            body {
+                background: white !important;
+                color: #000 !important;
+                padding: 0 !important;
+            }
+            .worksheet-card {
+                box-shadow: none !important;
+                border: none !important;
+                padding: 1.5rem !important;
+                max-width: 100% !important;
+            }
+            .answer-line {
+                border-bottom: 1.5px solid #000 !important;
+                background: transparent !important;
+                min-width: 140px !important;
+            }
+        }
+
+        /* Custom blank writing line style */
+        .blank-line {
+            border-bottom: 2px dashed #94a3b8;
+            transition: all 0.2s ease-in-out;
+        }
+        .blank-line:hover, .blank-line:focus-within {
+            border-bottom-color: #0284c7;
+        }
+    </style>
+</head>
+<body class="bg-slate-100/70 text-slate-800 min-h-screen py-6 px-3 sm:px-6 md:px-8">
+
+    <div class="max-w-4xl mx-auto">
+        <!-- Interactive Control Header (Hidden when printing) -->
+        <header class="no-print mb-6 flex flex-wrap items-center justify-between gap-4 bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
+            <div class="flex items-center gap-3">
+                <span class="p-2.5 bg-sky-100 text-sky-800 rounded-xl">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                </span>
+                <div>
+                    <h1 class="text-xl font-bold text-slate-900 leading-tight">हिंदी अभ्यास कार्यपत्रिका</h1>
+                    <p class="text-xs text-slate-500 font-medium">पाठ: जगदीश चंद्र बसु • 'हाँ' या 'नहीं' लिखिए</p>
+                </div>
+            </div>
+
+            <!-- Toolbar buttons -->
+            <div class="flex items-center flex-wrap gap-2 text-sm font-semibold">
+                <button onclick="checkAnswers()" class="flex items-center gap-1.5 px-4 py-2 bg-sky-600 hover:bg-sky-700 active:scale-95 text-white rounded-xl shadow-sm transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    उत्तर जाँचें (Check)
+                </button>
+                <button onclick="resetAnswers()" class="flex items-center gap-1.5 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 rounded-xl transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                    रीसेट (Reset)
+                </button>
+                <button onclick="window.print()" class="flex items-center gap-1.5 px-3.5 py-2 bg-amber-100 hover:bg-amber-200 text-amber-900 rounded-xl transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                    </svg>
+                    प्रिंट करें (Print)
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Worksheet Card -->
+        <main class="worksheet-card bg-white rounded-3xl p-6 sm:p-10 md:p-12 shadow-md border border-slate-200 relative">
+            
+            <!-- Result Banner / Notification -->
+            <div id="result-toast" class="hidden no-print mb-8 p-4 rounded-2xl text-center font-medium transition-all"></div>
+
+            <!-- Exercise Instruction (Verbatim from image) -->
+            <div class="mb-8 flex items-start gap-3">
+                <span class="text-2xl sm:text-3xl font-bold text-slate-900 select-none">2.</span>
+                <h2 class="text-xl sm:text-2xl md:text-[26px] font-bold text-slate-900 leading-relaxed tracking-wide">
+                    नीचे दिए गए वाक्यों के सामने 'हाँ' या 'नहीं' लिखिए-
+                </h2>
+            </div>
+
+            <!-- Exercise Items List -->
+            <div class="space-y-6 sm:space-y-7" id="exercise-list">
+
+                <div class="p-4 sm:p-5 rounded-2xl border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50/50 transition">
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                        <div class="flex items-start gap-3">
+                            <span class="text-xl sm:text-2xl font-bold text-slate-800 shrink-0">(क)</span>
+                            <p class="text-xl sm:text-2xl text-slate-800 leading-relaxed font-medium">
+                                जगदीश चंद्र बसु एक साहित्यकार थे।
+                            </p>
+                        </div>
+
+                        <!-- User Answer Input / Selection Area -->
+                        <div class="flex items-center justify-end gap-2 shrink-0 self-end lg:self-center">
+                            <!-- Quick-selection buttons for easy tapping -->
+                            <div class="no-print inline-flex rounded-xl bg-slate-100 p-1 border border-slate-200 text-sm font-bold">
+                                <button type="button" onclick="selectAnswer('q1', 'हाँ')" id="btn-q1-yes" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-emerald-700 hover:bg-white transition">हाँ</button>
+                                <button type="button" onclick="selectAnswer('q1', 'नहीं')" id="btn-q1-no" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-rose-600 hover:bg-white transition">नहीं</button>
+                            </div>
+
+                            <!-- Blank line display (matches textbook line layout) -->
+                            <div class="blank-line answer-line w-36 sm:w-44 h-11 flex items-center justify-center text-center font-bold text-xl sm:text-2xl text-slate-800 bg-slate-50/60 rounded-t-lg" id="line-q1">
+                                <span id="display-q1" class="select-none"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Detailed feedback -->
+                    <div id="feedback-q1" class="hidden mt-3 pt-3 border-t border-slate-100 text-sm sm:text-base text-slate-600"></div>
+                </div>
+
+                <div class="p-4 sm:p-5 rounded-2xl border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50/50 transition">
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                        <div class="flex items-start gap-3">
+                            <span class="text-xl sm:text-2xl font-bold text-slate-800 shrink-0">(ख)</span>
+                            <p class="text-xl sm:text-2xl text-slate-800 leading-relaxed font-medium">
+                                जगदीश चंद्र बसु का जन्म बंगाल में हुआ था।
+                            </p>
+                        </div>
+
+                        <div class="flex items-center justify-end gap-2 shrink-0 self-end lg:self-center">
+                            <div class="no-print inline-flex rounded-xl bg-slate-100 p-1 border border-slate-200 text-sm font-bold">
+                                <button type="button" onclick="selectAnswer('q2', 'हाँ')" id="btn-q2-yes" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-emerald-700 hover:bg-white transition">हाँ</button>
+                                <button type="button" onclick="selectAnswer('q2', 'नहीं')" id="btn-q2-no" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-rose-600 hover:bg-white transition">नहीं</button>
+                            </div>
+
+                            <div class="blank-line answer-line w-36 sm:w-44 h-11 flex items-center justify-center text-center font-bold text-xl sm:text-2xl text-slate-800 bg-slate-50/60 rounded-t-lg" id="line-q2">
+                                <span id="display-q2" class="select-none"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="feedback-q2" class="hidden mt-3 pt-3 border-t border-slate-100 text-sm sm:text-base text-slate-600"></div>
+                </div>
+
+                <div class="p-4 sm:p-5 rounded-2xl border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50/50 transition">
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                        <div class="flex items-start gap-3">
+                            <span class="text-xl sm:text-2xl font-bold text-slate-800 shrink-0">(ग)</span>
+                            <p class="text-xl sm:text-2xl text-slate-800 leading-relaxed font-medium">
+                                बसु ने क्रेस्कोग्राफ़ बनाया।
+                            </p>
+                        </div>
+
+                        <div class="flex items-center justify-end gap-2 shrink-0 self-end lg:self-center">
+                            <div class="no-print inline-flex rounded-xl bg-slate-100 p-1 border border-slate-200 text-sm font-bold">
+                                <button type="button" onclick="selectAnswer('q3', 'हाँ')" id="btn-q3-yes" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-emerald-700 hover:bg-white transition">हाँ</button>
+                                <button type="button" onclick="selectAnswer('q3', 'नहीं')" id="btn-q3-no" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-rose-600 hover:bg-white transition">नहीं</button>
+                            </div>
+
+                            <div class="blank-line answer-line w-36 sm:w-44 h-11 flex items-center justify-center text-center font-bold text-xl sm:text-2xl text-slate-800 bg-slate-50/60 rounded-t-lg" id="line-q3">
+                                <span id="display-q3" class="select-none"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="feedback-q3" class="hidden mt-3 pt-3 border-t border-slate-100 text-sm sm:text-base text-slate-600"></div>
+                </div>
+
+                <div class="p-4 sm:p-5 rounded-2xl border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50/50 transition">
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                        <div class="flex items-start gap-3">
+                            <span class="text-xl sm:text-2xl font-bold text-slate-800 shrink-0">(घ)</span>
+                            <p class="text-xl sm:text-2xl text-slate-800 leading-relaxed font-medium">
+                                क्रेस्कोग्राफ़ से धरती का कंपन मापा जाता है।
+                            </p>
+                        </div>
+
+                        <div class="flex items-center justify-end gap-2 shrink-0 self-end lg:self-center">
+                            <div class="no-print inline-flex rounded-xl bg-slate-100 p-1 border border-slate-200 text-sm font-bold">
+                                <button type="button" onclick="selectAnswer('q4', 'हाँ')" id="btn-q4-yes" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-emerald-700 hover:bg-white transition">हाँ</button>
+                                <button type="button" onclick="selectAnswer('q4', 'नहीं')" id="btn-q4-no" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-rose-600 hover:bg-white transition">नहीं</button>
+                            </div>
+
+                            <div class="blank-line answer-line w-36 sm:w-44 h-11 flex items-center justify-center text-center font-bold text-xl sm:text-2xl text-slate-800 bg-slate-50/60 rounded-t-lg" id="line-q4">
+                                <span id="display-q4" class="select-none"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="feedback-q4" class="hidden mt-3 pt-3 border-t border-slate-100 text-sm sm:text-base text-slate-600"></div>
+                </div>
+
+            </div>
+
+            <!-- Worksheet Footer -->
+            <footer class="mt-12 pt-6 border-t border-slate-200 flex flex-wrap items-center justify-between text-xs text-slate-500 gap-3">
+                <span>पाठ: वैज्ञानिक जगदीश चंद्र बसु</span>
+                <span>कक्षा अभ्यास कार्यपत्रिका • हिंदी</span>
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        // State store for selected answers
+        const userResponses = {
+            q1: null,
+            q2: null,
+            q3: null,
+            q4: null
+        };
+
+        // Answer key with educational explanation
+        const answerKey = {
+            q1: {
+                correct: 'नहीं',
+                explanation: 'उत्तर: <strong>नहीं</strong> — जगदीश चंद्र बसु भारत के महान वैज्ञानिक (भौतिक विज्ञानी एवं वनस्पति विज्ञानी) थे, साहित्यकार नहीं।'
+            },
+            q2: {
+                correct: 'हाँ',
+                explanation: 'उत्तर: <strong>हाँ</strong> — जगदीश चंद्र बसु का जन्म बंगाल प्रेसीडेंसी (मेमनसिंह) में हुआ था।'
+            },
+            q3: {
+                correct: 'हाँ',
+                explanation: 'उत्तर: <strong>हाँ</strong> — पौधों की वृद्धि और उनकी सूक्ष्म हरकतों को मापने के लिए बसु ने क्रेस्कोग्राफ़ का आविष्कार किया था।'
+            },
+            q4: {
+                correct: 'नहीं',
+                explanation: 'उत्तर: <strong>नहीं</strong> — क्रेस्कोग्राफ़ से पौधों की वृद्धि मापी जाती है; धरती का कंपन सिस्मोग्राफ़ (सीस्मोग्राफ़) से मापा जाता है।'
+            }
+        };
+
+        // Select an option ('हाँ' or 'नहीं')
+        function selectAnswer(qid, value) {
+            userResponses[qid] = value;
+
+            const display = document.getElementById(`display-${qid}`);
+            const btnYes = document.getElementById(`btn-${qid}-yes`);
+            const btnNo = document.getElementById(`btn-${qid}-no`);
+            const line = document.getElementById(`line-${qid}`);
+
+            // Reset button active styles
+            btnYes.className = 'px-3 py-1.5 rounded-lg text-slate-600 hover:text-emerald-700 hover:bg-white transition';
+            btnNo.className = 'px-3 py-1.5 rounded-lg text-slate-600 hover:text-rose-600 hover:bg-white transition';
+
+            // Reset line styles
+            line.className = 'blank-line answer-line w-36 sm:w-44 h-11 flex items-center justify-center text-center font-bold text-xl sm:text-2xl bg-slate-50/60 rounded-t-lg transition';
+
+            display.textContent = value;
+
+            if (value === 'हाँ') {
+                btnYes.className = 'px-3 py-1.5 rounded-lg font-bold bg-emerald-600 text-white shadow-sm transition';
+                line.classList.add('text-emerald-700', 'border-b-emerald-600', 'bg-emerald-50/50');
+            } else if (value === 'नहीं') {
+                btnNo.className = 'px-3 py-1.5 rounded-lg font-bold bg-rose-600 text-white shadow-sm transition';
+                line.classList.add('text-rose-700', 'border-b-rose-600', 'bg-rose-50/50');
+            }
+
+            // Hide old status alert
+            document.getElementById('result-toast').classList.add('hidden');
+        }
+
+        // Validate all answers
+        function checkAnswers() {
+            let correctCount = 0;
+            const total = Object.keys(answerKey).length;
+
+            Object.keys(answerKey).forEach((qid) => {
+                const userChoice = userResponses[qid];
+                const expected = answerKey[qid].correct;
+                const line = document.getElementById(`line-${qid}`);
+                const feedback = document.getElementById(`feedback-${qid}`);
+
+                feedback.classList.remove('hidden');
+
+                if (userChoice === expected) {
+                    correctCount++;
+                    line.className = 'blank-line answer-line w-36 sm:w-44 h-11 flex items-center justify-center text-center font-bold text-xl sm:text-2xl rounded-t-lg transition border-b-2 border-emerald-600 bg-emerald-100 text-emerald-800';
+                    feedback.innerHTML = `<span class="text-emerald-700 font-bold">✓ सही उत्तर!</span> ${answerKey[qid].explanation}`;
+                } else if (userChoice !== null) {
+                    line.className = 'blank-line answer-line w-36 sm:w-44 h-11 flex items-center justify-center text-center font-bold text-xl sm:text-2xl rounded-t-lg transition border-b-2 border-rose-600 bg-rose-100 text-rose-800';
+                    feedback.innerHTML = `<span class="text-rose-600 font-bold">✕ अशुद्ध!</span> ${answerKey[qid].explanation}`;
+                } else {
+                    line.className = 'blank-line answer-line w-36 sm:w-44 h-11 flex items-center justify-center text-center font-bold text-xl sm:text-2xl rounded-t-lg transition border-b-2 border-amber-500 bg-amber-50 text-amber-700';
+                    feedback.innerHTML = `<span class="text-amber-700 font-bold">! उत्तर नहीं दिया गया।</span> ${answerKey[qid].explanation}`;
+                }
+            });
+
+            const toast = document.getElementById('result-toast');
+            toast.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-900', 'bg-amber-100', 'text-amber-900');
+
+            if (correctCount === total) {
+                toast.classList.add('bg-emerald-100', 'text-emerald-900');
+                toast.innerHTML = `🎉 <strong>शाबाश!</strong> आपके सभी <strong>${correctCount}/${total}</strong> उत्तर बिल्कुल सही हैं!`;
+                if (typeof confetti === 'function') {
+                    confetti({
+                        particleCount: 80,
+                        spread: 70,
+                        origin: { y: 0.6 }
+                    });
+                }
+            } else {
+                toast.classList.add('bg-amber-100', 'text-amber-900');
+                toast.innerHTML = `📝 आपका स्कोर: <strong>${correctCount}/${total}</strong> सही। नीचे दिए गए स्पष्टीकरण को पढ़ें।`;
+            }
+
+            toast.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // Reset all answers
+        function resetAnswers() {
+            Object.keys(answerKey).forEach((qid) => {
+                userResponses[qid] = null;
+                document.getElementById(`display-${qid}`).textContent = '';
+
+                const line = document.getElementById(`line-${qid}`);
+                line.className = 'blank-line answer-line w-36 sm:w-44 h-11 flex items-center justify-center text-center font-bold text-xl sm:text-2xl text-slate-800 bg-slate-50/60 rounded-t-lg';
+
+                const btnYes = document.getElementById(`btn-${qid}-yes`);
+                const btnNo = document.getElementById(`btn-${qid}-no`);
+                btnYes.className = 'px-3 py-1.5 rounded-lg text-slate-600 hover:text-emerald-700 hover:bg-white transition';
+                btnNo.className = 'px-3 py-1.5 rounded-lg text-slate-600 hover:text-rose-600 hover:bg-white transition';
+
+                const feedback = document.getElementById(`feedback-${qid}`);
+                feedback.classList.add('hidden');
+                feedback.innerHTML = '';
+            });
+
+            document.getElementById('result-toast').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>अभ्यास 5 - सही (✓) या गलत (✗) का चिह्न लगाइए</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Mukta', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Printable styles for clean classroom paper copies */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            body {
+                background: white !important;
+                color: #000 !important;
+                padding: 0 !important;
+            }
+            .worksheet-card {
+                box-shadow: none !important;
+                border: 1px solid #111 !important;
+                padding: 1.5rem !important;
+                max-width: 100% !important;
+            }
+            .checkbox-target {
+                border: 2px solid #000 !important;
+                background-color: transparent !important;
+                color: #000 !important;
+            }
+        }
+
+        .symbol-correct {
+            color: #059669;
+            font-weight: 800;
+        }
+
+        .symbol-wrong {
+            color: #dc2626;
+            font-weight: 800;
+        }
+    </style>
+</head>
+<body class="bg-amber-50/40 text-slate-800 min-h-screen py-6 px-3 sm:px-6 md:px-8">
+
+    <div class="max-w-4xl mx-auto">
+        <!-- Interactive Header Toolbar (Hidden while printing) -->
+        <header class="no-print mb-6 flex flex-wrap items-center justify-between gap-4 bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
+            <div class="flex items-center gap-3">
+                <span class="p-2.5 bg-amber-100 text-amber-900 rounded-xl">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                </span>
+                <div>
+                    <h1 class="text-xl font-bold text-slate-900 leading-tight">हिंदी व्याकरण अभ्यास कार्यपत्रिका</h1>
+                    <p class="text-xs text-slate-500 font-medium">वाक्यांश के लिए एक शब्द • सही (✓) या गलत (✗)</p>
+                </div>
+            </div>
+
+            <!-- Toolbar buttons -->
+            <div class="flex items-center flex-wrap gap-2 text-sm font-semibold">
+                <button onclick="checkAnswers()" class="flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white rounded-xl shadow-sm transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    उत्तर जाँचें (Check)
+                </button>
+                <button onclick="resetAnswers()" class="flex items-center gap-1.5 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 rounded-xl transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                    रीसेट (Reset)
+                </button>
+                <button onclick="window.print()" class="flex items-center gap-1.5 px-3.5 py-2 bg-amber-100 hover:bg-amber-200 text-amber-900 rounded-xl transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                    </svg>
+                    प्रिंट करें (Print)
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Worksheet Card -->
+        <main class="worksheet-card bg-white rounded-3xl p-6 sm:p-10 md:p-14 shadow-md border border-slate-200 relative">
+            
+            <!-- Result Toast Notification -->
+            <div id="result-toast" class="hidden no-print mb-8 p-4 rounded-2xl text-center font-medium transition-all"></div>
+
+            <!-- Exercise Instruction (Verbatim from image) -->
+            <div class="mb-10 flex items-start gap-3">
+                <span class="text-2xl sm:text-3xl font-bold text-slate-900 select-none">5.</span>
+                <h2 class="text-xl sm:text-2xl md:text-[26px] font-bold text-slate-900 leading-relaxed tracking-wide">
+                    सही (<span class="text-emerald-700 font-extrabold">✓</span>) या गलत (<span class="text-rose-600 font-extrabold">✗</span>) का चिह्न लगाइए-
+                </h2>
+            </div>
+
+            <!-- Exercise Items List -->
+            <div class="space-y-6 sm:space-y-8" id="exercise-list">
+
+                <!-- Statement (क) -->
+                <div class="p-4 sm:p-5 rounded-2xl border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50/50 transition">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div class="flex items-start sm:items-center gap-3">
+                            <span class="text-xl sm:text-2xl font-bold text-slate-800 shrink-0">(क)</span>
+                            <p class="text-xl sm:text-2xl text-slate-800 leading-relaxed font-medium">
+                                अनेक शब्दों के स्थान पर प्रयुक्त एक शब्द को वाक्यांश के लिए एक शब्द कहते हैं।
+                            </p>
+                        </div>
+                        
+                        <!-- Toggle & Checkbox Controls -->
+                        <div class="flex items-center justify-end gap-3 self-end sm:self-center shrink-0">
+                            <!-- Quick selection helpers -->
+                            <div class="no-print inline-flex rounded-xl bg-slate-100 p-1 border border-slate-200">
+                                <button type="button" onclick="setChoice('q1', '✓')" id="btn-q1-correct" title="सही (✓)" class="px-2.5 py-1 text-sm rounded-lg font-bold text-slate-600 hover:text-emerald-700 hover:bg-white transition">✓</button>
+                                <button type="button" onclick="setChoice('q1', '✗')" id="btn-q1-wrong" title="गलत (✗)" class="px-2.5 py-1 text-sm rounded-lg font-bold text-slate-600 hover:text-rose-600 hover:bg-white transition">✗</button>
+                            </div>
+
+                            <!-- Clickable Box (Matching textbook right box) -->
+                            <div onclick="cycleChoice('q1')" id="box-q1" role="button" tabindex="0" title="क्लिक करके ✓ या ✗ चुनें" class="checkbox-target cursor-pointer w-11 h-11 sm:w-12 sm:h-12 border-2 border-slate-700 rounded-lg bg-white flex items-center justify-center text-2xl sm:text-3xl font-extrabold select-none transition hover:border-slate-900 hover:shadow-inner">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Feedback box -->
+                    <div id="feedback-q1" class="hidden mt-3 pt-3 border-t border-slate-100 text-sm sm:text-base text-slate-600"></div>
+                </div>
+
+                <!-- Statement (ख) -->
+                <div class="p-4 sm:p-5 rounded-2xl border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50/50 transition">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div class="flex items-start sm:items-center gap-3">
+                            <span class="text-xl sm:text-2xl font-bold text-slate-800 shrink-0">(ख)</span>
+                            <p class="text-xl sm:text-2xl text-slate-800 leading-relaxed font-medium">
+                                वाक्यांश के लिए एक शब्द के प्रयोग से भाषा कठिन हो जाती है।
+                            </p>
+                        </div>
+                        
+                        <div class="flex items-center justify-end gap-3 self-end sm:self-center shrink-0">
+                            <div class="no-print inline-flex rounded-xl bg-slate-100 p-1 border border-slate-200">
+                                <button type="button" onclick="setChoice('q2', '✓')" id="btn-q2-correct" title="सही (✓)" class="px-2.5 py-1 text-sm rounded-lg font-bold text-slate-600 hover:text-emerald-700 hover:bg-white transition">✓</button>
+                                <button type="button" onclick="setChoice('q2', '✗')" id="btn-q2-wrong" title="गलत (✗)" class="px-2.5 py-1 text-sm rounded-lg font-bold text-slate-600 hover:text-rose-600 hover:bg-white transition">✗</button>
+                            </div>
+
+                            <div onclick="cycleChoice('q2')" id="box-q2" role="button" tabindex="0" title="क्लिक करके ✓ या ✗ चुनें" class="checkbox-target cursor-pointer w-11 h-11 sm:w-12 sm:h-12 border-2 border-slate-700 rounded-lg bg-white flex items-center justify-center text-2xl sm:text-3xl font-extrabold select-none transition hover:border-slate-900 hover:shadow-inner">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="feedback-q2" class="hidden mt-3 pt-3 border-t border-slate-100 text-sm sm:text-base text-slate-600"></div>
+                </div>
+
+                <!-- Statement (ग) -->
+                <div class="p-4 sm:p-5 rounded-2xl border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50/50 transition">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div class="flex items-start sm:items-center gap-3">
+                            <span class="text-xl sm:text-2xl font-bold text-slate-800 shrink-0">(ग)</span>
+                            <p class="text-xl sm:text-2xl text-slate-800 leading-relaxed font-medium">
+                                भाषा को संक्षिप्त रूप प्रदान करने के लिए वाक्यांश के लिए एक शब्द का प्रयोग किया जाता है।
+                            </p>
+                        </div>
+                        
+                        <div class="flex items-center justify-end gap-3 self-end sm:self-center shrink-0">
+                            <div class="no-print inline-flex rounded-xl bg-slate-100 p-1 border border-slate-200">
+                                <button type="button" onclick="setChoice('q3', '✓')" id="btn-q3-correct" title="सही (✓)" class="px-2.5 py-1 text-sm rounded-lg font-bold text-slate-600 hover:text-emerald-700 hover:bg-white transition">✓</button>
+                                <button type="button" onclick="setChoice('q3', '✗')" id="btn-q3-wrong" title="गलत (✗)" class="px-2.5 py-1 text-sm rounded-lg font-bold text-slate-600 hover:text-rose-600 hover:bg-white transition">✗</button>
+                            </div>
+
+                            <div onclick="cycleChoice('q3')" id="box-q3" role="button" tabindex="0" title="क्लिक करके ✓ या ✗ चुनें" class="checkbox-target cursor-pointer w-11 h-11 sm:w-12 sm:h-12 border-2 border-slate-700 rounded-lg bg-white flex items-center justify-center text-2xl sm:text-3xl font-extrabold select-none transition hover:border-slate-900 hover:shadow-inner">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="feedback-q3" class="hidden mt-3 pt-3 border-t border-slate-100 text-sm sm:text-base text-slate-600"></div>
+                </div>
+
+                <!-- Statement (घ) -->
+                <div class="p-4 sm:p-5 rounded-2xl border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50/50 transition">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div class="flex items-start sm:items-center gap-3">
+                            <span class="text-xl sm:text-2xl font-bold text-slate-800 shrink-0">(घ)</span>
+                            <p class="text-xl sm:text-2xl text-slate-800 leading-relaxed font-medium">
+                                वाक्यांश के लिए एक शब्द के प्रयोग से भाषा सरल और प्रभावशाली बनती है।
+                            </p>
+                        </div>
+                        
+                        <div class="flex items-center justify-end gap-3 self-end sm:self-center shrink-0">
+                            <div class="no-print inline-flex rounded-xl bg-slate-100 p-1 border border-slate-200">
+                                <button type="button" onclick="setChoice('q4', '✓')" id="btn-q4-correct" title="सही (✓)" class="px-2.5 py-1 text-sm rounded-lg font-bold text-slate-600 hover:text-emerald-700 hover:bg-white transition">✓</button>
+                                <button type="button" onclick="setChoice('q4', '✗')" id="btn-q4-wrong" title="गलत (✗)" class="px-2.5 py-1 text-sm rounded-lg font-bold text-slate-600 hover:text-rose-600 hover:bg-white transition">✗</button>
+                            </div>
+
+                            <div onclick="cycleChoice('q4')" id="box-q4" role="button" tabindex="0" title="क्लिक करके ✓ या ✗ चुनें" class="checkbox-target cursor-pointer w-11 h-11 sm:w-12 sm:h-12 border-2 border-slate-700 rounded-lg bg-white flex items-center justify-center text-2xl sm:text-3xl font-extrabold select-none transition hover:border-slate-900 hover:shadow-inner">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="feedback-q4" class="hidden mt-3 pt-3 border-t border-slate-100 text-sm sm:text-base text-slate-600"></div>
+                </div>
+
+            </div>
+
+            <!-- Worksheet Footer -->
+            <footer class="mt-12 pt-6 border-t border-slate-200 flex flex-wrap items-center justify-between text-xs text-slate-500 gap-3">
+                <span>पाठ्य सामग्री: हिंदी व्याकरण • वाक्यांश के लिए एक शब्द</span>
+                <span>अभ्यास कार्यपत्रिका • सही (✓) या गलत (✗)</span>
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        // State store for selected user choices: null, '✓', or '✗'
+        const userResponses = {
+            q1: null,
+            q2: null,
+            q3: null,
+            q4: null
+        };
+
+        // Educational answer key based on Hindi grammar standards
+        const answerKey = {
+            q1: {
+                correct: '✓',
+                explanation: 'सही (✓) — विस्तृत अर्थ वाले अनेक शब्दों या पूरे वाक्य के स्थान पर प्रयुक्त होने वाले एक शब्द को वाक्यांश के लिए एक शब्द कहते हैं।'
+            },
+            q2: {
+                correct: '✗',
+                explanation: 'गलत (✗) — वाक्यांश के लिए एक शब्द के प्रयोग से भाषा कठिन नहीं होती, बल्कि सरल, संक्षिप्त और सुबोध बनती है।'
+            },
+            q3: {
+                correct: '✓',
+                explanation: 'सही (✓) — भाषा को संक्षिप्त और सुगठित रूप देने के लिए वाक्यांश के स्थान पर एक शब्द का प्रयोग किया जाता है।'
+            },
+            q4: {
+                correct: '✓',
+                explanation: 'सही (✓) — उचित शब्दों के प्रयोग से बात कम शब्दों में प्रभावशाली और सुंदर ढंग से कही जा सकती है।'
+            }
+        };
+
+        // Cycle through options when clicking directly on the square box: null -> ✓ -> ✗ -> null
+        function cycleChoice(qid) {
+            const current = userResponses[qid];
+            let nextVal = null;
+            if (current === null) {
+                nextVal = '✓';
+            } else if (current === '✓') {
+                nextVal = '✗';
+            } else {
+                nextVal = null;
+            }
+            setChoice(qid, nextVal);
+        }
+
+        // Set specific answer and update visual indicators
+        function setChoice(qid, value) {
+            userResponses[qid] = value;
+            const box = document.getElementById(`box-${qid}`);
+            const btnCorrect = document.getElementById(`btn-${qid}-correct`);
+            const btnWrong = document.getElementById(`btn-${qid}-wrong`);
+
+            // Reset box classes
+            box.className = 'checkbox-target cursor-pointer w-11 h-11 sm:w-12 sm:h-12 border-2 border-slate-700 rounded-lg bg-white flex items-center justify-center text-2xl sm:text-3xl font-extrabold select-none transition hover:border-slate-900 hover:shadow-inner';
+            btnCorrect.classList.remove('bg-emerald-600', 'text-white');
+            btnWrong.classList.remove('bg-rose-600', 'text-white');
+
+            if (value === '✓') {
+                box.textContent = '✓';
+                box.classList.add('symbol-correct', 'border-emerald-600', 'bg-emerald-50/50');
+                btnCorrect.classList.add('bg-emerald-600', 'text-white');
+            } else if (value === '✗') {
+                box.textContent = '✗';
+                box.classList.add('symbol-wrong', 'border-rose-600', 'bg-rose-50/50');
+                btnWrong.classList.add('bg-rose-600', 'text-white');
+            } else {
+                box.textContent = '';
+            }
+
+            // Hide evaluation result if user modifies answers
+            document.getElementById('result-toast').classList.add('hidden');
+        }
+
+        // Verify all answers and display detailed feedback
+        function checkAnswers() {
+            let correctCount = 0;
+            const total = Object.keys(answerKey).length;
+
+            Object.keys(answerKey).forEach((qid) => {
+                const userChoice = userResponses[qid];
+                const expected = answerKey[qid].correct;
+                const box = document.getElementById(`box-${qid}`);
+                const feedback = document.getElementById(`feedback-${qid}`);
+
+                feedback.classList.remove('hidden');
+
+                if (userChoice === expected) {
+                    correctCount++;
+                    box.classList.remove('border-slate-700', 'border-rose-600', 'bg-rose-50/50');
+                    box.classList.add('border-emerald-600', 'bg-emerald-100', 'ring-2', 'ring-emerald-300');
+                    feedback.innerHTML = `<span class="text-emerald-700 font-semibold">✓ सही उत्तर!</span> ${answerKey[qid].explanation}`;
+                } else if (userChoice !== null) {
+                    box.classList.remove('border-slate-700', 'border-emerald-600', 'bg-emerald-50/50');
+                    box.classList.add('border-rose-600', 'bg-rose-100', 'ring-2', 'ring-rose-300');
+                    feedback.innerHTML = `<span class="text-rose-600 font-semibold">✕ अशुद्ध! सही उत्तर: [${expected}]</span> — ${answerKey[qid].explanation}`;
+                } else {
+                    box.classList.add('ring-2', 'ring-amber-400');
+                    feedback.innerHTML = `<span class="text-amber-700 font-semibold">! उत्तर नहीं चुना गया। सही उत्तर: [${expected}]</span> — ${answerKey[qid].explanation}`;
+                }
+            });
+
+            const toast = document.getElementById('result-toast');
+            toast.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-900', 'bg-amber-100', 'text-amber-900');
+
+            if (correctCount === total) {
+                toast.classList.add('bg-emerald-100', 'text-emerald-900');
+                toast.innerHTML = `🎉 <strong>अति उत्तम!</strong> आपके सभी <strong>${correctCount}/${total}</strong> उत्तर सही हैं!`;
+                if (typeof confetti === 'function') {
+                    confetti({
+                        particleCount: 80,
+                        spread: 70,
+                        origin: { y: 0.6 }
+                    });
+                }
+            } else {
+                toast.classList.add('bg-amber-100', 'text-amber-900');
+                toast.innerHTML = `📝 आपका स्कोर: <strong>${correctCount}/${total}</strong> सही। नीचे दिए गए स्पष्टीकरण को पढ़ें।`;
+            }
+
+            toast.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // Reset the worksheet to default state
+        function resetAnswers() {
+            Object.keys(answerKey).forEach((qid) => {
+                setChoice(qid, null);
+                const feedback = document.getElementById(`feedback-${qid}`);
+                feedback.classList.add('hidden');
+                feedback.innerHTML = '';
+                const box = document.getElementById(`box-${qid}`);
+                box.classList.remove('ring-2', 'ring-emerald-300', 'ring-rose-300', 'ring-amber-400', 'bg-emerald-100', 'bg-rose-100');
+            });
+            document.getElementById('result-toast').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>

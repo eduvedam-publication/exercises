@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>आइए, भाषा सीखें - कार्यपत्रिका (Hindi Grammar Worksheet)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&family=Yatra+One&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Mukta', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .heading-font {
+            font-family: 'Mukta', sans-serif;
+        }
+        /* Custom print stylesheet for physical paper handouts */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            .worksheet-card {
+                box-shadow: none !important;
+                border: 1px solid #d1d5db !important;
+                margin: 0 !important;
+                padding: 1rem !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+            .checkbox-box {
+                border-color: #000 !important;
+            }
+        }
+        /* Custom checkbox check animation */
+        .check-icon {
+            transform: scale(0);
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .option-item.selected .check-icon {
+            transform: scale(1);
+        }
+    </style>
+</head>
+<body class="bg-amber-50/40 text-slate-800 min-h-screen py-6 px-3 sm:px-6 md:px-8 selection:bg-amber-200">
+
+    <div class="max-w-4xl mx-auto">
+        <!-- Top Toolbar / Action Controls -->
+        <header class="no-print mb-6 flex flex-wrap items-center justify-between gap-4 bg-white p-4 rounded-2xl shadow-sm border border-slate-200/80">
+            <div class="flex items-center gap-3">
+                <span class="p-2.5 bg-amber-100 text-amber-800 rounded-xl">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                </span>
+                <div>
+                    <h1 class="text-xl font-bold text-slate-900">हिंदी व्याकरण अभ्यास (Hindi Worksheet)</h1>
+                    <p class="text-xs text-slate-500 font-medium">कक्षा अभ्यास • सही विकल्प पर निशान लगाएँ</p>
+                </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="flex items-center flex-wrap gap-2.5 text-sm">
+                <button onclick="checkAllAnswers()" id="btn-check" class="flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-semibold rounded-xl shadow-sm transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    उत्तर जाँचें (Check)
+                </button>
+                <button onclick="resetWorksheet()" class="flex items-center gap-1.5 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 font-semibold rounded-xl transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                    रीसेट (Reset)
+                </button>
+                <button onclick="window.print()" class="flex items-center gap-1.5 px-3.5 py-2 bg-amber-100 hover:bg-amber-200 text-amber-900 font-semibold rounded-xl transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                    </svg>
+                    प्रिंट करें (Print)
+                </button>
+            </div>
+        </header>
+
+        <main class="worksheet-card bg-white rounded-3xl p-6 sm:p-10 md:p-12 shadow-md border border-slate-200/90 relative">
+            
+            <!-- Book Header Pill Banner (Authentic to original textbook layout) -->
+            <div class="inline-flex items-center gap-3 border-2 border-slate-800 rounded-full py-1.5 px-5 mb-8 shadow-sm bg-amber-50/50">
+                <!-- Lightbulb icon -->
+                <div class="w-7 h-7 rounded-full bg-amber-200 text-amber-900 flex items-center justify-center font-bold">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                    </svg>
+                </div>
+                <h2 class="text-xl sm:text-2xl font-bold tracking-wide text-slate-900">
+                    आइए, भाषा सीखें <span class="text-base sm:text-lg font-normal text-slate-600">(Let's Learn Grammar)</span>
+                </h2>
+            </div>
+
+            <!-- Score / Feedback notification bar (dynamic) -->
+            <div id="result-toast" class="hidden no-print mb-8 p-4 rounded-2xl text-center font-medium transition-all"></div>
+
+            <!-- Section Title / Main Instruction -->
+            <div class="mb-8">
+                <div class="flex items-start gap-3">
+                    <span class="text-2xl font-bold text-slate-900 mt-0.5">1.</span>
+                    <h3 class="text-xl sm:text-2xl font-bold text-slate-900 leading-relaxed">
+                        सही विकल्प पर सही (<span class="text-emerald-700 font-extrabold text-2xl inline-block px-1">✓</span>) का निशान लगाएँ—
+                    </h3>
+                </div>
+            </div>
+
+            <div class="space-y-9 pl-1 sm:pl-4" id="questions-list">
+
+                <!-- Question (क) -->
+                <section class="question-block pb-7 border-b border-dashed border-slate-200" data-qid="q1" data-correct="iii">
+                    <div class="flex items-baseline gap-2 mb-4">
+                        <span class="text-xl font-bold text-slate-800">(क)</span>
+                        <h4 class="text-xl sm:text-2xl font-semibold text-slate-800 tracking-wide">
+                            तीनों मित्रों को अपनी विद्याओं पर था—
+                        </h4>
+                    </div>
+
+                    <!-- Options Row -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6 mt-3">
+                        <!-- Option (i) -->
+                        <div onclick="selectOption('q1', 'i')" id="opt-q1-i" class="option-item group flex items-center justify-between p-3.5 sm:px-4 rounded-xl border border-slate-300 hover:border-slate-500 bg-white hover:bg-slate-50 cursor-pointer transition select-none">
+                            <span class="text-lg sm:text-xl font-medium text-slate-800">
+                                <span class="font-bold text-slate-500 mr-2">(i)</span> भरोसा
+                            </span>
+                            <div class="checkbox-box w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 border-slate-600 flex items-center justify-center bg-white group-hover:border-slate-800 transition">
+                                <svg class="check-icon w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Option (ii) -->
+                        <div onclick="selectOption('q1', 'ii')" id="opt-q1-ii" class="option-item group flex items-center justify-between p-3.5 sm:px-4 rounded-xl border border-slate-300 hover:border-slate-500 bg-white hover:bg-slate-50 cursor-pointer transition select-none">
+                            <span class="text-lg sm:text-xl font-medium text-slate-800">
+                                <span class="font-bold text-slate-500 mr-2">(ii)</span> घृणा
+                            </span>
+                            <div class="checkbox-box w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 border-slate-600 flex items-center justify-center bg-white group-hover:border-slate-800 transition">
+                                <svg class="check-icon w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Option (iii) -->
+                        <div onclick="selectOption('q1', 'iii')" id="opt-q1-iii" class="option-item group flex items-center justify-between p-3.5 sm:px-4 rounded-xl border border-slate-300 hover:border-slate-500 bg-white hover:bg-slate-50 cursor-pointer transition select-none">
+                            <span class="text-lg sm:text-xl font-medium text-slate-800">
+                                <span class="font-bold text-slate-500 mr-2">(iii)</span> अभिमान
+                            </span>
+                            <div class="checkbox-box w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 border-slate-600 flex items-center justify-center bg-white group-hover:border-slate-800 transition">
+                                <svg class="check-icon w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Explanatory feedback for students -->
+                    <div id="hint-q1" class="hidden mt-3 text-sm rounded-lg p-2.5 bg-slate-50 text-slate-700"></div>
+                </section>
+
+                <!-- Question (ख) -->
+                <section class="question-block pb-7 border-b border-dashed border-slate-200" data-qid="q2" data-correct="ii">
+                    <div class="flex items-baseline gap-2 mb-4">
+                        <span class="text-xl font-bold text-slate-800">(ख)</span>
+                        <h4 class="text-xl sm:text-2xl font-semibold text-slate-800 tracking-wide">
+                            अभिमानी युवकों ने किसके कंकाल पर अपनी विद्या का प्रयोग किया?
+                        </h4>
+                    </div>
+
+                    <!-- Options Row -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6 mt-3">
+                        <!-- Option (i) -->
+                        <div onclick="selectOption('q2', 'i')" id="opt-q2-i" class="option-item group flex items-center justify-between p-3.5 sm:px-4 rounded-xl border border-slate-300 hover:border-slate-500 bg-white hover:bg-slate-50 cursor-pointer transition select-none">
+                            <span class="text-lg sm:text-xl font-medium text-slate-800">
+                                <span class="font-bold text-slate-500 mr-2">(i)</span> चीता
+                            </span>
+                            <div class="checkbox-box w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 border-slate-600 flex items-center justify-center bg-white group-hover:border-slate-800 transition">
+                                <svg class="check-icon w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Option (ii) -->
+                        <div onclick="selectOption('q2', 'ii')" id="opt-q2-ii" class="option-item group flex items-center justify-between p-3.5 sm:px-4 rounded-xl border border-slate-300 hover:border-slate-500 bg-white hover:bg-slate-50 cursor-pointer transition select-none">
+                            <span class="text-lg sm:text-xl font-medium text-slate-800">
+                                <span class="font-bold text-slate-500 mr-2">(ii)</span> शेर
+                            </span>
+                            <div class="checkbox-box w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 border-slate-600 flex items-center justify-center bg-white group-hover:border-slate-800 transition">
+                                <svg class="check-icon w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Option (iii) -->
+                        <div onclick="selectOption('q2', 'iii')" id="opt-q2-iii" class="option-item group flex items-center justify-between p-3.5 sm:px-4 rounded-xl border border-slate-300 hover:border-slate-500 bg-white hover:bg-slate-50 cursor-pointer transition select-none">
+                            <span class="text-lg sm:text-xl font-medium text-slate-800">
+                                <span class="font-bold text-slate-500 mr-2">(iii)</span> लोमड़ी
+                            </span>
+                            <div class="checkbox-box w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 border-slate-600 flex items-center justify-center bg-white group-hover:border-slate-800 transition">
+                                <svg class="check-icon w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="hint-q2" class="hidden mt-3 text-sm rounded-lg p-2.5 bg-slate-50 text-slate-700"></div>
+                </section>
+
+                <!-- Question (ग) -->
+                <section class="question-block pb-7 border-b border-dashed border-slate-200" data-qid="q3" data-correct="iii">
+                    <div class="flex items-baseline gap-2 mb-4">
+                        <span class="text-xl font-bold text-slate-800">(ग)</span>
+                        <h4 class="text-xl sm:text-2xl font-semibold text-slate-800 tracking-wide">
+                            अंत में कितने मित्र जीवित बचे?
+                        </h4>
+                    </div>
+
+                    <!-- Options Row -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6 mt-3">
+                        <!-- Option (i) -->
+                        <div onclick="selectOption('q3', 'i')" id="opt-q3-i" class="option-item group flex items-center justify-between p-3.5 sm:px-4 rounded-xl border border-slate-300 hover:border-slate-500 bg-white hover:bg-slate-50 cursor-pointer transition select-none">
+                            <span class="text-lg sm:text-xl font-medium text-slate-800">
+                                <span class="font-bold text-slate-500 mr-2">(i)</span> दो
+                            </span>
+                            <div class="checkbox-box w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 border-slate-600 flex items-center justify-center bg-white group-hover:border-slate-800 transition">
+                                <svg class="check-icon w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Option (ii) -->
+                        <div onclick="selectOption('q3', 'ii')" id="opt-q3-ii" class="option-item group flex items-center justify-between p-3.5 sm:px-4 rounded-xl border border-slate-300 hover:border-slate-500 bg-white hover:bg-slate-50 cursor-pointer transition select-none">
+                            <span class="text-lg sm:text-xl font-medium text-slate-800">
+                                <span class="font-bold text-slate-500 mr-2">(ii)</span> तीन
+                            </span>
+                            <div class="checkbox-box w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 border-slate-600 flex items-center justify-center bg-white group-hover:border-slate-800 transition">
+                                <svg class="check-icon w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Option (iii) -->
+                        <div onclick="selectOption('q3', 'iii')" id="opt-q3-iii" class="option-item group flex items-center justify-between p-3.5 sm:px-4 rounded-xl border border-slate-300 hover:border-slate-500 bg-white hover:bg-slate-50 cursor-pointer transition select-none">
+                            <span class="text-lg sm:text-xl font-medium text-slate-800">
+                                <span class="font-bold text-slate-500 mr-2">(iii)</span> एक
+                            </span>
+                            <div class="checkbox-box w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 border-slate-600 flex items-center justify-center bg-white group-hover:border-slate-800 transition">
+                                <svg class="check-icon w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="hint-q3" class="hidden mt-3 text-sm rounded-lg p-2.5 bg-slate-50 text-slate-700"></div>
+                </section>
+
+                <!-- Question (घ) -->
+                <section class="question-block" data-qid="q4" data-correct="iii">
+                    <div class="flex items-baseline gap-2 mb-4">
+                        <span class="text-xl font-bold text-slate-800">(घ)</span>
+                        <h4 class="text-xl sm:text-2xl font-semibold text-slate-800 tracking-wide">
+                            अस्थि : अस्थियाँ :: शक्ति : <span class="text-amber-800 font-bold border-b-2 border-slate-400 px-3">?</span>
+                        </h4>
+                    </div>
+
+                    <!-- Options Row -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6 mt-3">
+                        <!-- Option (i) -->
+                        <div onclick="selectOption('q4', 'i')" id="opt-q4-i" class="option-item group flex items-center justify-between p-3.5 sm:px-4 rounded-xl border border-slate-300 hover:border-slate-500 bg-white hover:bg-slate-50 cursor-pointer transition select-none">
+                            <span class="text-lg sm:text-xl font-medium text-slate-800">
+                                <span class="font-bold text-slate-500 mr-2">(i)</span> शक्तियों
+                            </span>
+                            <div class="checkbox-box w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 border-slate-600 flex items-center justify-center bg-white group-hover:border-slate-800 transition">
+                                <svg class="check-icon w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Option (ii) -->
+                        <div onclick="selectOption('q4', 'ii')" id="opt-q4-ii" class="option-item group flex items-center justify-between p-3.5 sm:px-4 rounded-xl border border-slate-300 hover:border-slate-500 bg-white hover:bg-slate-50 cursor-pointer transition select-none">
+                            <span class="text-lg sm:text-xl font-medium text-slate-800">
+                                <span class="font-bold text-slate-500 mr-2">(ii)</span> शक्ति
+                            </span>
+                            <div class="checkbox-box w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 border-slate-600 flex items-center justify-center bg-white group-hover:border-slate-800 transition">
+                                <svg class="check-icon w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Option (iii) -->
+                        <div onclick="selectOption('q4', 'iii')" id="opt-q4-iii" class="option-item group flex items-center justify-between p-3.5 sm:px-4 rounded-xl border border-slate-300 hover:border-slate-500 bg-white hover:bg-slate-50 cursor-pointer transition select-none">
+                            <span class="text-lg sm:text-xl font-medium text-slate-800">
+                                <span class="font-bold text-slate-500 mr-2">(iii)</span> शक्तियाँ
+                            </span>
+                            <div class="checkbox-box w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-2 border-slate-600 flex items-center justify-center bg-white group-hover:border-slate-800 transition">
+                                <svg class="check-icon w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="hint-q4" class="hidden mt-3 text-sm rounded-lg p-2.5 bg-slate-50 text-slate-700"></div>
+                </section>
+
+            </div>
+
+            <footer class="mt-12 pt-6 border-t border-slate-200 flex flex-wrap items-center justify-between text-xs text-slate-400 gap-2">
+                <span>पाठ: पंचतंत्र की कथा (चार मित्र और जीवित शेर)</span>
+                <span>व्याकरण कौशल: वचन और समझ आधारित चयन</span>
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        // State store for answers
+        const userAnswers = {
+            q1: null,
+            q2: null,
+            q3: null,
+            q4: null
+        };
+
+        const answerKey = {
+            q1: {
+                correct: 'iii',
+                explanation: 'तीनों मित्रों को अपनी सीखी हुई विद्याओं पर बहुत अभिमान (घमंड) था।'
+            },
+            q2: {
+                correct: 'ii',
+                explanation: 'तीनों युवकों ने जंगल में मिले शेर (सिंह) के कंकाल पर अपनी विद्या की परीक्षा ली थी।'
+            },
+            q3: {
+                correct: 'iii',
+                explanation: 'केवल एक बुद्धिमान मित्र ही जीवित बचा, जो समझदारी दिखाते हुए पेड़ पर चढ़ गया था।'
+            },
+            q4: {
+                correct: 'iii',
+                explanation: 'अस्थि (एकवचन) का बहुवचन "अस्थियाँ" है, उसी प्रकार शक्ति (एकवचन) का बहुवचन "शक्तियाँ" होता है।'
+            }
+        };
+
+        // Option selection handler
+        function selectOption(questionId, optionId) {
+            // Uncheck previous in same question
+            const currentSelected = userAnswers[questionId];
+            if (currentSelected) {
+                const prevElem = document.getElementById(`opt-${questionId}-${currentSelected}`);
+                if (prevElem) {
+                    prevElem.classList.remove('selected', 'bg-amber-50', 'border-amber-500', 'ring-2', 'ring-amber-200');
+                    prevElem.classList.add('bg-white');
+                }
+            }
+
+            // If tapped on already selected, toggle off
+            if (currentSelected === optionId) {
+                userAnswers[questionId] = null;
+            } else {
+                // Select new option
+                userAnswers[questionId] = optionId;
+                const newElem = document.getElementById(`opt-${questionId}-${optionId}`);
+                if (newElem) {
+                    newElem.classList.remove('bg-white');
+                    newElem.classList.add('selected', 'bg-amber-50', 'border-amber-500', 'ring-2', 'ring-amber-200');
+                }
+            }
+
+            // Hide old status toast when user makes changes
+            const toast = document.getElementById('result-toast');
+            toast.classList.add('hidden');
+        }
+
+        // Evaluate answers and give feedback
+        function checkAllAnswers() {
+            let score = 0;
+            let answeredCount = 0;
+            const totalQuestions = Object.keys(answerKey).length;
+
+            Object.keys(answerKey).forEach((qId) => {
+                const selected = userAnswers[qId];
+                const correct = answerKey[qId].correct;
+                const hintBox = document.getElementById(`hint-${qId}`);
+
+                // Clean existing validation styles
+                ['i', 'ii', 'iii'].forEach(opt => {
+                    const el = document.getElementById(`opt-${qId}-${opt}`);
+                    if (el) {
+                        el.classList.remove('border-emerald-500', 'bg-emerald-50', 'border-rose-400', 'bg-rose-50', 'ring-rose-200', 'ring-emerald-200');
+                    }
+                });
+
+                if (selected) {
+                    answeredCount++;
+                    if (selected === correct) {
+                        score++;
+                        const optEl = document.getElementById(`opt-${qId}-${selected}`);
+                        optEl.classList.add('border-emerald-500', 'bg-emerald-50', 'ring-2', 'ring-emerald-200');
+                    } else {
+                        // Mark wrong selected
+                        const wrongEl = document.getElementById(`opt-${qId}-${selected}`);
+                        wrongEl.classList.add('border-rose-400', 'bg-rose-50', 'ring-2', 'ring-rose-200');
+                        // Highlight right one
+                        const correctEl = document.getElementById(`opt-${qId}-${correct}`);
+                        correctEl.classList.add('border-emerald-500', 'bg-emerald-50/50');
+                    }
+
+                    // Reveal explanations
+                    if (hintBox) {
+                        hintBox.innerHTML = `<strong>स्पष्टीकरण:</strong> ${answerKey[qId].explanation}`;
+                        hintBox.classList.remove('hidden');
+                    }
+                } else {
+                    // Show explanation for unanswered
+                    if (hintBox) {
+                        hintBox.innerHTML = `⚠️ <em>इस प्रश्न का उत्तर नहीं दिया गया। सही उत्तर: (${correct})</em> — ${answerKey[qId].explanation}`;
+                        hintBox.classList.remove('hidden');
+                    }
+                }
+            });
+
+            // Display toast banner
+            const toast = document.getElementById('result-toast');
+            toast.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-900', 'bg-amber-100', 'text-amber-900', 'bg-rose-100', 'text-rose-900');
+
+            if (score === totalQuestions) {
+                toast.classList.add('bg-emerald-100', 'text-emerald-900');
+                toast.innerHTML = `🎉 <strong>शाबाश! उत्कृष्ट प्रदर्शन!</strong> आपके सभी <strong>${score}/${totalQuestions}</strong> उत्तर बिल्कुल सही हैं।`;
+                // Confetti celebratory burst
+                if (typeof confetti === 'function') {
+                    confetti({
+                        particleCount: 80,
+                        spread: 70,
+                        origin: { y: 0.6 }
+                    });
+                }
+            } else {
+                toast.classList.add('bg-amber-100', 'text-amber-900');
+                toast.innerHTML = `📝 आपका स्कोर: <strong>${score}/${totalQuestions}</strong> सही। हरे रंग में सही उत्तर और नीचे स्पष्टीकरण देखें।`;
+            }
+            toast.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // Reset the form back to initial clean state
+        function resetWorksheet() {
+            Object.keys(userAnswers).forEach(qId => {
+                userAnswers[qId] = null;
+                const hintBox = document.getElementById(`hint-${qId}`);
+                if (hintBox) hintBox.classList.add('hidden');
+
+                ['i', 'ii', 'iii'].forEach(opt => {
+                    const el = document.getElementById(`opt-${qId}-${opt}`);
+                    if (el) {
+                        el.className = 'option-item group flex items-center justify-between p-3.5 sm:px-4 rounded-xl border border-slate-300 hover:border-slate-500 bg-white hover:bg-slate-50 cursor-pointer transition select-none';
+                    }
+                });
+            });
+
+            const toast = document.getElementById('result-toast');
+            toast.classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
