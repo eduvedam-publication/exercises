@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KOPAL Hindi Class 4 Chapter 11 - MCQ</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 20px; background: #e3f8ff; color: #17354a;
+         font-family: "Noto Sans Devanagari", "Mangal", Arial, sans-serif; }
+  .sheet { max-width: 1000px; margin: 0 auto; background: #fff; border: 3px solid #00bde8;
+           border-radius: 18px; padding: 24px; }
+  h1 { margin: 0 0 8px; color: #ff3284; font-size: clamp(21px, 3vw, 30px); }
+  .meta { color: #236a86; margin-bottom: 20px; }
+  .question { padding: 16px; margin: 14px 0; border: 1px solid #77dcf5; border-radius: 13px; background: #f0fbff; }
+  .qtext { font-size: 18px; font-weight: 600; margin-bottom: 12px; }
+  .options { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; }
+  label.option { display: flex; gap: 9px; align-items: flex-start; border: 1px solid #d5e9ef; background: #fff;
+                 padding: 10px 12px; border-radius: 9px; cursor: pointer; }
+  label.option:hover { border-color: #00bde8; }
+  input[type=radio] { accent-color: #ff3284; margin-top: 5px; }
+  .correct { border-color: #1a9b62 !important; background: #e7fff2 !important; }
+  .wrong { border-color: #e7475d !important; background: #fff0f1 !important; }
+  .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 22px 0 12px; }
+  button { border: 0; border-radius: 30px; padding: 12px 22px; color: white; background: #ff3284;
+           font-weight: 700; font-size: 15px; cursor: pointer; }
+  button:hover { filter: brightness(.94); }
+  button.secondary { background: #078db6; }
+  button.reset { background: #687d89; }
+  #score { text-align: center; color: #007ca5; font-weight: 800; font-size: 21px; margin: 16px 0 4px; }
+  #feedback { text-align: center; min-height: 24px; font-weight: 600; }
+  @media (max-width: 520px) { body { padding: 8px; } .sheet { padding: 14px; } .question { padding: 12px; } }
+</style>
+</head>
+<body>
+<main class="sheet">
+  <h1>सही विकल्प पर सही (✓) का निशान लगाएँ–</h1>
+  <div class="meta">KOPAL Hindi · Class 4 · Chapter 11 · प्रत्येक प्रश्न 1 अंक का है। कुल अंक: 5</div>
+  <form id="quiz">
+    <section class="question" data-answer="b">
+      <div class="qtext">(क) पाठ में किसकी आत्मकथा का वर्णन किया गया है?</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q1" value="a"><span>(i) हिमालय</span></label>
+        <label class="option"><input type="radio" name="q1" value="b"><span>(ii) गंगा</span></label>
+        <label class="option"><input type="radio" name="q1" value="c"><span>(iii) नदी</span></label>
+      </div>
+    </section>
+    <section class="question" data-answer="b">
+      <div class="qtext">(ख) नदी ने अपना पिता किसे बताया है?</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q2" value="a"><span>(i) पर्वत</span></label>
+        <label class="option"><input type="radio" name="q2" value="b"><span>(ii) हिमालय</span></label>
+        <label class="option"><input type="radio" name="q2" value="c"><span>(iii) राजा</span></label>
+      </div>
+    </section>
+    <section class="question" data-answer="b">
+      <div class="qtext">(ग) पिता का घर छोड़ते समय नदी थी—</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q3" value="a"><span>(i) खुश</span></label>
+        <label class="option"><input type="radio" name="q3" value="b"><span>(ii) दुखी</span></label>
+        <label class="option"><input type="radio" name="q3" value="c"><span>(iii) घबराई हुई</span></label>
+      </div>
+    </section>
+    <section class="question" data-answer="b">
+      <div class="qtext">(घ) नदी से बिजली का क्या संबंध है?</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q4" value="a"><span>(i) पानी में बिजली मिली होती है।</span></label>
+        <label class="option"><input type="radio" name="q4" value="b"><span>(ii) नदी का बाँध बनाकर बिजली बनती है।</span></label>
+        <label class="option"><input type="radio" name="q4" value="c"><span>(iii) बिजली ही नदी का प्राण होती है।</span></label>
+      </div>
+    </section>
+    <section class="question" data-answer="a">
+      <div class="qtext">(ङ) ‘आज वे ही कृतघ्न हो गए हैं’ इसमें ‘कृतघ्न’ का अर्थ क्या है?</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q5" value="a"><span>(i) जो उपकार को न माने</span></label>
+        <label class="option"><input type="radio" name="q5" value="b"><span>(ii) जो उपकार करे</span></label>
+        <label class="option"><input type="radio" name="q5" value="c"><span>(iii) जो उपकार को माने</span></label>
+      </div>
+    </section>
+    <div class="actions">
+      <button type="button" onclick="submitQuiz()">Submit</button>
+      <button type="button" class="secondary" onclick="showAnswers()">Show Answer</button>
+      <button type="button" class="reset" onclick="resetQuiz()">Reset</button>
+    </div>
+  </form>
+  <div id="score">प्राप्तांक: 0 / 5</div>
+  <div id="feedback" aria-live="polite"></div>
+</main>
+<script>
+function clearStyles() {
+  document.querySelectorAll('.option').forEach(el => el.classList.remove('correct', 'wrong'));
+}
+function markAnswers(showAll) {
+  clearStyles();
+  let score = 0, answered = 0;
+  document.querySelectorAll('.question').forEach((q, idx) => {
+    const answer = q.dataset.answer;
+    const chosen = q.querySelector('input:checked');
+    if (chosen) {
+      answered++;
+      if (chosen.value === answer) score++;
+      else chosen.closest('.option').classList.add('wrong');
+    }
+    const correctInput = q.querySelector('input[value="' + answer + '"]');
+    if (showAll || (chosen && chosen.value === answer)) correctInput.closest('.option').classList.add('correct');
+  });
+  document.getElementById('score').textContent = 'प्राप्तांक: ' + score + ' / 5';
+  document.getElementById('feedback').textContent = showAll ? 'सही उत्तर हरे रंग में दिखाए गए हैं।' :
+    (answered < 5 ? 'आपने ' + answered + ' में से प्रश्नों के उत्तर दिए हैं।' : (score === 5 ? 'बहुत अच्छे! सभी उत्तर सही हैं।' : 'उत्तर जाँच लिए गए हैं। सही उत्तर हरे और गलत उत्तर लाल रंग में हैं।'));
+}
+function submitQuiz() { markAnswers(false); }
+function showAnswers() { markAnswers(true); }
+function resetQuiz() {
+  document.getElementById('quiz').reset();
+  clearStyles();
+  document.getElementById('score').textContent = 'प्राप्तांक: 0 / 5';
+  document.getElementById('feedback').textContent = '';
+}
+</script>
+</body>
+</html>

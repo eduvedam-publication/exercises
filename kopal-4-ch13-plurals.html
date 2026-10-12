@@ -1,0 +1,39 @@
+<!DOCTYPE html><html lang="hi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>नीचे दिए गए शब्दों को बहुवचन में बदलिए–</title><style>
+*{box-sizing:border-box}body{margin:0;padding:18px;background:#e3f8ff;color:#17354a;font-family:"Noto Sans Devanagari","Mangal",Arial,sans-serif}
+.sheet{max-width:1000px;margin:auto;background:#fff;border:3px solid #00bde8;border-radius:18px;padding:24px}
+h1{margin:0 0 8px;color:#ff3284;font-size:clamp(21px,3vw,30px)}
+.meta{color:#236a86;margin-bottom:18px}
+.question{padding:15px;margin:13px 0;border:1px solid #77dcf5;border-radius:13px;background:#f0fbff}
+.qtext{font-size:18px;font-weight:600;margin-bottom:10px}
+.options{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:9px}
+.option{display:flex;align-items:flex-start;gap:9px;border:1px solid #d5e9ef;background:#fff;padding:10px 12px;border-radius:9px;cursor:pointer}
+.option:hover{border-color:#00bde8}
+input[type=radio]{accent-color:#ff3284;margin-top:5px}
+select,input[type=text]{font:inherit;border:1px solid #7acfe6;border-radius:7px;padding:8px;background:white;max-width:100%;min-width:145px}
+.answerline{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:8px}
+.correct{border-color:#1a9b62!important;background:#e7fff2!important}
+.wrong{border-color:#e7475d!important;background:#fff0f1!important}
+.actions{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:22px 0 12px}
+button{border:0;border-radius:30px;padding:12px 22px;color:white;background:#ff3284;font-weight:700;font-size:15px;cursor:pointer}
+button.secondary{background:#078db6}button.reset{background:#687d89}
+#score{text-align:center;color:#007ca5;font-weight:800;font-size:21px;margin:16px 0 4px}
+#feedback{text-align:center;min-height:24px;font-weight:600}
+@media(max-width:520px){body{padding:8px}.sheet{padding:14px}.question{padding:12px}}
+</style></head><body><main class="sheet"><h1>नीचे दिए गए शब्दों को बहुवचन में बदलिए–</h1><form id="quiz"><section class="question" data-answer="पाबंदियाँ"><div class="qtext">(क) पाबंदी —</div><div class="answerline"><label>बहुवचन:</label><select name="q1"><option value="">— विकल्प चुनें —</option><option value="पाबंदियाँ">पाबंदियाँ</option><option value="कठिनाइयाँ">कठिनाइयाँ</option><option value="सीटियाँ">सीटियाँ</option><option value="यात्रियों/यात्रीगण">यात्रियों/यात्रीगण</option></select></div><div class="shown-answer"></div></section><section class="question" data-answer="ज़िंदगियाँ"><div class="qtext">(ख) ज़िंदगी —</div><div class="answerline"><label>बहुवचन:</label><select name="q2"><option value="">— विकल्प चुनें —</option><option value="यात्रियों/यात्रीगण">यात्रियों/यात्रीगण</option><option value="ज़िंदगियाँ">ज़िंदगियाँ</option><option value="सीटियाँ">सीटियाँ</option><option value="कठिनाइयाँ">कठिनाइयाँ</option></select></div><div class="shown-answer"></div></section><section class="question" data-answer="मजबूरियाँ"><div class="qtext">(ग) मजबूरी —</div><div class="answerline"><label>बहुवचन:</label><select name="q3"><option value="">— विकल्प चुनें —</option><option value="ज़िंदगियाँ">ज़िंदगियाँ</option><option value="सीटियाँ">सीटियाँ</option><option value="मजबूरियाँ">मजबूरियाँ</option><option value="पाबंदियाँ">पाबंदियाँ</option></select></div><div class="shown-answer"></div></section><section class="question" data-answer="यात्रियों/यात्रीगण"><div class="qtext">(घ) यात्री —</div><div class="answerline"><label>बहुवचन:</label><select name="q4"><option value="">— विकल्प चुनें —</option><option value="कठिनाइयाँ">कठिनाइयाँ</option><option value="पाबंदियाँ">पाबंदियाँ</option><option value="ज़िंदगियाँ">ज़िंदगियाँ</option><option value="यात्रियों/यात्रीगण">यात्रियों/यात्रीगण</option></select></div><div class="shown-answer"></div></section><section class="question" data-answer="सीटियाँ"><div class="qtext">(ङ) सीटी —</div><div class="answerline"><label>बहुवचन:</label><select name="q5"><option value="">— विकल्प चुनें —</option><option value="मजबूरियाँ">मजबूरियाँ</option><option value="यात्रियों/यात्रीगण">यात्रियों/यात्रीगण</option><option value="कठिनाइयाँ">कठिनाइयाँ</option><option value="सीटियाँ">सीटियाँ</option></select></div><div class="shown-answer"></div></section><section class="question" data-answer="कठिनाइयाँ"><div class="qtext">(च) कठिनाई —</div><div class="answerline"><label>बहुवचन:</label><select name="q6"><option value="">— विकल्प चुनें —</option><option value="सीटियाँ">सीटियाँ</option><option value="कठिनाइयाँ">कठिनाइयाँ</option><option value="यात्रियों/यात्रीगण">यात्रियों/यात्रीगण</option><option value="पाबंदियाँ">पाबंदियाँ</option></select></div><div class="shown-answer"></div></section></form><div class="actions"><button type="button" onclick="submitQuiz()">Submit</button><button type="button" class="secondary" onclick="showAnswers()">Show Answer</button><button type="button" class="reset" onclick="resetQuiz()">Reset</button></div><div id="score">प्राप्तांक: 0 / 6</div><div id="feedback" aria-live="polite"></div></main><script>
+function clearStyles(){document.querySelectorAll('.option,.question').forEach(el=>el.classList.remove('correct','wrong'))}
+function getChoice(q){let r=q.querySelector('input[type=radio]:checked');if(r)return r.value;let s=q.querySelector('select');if(s && s.value!=='')return s.value;let t=q.querySelector('input[type=text]');if(t)return t.value.trim();return ''}
+function markAnswers(showAll){
+ clearStyles();let score=0,answered=0;
+ document.querySelectorAll('.question').forEach(q=>{
+  const answer=q.dataset.answer;const chosen=getChoice(q);
+  const control=q.querySelector('input[type=radio]:checked')||q.querySelector('select')||q.querySelector('input[type=text]');
+  if(chosen!==''){answered++;if(chosen===answer){score++;if(control)control.classList.add('correct')}else{if(control)control.classList.add('wrong')}}
+  if(showAll){q.querySelectorAll('input[type=radio]').forEach(r=>{if(r.value===answer)r.closest('.option').classList.add('correct')});let s=q.querySelector('select');if(s){s.classList.add('correct');let out=q.querySelector('.shown-answer');if(out)out.textContent='सही उत्तर: '+answer;}}
+ });
+ document.getElementById('score').textContent='प्राप्तांक: '+score+' / 6';
+ document.getElementById('feedback').textContent=showAll?'सही उत्तर हरे रंग में दिखाए गए हैं।':(answered<6?'आपने '+answered+' प्रश्नों के उत्तर दिए हैं।':(score===6?'बहुत अच्छे! सभी उत्तर सही हैं।':'उत्तर जाँच लिए गए हैं। सही उत्तर हरे और गलत उत्तर लाल रंग में हैं।'));
+}
+function submitQuiz(){markAnswers(false)}
+function showAnswers(){markAnswers(true)}
+function resetQuiz(){document.getElementById('quiz').reset();clearStyles();document.querySelectorAll('.shown-answer').forEach(e=>e.textContent='');document.getElementById('score').textContent='प्राप्तांक: 0 / 6';document.getElementById('feedback').textContent=''}
+</script></body></html>

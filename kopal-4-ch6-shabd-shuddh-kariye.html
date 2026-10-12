@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KOPAL Hindi 4 Chapter 6 Correct Spellings</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#e4f8ff;font-family:Georgia,'Noto Serif Devanagari',serif;color:#263b44}.wrap{max-width:1000px;margin:22px auto;background:#fff;border:3px solid #00bde8;border-radius:18px;padding:24px}h2{margin:0 0 8px;color:#ff3988;font-size:25px}.meta{color:#527783;margin:0 0 18px}.q{background:#effbff;border:1px solid #8cdef4;border-radius:12px;padding:14px;margin:12px 0;font-size:19px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}.q select{font:inherit;font-size:17px;min-width:210px;max-width:100%;padding:8px 12px;border:1.5px solid #00bde8;border-radius:8px;background:#fff;cursor:pointer}.q select:focus{outline:2px solid #ff8bb7}.q select.correct{background:#dcf8e5;border-color:#20a653}.q select.wrong{background:#ffe0e0;border-color:#e43d3d}.actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:22px}.actions button{border:0;border-radius:24px;padding:11px 21px;background:#ff3988;color:white;font-weight:bold;cursor:pointer;font-size:15px}#score{text-align:center;color:#087fa7;font-weight:bold;font-size:19px;margin-top:15px}@media(max-width:650px){.wrap{margin:8px;padding:14px}.q{font-size:17px}.q select{width:100%;min-width:0}}
+</style></head><body><main class="wrap"><h2>नीचे दिए गए शब्दों को शुद्ध करके लिखिए–</h2><p class="meta">प्रत्येक प्रश्न 1 अंक का है। कुल अंक: 6</p><section id="questions"></section><div class="actions"><button onclick="check()">Submit</button><button onclick="showAnswers()">Show Answer</button><button onclick="resetAll()">Reset</button></div><div id="score">प्राप्तांक: 0 / 6</div></main>
+<script>
+const data=[
+["प्रतीदिन",["प्रतिदिन","पवित्र","सूर्योदय","निश्चिंत"],"प्रतिदिन"],
+["आग्या",["सूर्योदय","आज्ञा","आश्चर्य","निश्चिंत"],"आज्ञा"],
+["निश्चिन्त",["आज्ञा","पवित्र","निश्चिंत","सूर्योदय"],"निश्चिंत"],
+["पवितर",["आश्चर्य","निश्चिंत","सूर्योदय","पवित्र"],"पवित्र"],
+["आशचर्य",["सूर्योदय","आज्ञा","आश्चर्य","प्रतिदिन"],"आश्चर्य"],
+["सूय्रोदय",["पवित्र","सूर्योदय","आश्चर्य","निश्चिंत"],"सूर्योदय"]
+];const key='kopal-4-ch6-spellings';let answers={};try{answers=JSON.parse(localStorage.getItem(key)||'{}')}catch(e){}const root=document.getElementById('questions');
+function render(){root.innerHTML=data.map((q,i)=>`<div class="q" id="q${i}">(${'कखगघङच'[i]}) <b>${q[0]}</b> — <select id="s${i}" onchange="pick(${i},this.value)"><option value="">— शुद्ध शब्द चुनें —</option>${q[1].map(o=>`<option value="${o}" ${answers[i]===o?'selected':''}>${o}</option>`).join('')}</select></div>`).join('')}
+function pick(i,v){answers[i]=v;localStorage.setItem(key,JSON.stringify(answers))}
+function check(){let score=0;data.forEach((q,i)=>{let el=document.getElementById('s'+i);el.classList.remove('correct','wrong');if(answers[i]){let ok=answers[i]===q[2];el.classList.add(ok?'correct':'wrong');if(ok)score++}});document.getElementById('score').textContent=`प्राप्तांक: ${score} / 6`}
+function showAnswers(){answers={};data.forEach((q,i)=>answers[i]=q[2]);localStorage.setItem(key,JSON.stringify(answers));render();check()}
+function resetAll(){answers={};localStorage.removeItem(key);render();document.getElementById('score').textContent='प्राप्तांक: 0 / 6'}render();
+</script></body></html>
