@@ -12,7 +12,7 @@ const data=[
 ["कवि किस प्रकार खड़े रहने की बात कह रहे हैं?",["विचलित होकर","अविचलित होकर","अस्थिर रहकर"],1],
 ["सफलता कैसे मिलती है?",["मुसीबत आने पर","खुशी आने पर","मुसीबत में भी अटल रहने पर"],2],
 ["यह ‘अचल’ है–",["पृथ्वी","पर्वत","नदी"],1],
-["‘गंगा’ का अर्थ यह नहीं है–",["संसार","एक बरतन","कलश"],1]
+["‘जग’ का अर्थ यह नहीं है–",["संसार","एक बरतन","कलश"],1]
 ],key='kopal-4-ch1-mcq';let answers={};try{answers=JSON.parse(localStorage.getItem(key)||'{}')}catch(e){}const root=document.getElementById('questions');
 function render(){root.innerHTML=data.map((q,i)=>`<div class="q" id="q${i}"><b>(${'कखगघङ'[i]}) ${q[0]}</b><div class="opts">${q[1].map((o,j)=>`<div class="opt ${answers[i]===j?'sel':''}" id="o${i}-${j}" role="button" tabindex="0" onclick="pick(${i},${j})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();pick(${i},${j})}"><span>(${'i ii iii'.split(' ')[j]}) ${o}</span><span>${answers[i]===j?'☑':'□'}</span></div>`).join('')}</div></div>`).join('')}
 function pick(i,j){answers[i]=j;localStorage.setItem(key,JSON.stringify(answers));render()}
