@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>रिक्त स्थान भरिए</title>
+<style>
+*{box-sizing:border-box}body{margin:0;padding:18px 12px;background:#eef8e4;color:#344334;font-family:"Noto Sans Devanagari",Mangal,Arial,sans-serif}
+.sheet{max-width:900px;margin:auto;padding:22px;background:#fff;border:2px solid #9dcc79;border-radius:16px}
+h1{margin:0 0 18px;color:#ff3281;font-size:28px}.question{padding:14px 12px;margin:10px 0;background:#f4faed;border-radius:10px;border:1px solid #d7e9c8;font-size:19px;line-height:2}
+input.answer{width:170px;max-width:45%;border:0;border-bottom:2px dashed #7b9e72;background:transparent;text-align:center;font:inherit;color:#304b30;outline:none;padding:2px 5px}
+input.answer:focus{border-bottom:2px solid #ff3281;background:#fff}.question.correct{background:#e7fff1;border-color:#35b77b}.question.incorrect{background:#fff0f2;border-color:#ef6a84}
+.feedback{font-size:15px;line-height:1.5;margin-top:5px}.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+button{border:0;border-radius:24px;padding:11px 20px;background:#ff3281;color:white;font-size:16px;font-weight:bold;cursor:pointer}button.secondary{background:#1286a5}button.reset{background:#65766a}
+#score{text-align:center;font-size:21px;font-weight:bold;color:#137b53;margin-top:18px}@media(max-width:520px){.sheet{padding:14px}h1{font-size:23px}.question{font-size:17px}input.answer{width:130px}}
+</style></head><body><main class="sheet">
+<h1>रिक्त स्थान भरिए—</h1><form id="quiz">
+<div class="question">(क) तानसेन का जन्म <input class="answer" name="a0" autocomplete="off" aria-label="प्रश्न क का उत्तर"> शहर में हुआ था।<div class="feedback"></div></div>
+<div class="question">(ख) तानसेन के पिता का नाम <input class="answer" name="a1" autocomplete="off" aria-label="प्रश्न ख का उत्तर"> था।<div class="feedback"></div></div>
+<div class="question">(ग) बाबा ने मकरंद को भगवान पर <input class="answer" name="a2" autocomplete="off" aria-label="प्रश्न ग का उत्तर"> रखने को कहा।<div class="feedback"></div></div>
+<div class="question">(घ) तानसेन के गुरु <input class="answer" name="a3" autocomplete="off" aria-label="प्रश्न घ का उत्तर"> थे।<div class="feedback"></div></div>
+<div class="question">(ङ) अकबर ने तानसेन को अपने <input class="answer" name="a4" autocomplete="off" aria-label="प्रश्न ङ का उत्तर"> में शामिल किया।<div class="feedback"></div></div>
+<div class="actions"><button type="button" id="submit">Submit</button><button type="button" class="secondary" id="show">Show Answer</button><button type="button" class="reset" id="reset">Reset</button></div>
+<div id="score" aria-live="polite">प्राप्तांक: 0 / 5</div></form></main>
+<script>
+/* Suggested answers; verify against the exact chapter text before publishing. */
+const answers=[["ग्वालियर"],["मुकुंद पांडे","मुकुंद पांडेय","मुकुंद"],["विश्वास","भरोसा"],["स्वामी हरिदास","हरिदास"],["नवरत्नों","नवरत्न"]];
+const qs=[...document.querySelectorAll(".question")];
+function norm(s){return s.trim().replace(/[।.,!?]/g,"").replace(/\s+/g," ").toLowerCase()}
+function check(reveal=false){let score=0;qs.forEach((q,i)=>{q.classList.remove("correct","incorrect");const f=q.querySelector("input"),v=norm(f.value),ok=answers[i].some(a=>norm(a)===v),fb=q.querySelector(".feedback");if(ok){score++;q.classList.add("correct");fb.textContent="सही उत्तर ✓";fb.style.color="#087c4b"}else if(reveal){q.classList.add("incorrect");fb.textContent="उत्तर: "+answers[i][0];fb.style.color="#b83250"}else if(v){q.classList.add("incorrect");fb.textContent="फिर से प्रयास करें";fb.style.color="#b83250"}else{fb.textContent="उत्तर लिखें";fb.style.color="#876b72"}});document.getElementById("score").textContent="प्राप्तांक: "+score+" / 5"}
+document.getElementById("submit").addEventListener("click",()=>check(false));
+document.getElementById("show").addEventListener("click",()=>check(true));
+document.getElementById("reset").addEventListener("click",()=>{document.getElementById("quiz").reset();qs.forEach(q=>{q.classList.remove("correct","incorrect");q.querySelector(".feedback").textContent=""});document.getElementById("score").textContent="प्राप्तांक: 0 / 5"});
+</script></body></html>
