@@ -1,0 +1,140 @@
+<!doctype html><html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KOPAL Class 7 Chapter 17 Fill — 2026–27</title><style>*{box-sizing:border-box}body{margin:0;background:#d1faff;font-family:Georgia,'Noto Serif Devanagari',serif;color:#17333b}.wrap{max-width:1000px;margin:22px auto;background:white;border:3px solid #00aee8;border-radius:20px;padding:24px}h2{color:#00a7dd;margin:0 0 8px;font-size:26px}.q{background:#eafaff;border:1px solid #00b9f3;border-radius:12px;padding:13px;margin:10px 0;font-size:19px}.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:12px}.opt{border:1px solid #93dcf5;background:white;border-radius:8px;padding:10px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:6px}.opt.sel{background:#d8f3ff;border-color:#009be0}.opt.correct{background:#dcfce5!important;border-color:#22aa55!important}.opt.wrong{background:#ffe3e3!important;border-color:#ff4545!important;animation:blink .6s 2}@keyframes blink{50%{opacity:.55}}.actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:25px}.actions button{border:0;border-radius:24px;background:#ff8200;color:white;font-weight:bold;padding:11px 19px;cursor:pointer;font-size:15px}@media(max-width:620px){.wrap{margin:7px;padding:14px}.opts{grid-template-columns:1fr}.q{font-size:17px}}
+.bank{display:flex;flex-wrap:wrap;gap:8px;padding:12px;margin:12px 0;background:#ebfaff;border-radius:10px}
+.chip,.blank{font:inherit;color:inherit;border-radius:8px;background:white;cursor:pointer;min-height:40px;padding:4px 10px;touch-action:manipulation}
+.chip{border:1px solid #009bd0;cursor:grab}
+.blank{min-width:122px;border:2px dashed #00a7dd;vertical-align:middle;margin:2px 0}
+.blank.filled{border-style:solid;cursor:grab}
+.chip[aria-pressed=true],.blank[aria-pressed=true],.blank.over{background:#c4edff;outline:2px solid #007da8}
+.blank.correct{background:#dcfce5;border-color:#22aa55}
+.blank.wrong{background:#ffe3e3;border-color:#e33}
+.stanza{line-height:1.85}
+button:focus-visible{outline:2px solid #005878;outline-offset:2px}
+</style></head><body><main class="wrap">
+<h2>रिक्त स्थानों की पूर्ति कीजिए–</h2>
+<p>शब्द-समूह को खींचकर सही रिक्त स्थान में छोड़िए, या शब्द-समूह चुनकर रिक्त स्थान पर टैप कीजिए। उत्तर हटाने के लिए भरे हुए स्थान पर फिर से टैप कीजिए।</p>
+<div class="bank" id="bank" role="group" aria-label="शब्द-समूह"></div>
+<section class="q stanza" aria-label="पद्यांश क"><strong>क.</strong> काले बादलों <button type="button" class="blank" data-slot="0"></button><br>काले बादलों <button type="button" class="blank" data-slot="1"></button><br><button type="button" class="blank" data-slot="2"></button> पथ पर,<br><button type="button" class="blank" data-slot="3"></button> प्रवेश के,</section><section class="q stanza" aria-label="पद्यांश ख"><strong>ख.</strong> देश जातियों <button type="button" class="blank" data-slot="4"></button>,<br>नव मानवता <button type="button" class="blank" data-slot="5"></button>,<br><button type="button" class="blank" data-slot="6"></button> कल की,<br><button type="button" class="blank" data-slot="7"></button> रेखा।</section>
+<div class="actions"><button id="submit">Submit</button><button id="show">Show Answer</button><button id="reset">Reset</button></div>
+</main><script>
+const phrases=["जाति द्वेष के", "विश्व क्लेश के", "काले बादलों उठते", "नव स्वतंत्रता के", "का कब होगा", "में रे एका", "काले बादलों में", "सोने की"];
+const bankOrder=[5, 2, 7, 0, 6, 3, 4, 1];
+
+const key='kopal-7-ch17-fill-drag';
+const slots=Array.from(document.querySelectorAll('.blank'));
+const bank=document.getElementById('bank');
+const chips=new Map();
+const empty=()=>phrases.map(()=>null);
+let placed=empty();
+let selected=null;
+let dragged=null;
+let feedback=false;
+try {
+  const saved=JSON.parse(localStorage.getItem(key));
+  if(Array.isArray(saved)&&saved.length===phrases.length){
+    const seen=new Set();
+    placed=saved.map(id=>{
+      if(!Number.isInteger(id)||!phrases[id]||seen.has(id)) return null;
+      seen.add(id);
+      return id;
+    });
+  }
+} catch {}
+function save(){
+  try { localStorage.setItem(key,JSON.stringify(placed)); } catch {}
+}
+function startDrag(event,id){
+  dragged=id;
+  event.dataTransfer.setData('text/plain',String(id));
+  event.dataTransfer.effectAllowed='move';
+}
+function endDrag(){
+  dragged=null;
+  slots.forEach(slot=>slot.classList.remove('over'));
+}
+function place(index,id){
+  const previous=placed.indexOf(id);
+  if(previous!==-1) placed[previous]=null;
+  placed[index]=id;
+  selected=null;
+  feedback=false;
+  save();
+  render();
+}
+function render(){
+  chips.forEach((chip,id)=>{
+    chip.hidden=placed.includes(id);
+    chip.setAttribute('aria-pressed',String(selected===id));
+  });
+  slots.forEach((slot,index)=>{
+    const id=placed[index];
+    const filled=id!==null;
+    const checked=feedback&&filled;
+    const correct=id===index;
+    const status=checked?(correct?'सही':'गलत'):'';
+    slot.textContent=filled?phrases[id]+(checked?(correct?' ✓':' ✗'):''):'________';
+    slot.draggable=filled;
+    slot.classList.toggle('filled',filled);
+    slot.classList.toggle('correct',checked&&correct);
+    slot.classList.toggle('wrong',checked&&!correct);
+    slot.setAttribute('aria-pressed',String(filled&&selected===id));
+    slot.setAttribute('aria-label', 'रिक्त स्थान '+(index+1)+(filled?', '+phrases[id]:', खाली')+(status?', '+status:''));
+  });
+}
+bankOrder.forEach(id=>{
+  const chip=document.createElement('button');
+  chip.type='button';
+  chip.className='chip';
+  chip.textContent=phrases[id];
+  chip.draggable=true;
+  chip.ondragstart=event=>startDrag(event,id);
+  chip.ondragend=endDrag;
+  chip.onclick=()=>{
+    selected=selected===id?null:id;
+    render();
+  };
+  chips.set(id,chip);
+  bank.append(chip);
+});
+slots.forEach((slot,index)=>{
+  slot.onclick=()=>{
+    if(selected!==null) place(index,selected);
+    else if(placed[index]!==null) place(index,null);
+  };
+  slot.ondragstart=event=>{
+    if(placed[index]!==null) startDrag(event,placed[index]);
+  };
+  slot.ondragend=endDrag;
+  slot.ondragover=event=>{
+    if(dragged===null) return;
+    event.preventDefault();
+    event.dataTransfer.dropEffect='move';
+    slot.classList.add('over');
+  };
+  slot.ondragleave=()=>slot.classList.remove('over');
+  slot.ondrop=event=>{
+    event.preventDefault();
+    if(dragged!==null) place(index,dragged);
+    endDrag();
+  };
+});
+document.getElementById('submit').onclick=()=>{
+  selected=null;
+  feedback=true;
+  render();
+};
+document.getElementById('show').onclick=()=>{
+  placed=phrases.map((_,index)=>index);
+  selected=null;
+  feedback=true;
+  save();
+  render();
+};
+document.getElementById('reset').onclick=()=>{
+  placed=empty();
+  selected=null;
+  feedback=false;
+  save();
+  render();
+};
+render();
+</script></body></html>
