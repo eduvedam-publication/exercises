@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>हिन्दी व्याकरण - सही या गलत अभ्यास (Kriya Quiz)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Tiro Devanagari Hindi', 'Poppins', serif;
+        }
+        .heading-font {
+            font-family: 'Poppins', 'Tiro Devanagari Hindi', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-amber-50 min-h-screen text-gray-800 py-8 px-4 sm:px-6 lg:px-8">
+
+    <div class="max-w-3xl mx-auto">
+        <!-- Header -->
+        <header class="bg-white shadow-lg rounded-2xl p-6 mb-8 text-center border-t-4 border-amber-600">
+            <span class="inline-block px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-sm font-semibold mb-2">अभ्यास प्रश्न-पत्र (Worksheet)</span>
+            <h1 class="text-3xl sm:text-4xl font-bold text-amber-900 mb-2">हिन्दी व्याकरण : क्रिया (Verb)</h1>
+            <p class="text-gray-600 text-lg">प्रश्न 5. सही (✓) या गलत (✗) का चिह्न लगाइए-</p>
+        </header>
+
+        <!-- Question Container -->
+        <main class="bg-white shadow-xl rounded-2xl p-6 sm:p-8 border border-amber-100">
+            
+            <form id="quiz-form" class="space-y-6">
+
+                <!-- Statement (क) -->
+                <div class="question-card p-5 rounded-xl border-2 border-gray-100 bg-gray-50 hover:border-amber-200 transition duration-200" data-answer="true">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div class="flex items-start gap-3">
+                            <span class="bg-amber-600 text-white font-bold w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5">(क)</span>
+                            <p class="text-xl leading-relaxed text-gray-900">
+                                लिंग व वचन में परिवर्तन होने पर क्रिया का रूप भी बदल जाता है।
+                            </p>
+                        </div>
+                        <div class="flex items-center gap-3 shrink-0 self-end sm:self-center">
+                            <button type="button" onclick="selectAnswer(this, true)" class="option-btn px-4 py-2 border-2 border-emerald-500 text-emerald-700 hover:bg-emerald-50 rounded-xl font-bold text-lg flex items-center gap-1 transition">
+                                <span>✓</span> सही
+                            </button>
+                            <button type="button" onclick="selectAnswer(this, false)" class="option-btn px-4 py-2 border-2 border-rose-500 text-rose-700 hover:bg-rose-50 rounded-xl font-bold text-lg flex items-center gap-1 transition">
+                                <span>✗</span> गलत
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Feedback Section -->
+                    <div class="feedback-box hidden mt-4 pt-3 border-t text-base font-medium"></div>
+                </div>
+
+                <!-- Statement (ख) -->
+                <div class="question-card p-5 rounded-xl border-2 border-gray-100 bg-gray-50 hover:border-amber-200 transition duration-200" data-answer="false">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div class="flex items-start gap-3">
+                            <span class="bg-amber-600 text-white font-bold w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5">(ख)</span>
+                            <p class="text-xl leading-relaxed text-gray-900">
+                                क्रिया के तीन रूप होते हैं।
+                            </p>
+                        </div>
+                        <div class="flex items-center gap-3 shrink-0 self-end sm:self-center">
+                            <button type="button" onclick="selectAnswer(this, true)" class="option-btn px-4 py-2 border-2 border-emerald-500 text-emerald-700 hover:bg-emerald-50 rounded-xl font-bold text-lg flex items-center gap-1 transition">
+                                <span>✓</span> सही
+                            </button>
+                            <button type="button" onclick="selectAnswer(this, false)" class="option-btn px-4 py-2 border-2 border-rose-500 text-rose-700 hover:bg-rose-50 rounded-xl font-bold text-lg flex items-center gap-1 transition">
+                                <span>✗</span> गलत
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Feedback Section -->
+                    <div class="feedback-box hidden mt-4 pt-3 border-t text-base font-medium"></div>
+                </div>
+
+                <!-- Statement (ग) -->
+                <div class="question-card p-5 rounded-xl border-2 border-gray-100 bg-gray-50 hover:border-amber-200 transition duration-200" data-answer="true">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div class="flex items-start gap-3">
+                            <span class="bg-amber-600 text-white font-bold w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5">(ग)</span>
+                            <p class="text-xl leading-relaxed text-gray-900">
+                                जिस क्रिया में कर्म पाया जाता है, वह सकर्मक क्रिया कहलाती है।
+                            </p>
+                        </div>
+                        <div class="flex items-center gap-3 shrink-0 self-end sm:self-center">
+                            <button type="button" onclick="selectAnswer(this, true)" class="option-btn px-4 py-2 border-2 border-emerald-500 text-emerald-700 hover:bg-emerald-50 rounded-xl font-bold text-lg flex items-center gap-1 transition">
+                                <span>✓</span> सही
+                            </button>
+                            <button type="button" onclick="selectAnswer(this, false)" class="option-btn px-4 py-2 border-2 border-rose-500 text-rose-700 hover:bg-rose-50 rounded-xl font-bold text-lg flex items-center gap-1 transition">
+                                <span>✗</span> गलत
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Feedback Section -->
+                    <div class="feedback-box hidden mt-4 pt-3 border-t text-base font-medium"></div>
+                </div>
+
+                <!-- Statement (घ) -->
+                <div class="question-card p-5 rounded-xl border-2 border-gray-100 bg-gray-50 hover:border-amber-200 transition duration-200" data-answer="true">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div class="flex items-start gap-3">
+                            <span class="bg-amber-600 text-white font-bold w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5">(घ)</span>
+                            <p class="text-xl leading-relaxed text-gray-900">
+                                जिस क्रिया में कर्म नहीं पाया जाता, वह अकर्मक क्रिया कहलाती है।
+                            </p>
+                        </div>
+                        <div class="flex items-center gap-3 shrink-0 self-end sm:self-center">
+                            <button type="button" onclick="selectAnswer(this, true)" class="option-btn px-4 py-2 border-2 border-emerald-500 text-emerald-700 hover:bg-emerald-50 rounded-xl font-bold text-lg flex items-center gap-1 transition">
+                                <span>✓</span> सही
+                            </button>
+                            <button type="button" onclick="selectAnswer(this, false)" class="option-btn px-4 py-2 border-2 border-rose-500 text-rose-700 hover:bg-rose-50 rounded-xl font-bold text-lg flex items-center gap-1 transition">
+                                <span>✗</span> गलत
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Feedback Section -->
+                    <div class="feedback-box hidden mt-4 pt-3 border-t text-base font-medium"></div>
+                </div>
+
+                <!-- Action Controls -->
+                <div class="pt-6 flex flex-wrap items-center justify-between gap-4 border-t">
+                    <button type="button" onclick="checkAnswers()" class="w-full sm:w-auto px-8 py-3 bg-amber-600 hover:bg-amber-700 text-white text-xl font-bold rounded-xl shadow-md transition transform active:scale-95">
+                        उत्तर जांचें (Check Answers)
+                    </button>
+                    <button type="button" onclick="resetQuiz()" class="w-full sm:w-auto px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 text-lg font-semibold rounded-xl transition">
+                        पुनः प्रयास करें (Reset)
+                    </button>
+                </div>
+
+            </form>
+
+            <!-- Result Box -->
+            <div id="result-box" class="hidden mt-8 p-6 bg-amber-50 rounded-xl border border-amber-200 text-center">
+                <h3 class="text-2xl font-bold text-amber-900 mb-1" id="score-title">आपका परिणाम</h3>
+                <p class="text-3xl font-extrabold text-amber-700 my-2" id="score-text">0 / 4</p>
+                <p class="text-gray-600 text-lg" id="score-msg"></p>
+            </div>
+
+        </main>
+        
+        <footer class="mt-8 text-center text-gray-500 text-sm">
+            हिन्दी भाषा एवं व्याकरण अभ्यास पत्र
+        </footer>
+    </div>
+
+    <script>
+        // Store selected user answers
+        const userAnswers = {};
+
+        // Explanations for answers
+        const explanations = {
+            0: "✓ **सही!** उदाहरण: 'लड़का पढ़ता है' (पुं.) ➔ 'लड़की पढ़ती है' (स्त्री.) तथा 'लड़के पढ़ते हैं' (बहुवचन)।",
+            1: "✗ **गलत!** कर्म के आधार पर क्रिया के मुख्यतः **दो** भेद (रूप) होते हैं — सकर्मक क्रिया और अकर्मक क्रिया।",
+            2: "✓ **सही!** जिस क्रिया का फल कर्म पर पड़ता है या कर्म उपस्थित होता है, उसे सकर्मक क्रिया कहते हैं। (जैसे: वह फल खाता है)।",
+            3: "✓ **सही!** जिस क्रिया में कर्म नहीं होता और क्रिया का फल सीधे कर्ता पर पड़ता है, उसे अकर्मक क्रिया कहते हैं। (जैसे: वह सोता है)।"
+        };
+
+        function selectAnswer(button, isTrue) {
+            const card = button.closest('.question-card');
+            const allCards = Array.from(document.querySelectorAll('.question-card'));
+            const questionIndex = allCards.indexOf(card);
+
+            // Record answer
+            userAnswers[questionIndex] = isTrue;
+
+            // Reset buttons styling in this card
+            const buttons = card.querySelectorAll('.option-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-emerald-600', 'text-white', 'bg-rose-600');
+                if (btn.innerText.includes('सही')) {
+                    btn.className = 'option-btn px-4 py-2 border-2 border-emerald-500 text-emerald-700 hover:bg-emerald-50 rounded-xl font-bold text-lg flex items-center gap-1 transition';
+                } else {
+                    btn.className = 'option-btn px-4 py-2 border-2 border-rose-500 text-rose-700 hover:bg-rose-50 rounded-xl font-bold text-lg flex items-center gap-1 transition';
+                }
+            });
+
+            // Highlight selected button
+            if (isTrue) {
+                button.className = 'option-btn px-4 py-2 border-2 border-emerald-600 bg-emerald-600 text-white rounded-xl font-bold text-lg flex items-center gap-1 shadow-md';
+            } else {
+                button.className = 'option-btn px-4 py-2 border-2 border-rose-600 bg-rose-600 text-white rounded-xl font-bold text-lg flex items-center gap-1 shadow-md';
+            }
+        }
+
+        function checkAnswers() {
+            const cards = document.querySelectorAll('.question-card');
+            let score = 0;
+            const total = cards.length;
+
+            if (Object.keys(userAnswers).length < total) {
+                showToast("कृपया सभी प्रश्नों के उत्तर चुनें!");
+                return;
+            }
+
+            cards.forEach((card, idx) => {
+                const correctAnswer = card.dataset.answer === 'true';
+                const userChoice = userAnswers[idx];
+                const feedbackBox = card.querySelector('.feedback-box');
+                feedbackBox.classList.remove('hidden');
+
+                if (userChoice === correctAnswer) {
+                    score++;
+                    card.classList.remove('bg-gray-50', 'bg-rose-50');
+                    card.classList.add('bg-emerald-50', 'border-emerald-300');
+                    feedbackBox.className = 'feedback-box mt-4 pt-3 border-t border-emerald-200 text-emerald-900';
+                    feedbackBox.innerHTML = `<span class="font-bold text-emerald-700">उत्तम! </span> ` + formatMarkdown(explanations[idx]);
+                } else {
+                    card.classList.remove('bg-gray-50', 'bg-emerald-50');
+                    card.classList.add('bg-rose-50', 'border-rose-300');
+                    feedbackBox.className = 'feedback-box mt-4 pt-3 border-t border-rose-200 text-rose-900';
+                    feedbackBox.innerHTML = `<span class="font-bold text-rose-700">गलत उत्तर! </span> ` + formatMarkdown(explanations[idx]);
+                }
+            });
+
+            // Display Results
+            const resultBox = document.getElementById('result-box');
+            const scoreText = document.getElementById('score-text');
+            const scoreMsg = document.getElementById('score-msg');
+            resultBox.classList.remove('hidden');
+            scoreText.innerText = `${score} / ${total}`;
+
+            if (score === total) {
+                scoreMsg.innerText = "अति उत्तम! आपने सभी प्रश्नों के सही उत्तर दिए हैं। 🎉";
+            } else if (score >= total / 2) {
+                scoreMsg.innerText = "अच्छा प्रयास! स्पष्टीकरण पढ़ें और पुनः प्रयास करें। 👍";
+            } else {
+                scoreMsg.innerText = "अभ्यास की आवश्यकता है। स्पष्टीकरण ध्यानपूर्वक पढ़ें। 📚";
+            }
+
+            resultBox.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function resetQuiz() {
+            // Clear selections
+            for (let member in userAnswers) delete userAnswers[member];
+
+            const cards = document.querySelectorAll('.question-card');
+            cards.forEach(card => {
+                card.className = 'question-card p-5 rounded-xl border-2 border-gray-100 bg-gray-50 hover:border-amber-200 transition duration-200';
+                
+                const buttons = card.querySelectorAll('.option-btn');
+                buttons.forEach(btn => {
+                    if (btn.innerText.includes('सही')) {
+                        btn.className = 'option-btn px-4 py-2 border-2 border-emerald-500 text-emerald-700 hover:bg-emerald-50 rounded-xl font-bold text-lg flex items-center gap-1 transition';
+                    } else {
+                        btn.className = 'option-btn px-4 py-2 border-2 border-rose-500 text-rose-700 hover:bg-rose-50 rounded-xl font-bold text-lg flex items-center gap-1 transition';
+                    }
+                });
+
+                const feedbackBox = card.querySelector('.feedback-box');
+                feedbackBox.classList.add('hidden');
+                feedbackBox.innerHTML = '';
+            });
+
+            const resultBox = document.getElementById('result-box');
+            resultBox.classList.add('hidden');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function formatMarkdown(text) {
+            return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        }
+
+        function showToast(message) {
+            let toast = document.createElement('div');
+            toast.className = 'fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-full shadow-lg text-lg z-50';
+            toast.innerText = message;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.remove();
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
