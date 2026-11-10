@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>अभ्यास</title>
+<style>*{box-sizing:border-box}body{margin:0;background:#d0faff;font-family:Georgia,"Noto Serif Devanagari",serif;color:#202020}.wrap{max-width:990px;margin:22px auto;background:white;border:3px solid #00aee8;border-radius:20px;padding:24px}h2{color:#00a9e9;margin:0 0 16px;font-size:25px}.q{background:#ebfaff;border:1px solid #00b9ed;border-radius:11px;padding:13px;margin:9px 0}.options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:9px}.opt{background:white;border:1px solid #9bdfff;border-radius:7px;padding:10px;cursor:pointer;display:flex;justify-content:space-between;gap:8px;align-items:center}.opt.selected{border:2px solid #008ad1;background:#d7f4ff}.correct{background:#d6ffe5!important;border-color:#0baf54!important}.wrong{background:#ffe0e0!important;border-color:#e33!important;animation:blink .6s 2}@keyframes blink{50%{opacity:.5}}.buttons{text-align:center;margin-top:24px}button{background:#ff8000;color:white;border:0;border-radius:22px;padding:11px 19px;margin:3px;cursor:pointer;font-weight:bold}.bank{display:flex;gap:9px;flex-wrap:wrap;justify-content:center;background:#dff7ff;padding:13px;border-radius:10px;margin:12px 0}.chip{color:#202020;font-family:inherit;font-weight:normal;line-height:1.5;appearance:none;border:1px solid #00aeec;background:white;border-radius:7px;padding:9px 14px;cursor:grab;font-size:18px}.chip.active{outline:3px solid orange}.slot{display:inline-flex;min-width:125px;min-height:37px;border:2px dashed #ff724d;border-radius:7px;vertical-align:middle;align-items:center;justify-content:center;padding:4px 10px;cursor:pointer;background:white}.slot.filled{border-style:solid}.statement{display:flex;gap:10px;justify-content:space-between;align-items:center}.choices{display:flex;gap:6px;flex-shrink:0}.choice{color:#202020;font-family:Arial,sans-serif;font-size:21px;font-weight:bold;min-width:40px;min-height:37px;line-height:1;appearance:none;border:1px solid #00aeec;background:white;border-radius:7px;padding:7px 13px;cursor:pointer}.choice.selected{background:#ccefff;border-width:2px}@media(max-width:650px){.wrap{margin:7px;padding:14px}.options{grid-template-columns:1fr}.q{font-size:16px}.statement{align-items:flex-start;flex-direction:column}}.opt{margin:0;color:inherit;font:inherit;text-align:left}.slot{margin:3px;color:inherit;font:inherit}.group+.group{margin-top:22px}.choice[aria-pressed=true]{background:#ccefff}.chip[aria-pressed=true]{outline:3px solid orange}</style>
+</head>
+<body><main class="wrap">
+<h2>रिक्त स्थानों में उपयुक्त सर्वनाम शब्द भरिए–</h2>
+<div id="questions"></div>
+<div class="buttons">
+<button type="button" onclick="check()">Submit</button>
+<button type="button" onclick="showAnswers()">Show Answer</button>
+<button type="button" onclick="resetAll()">Reset</button>
+</div>
+</main>
+<script>
+const mode = "fill";
+const data = [[["हमें ____ खाने को दीजिए।", ["कुछ"]], ["कृपया ____ मेरी सहायता करें।", ["आप"]], ["____ कल दिल्ली जाएँगे।", ["हम"]], ["____ अपना कार्य ____ कर लूँगा।", ["मैं", "स्वयं"]]]];
+
+const expected = data.flatMap(group => group.flatMap(row => row[1]));
+function render() {
+  let index = 0;
+  root.innerHTML = data.map((group, groupIndex) => {
+    const words = [...new Set(group.flatMap(row => row[1]))];
+    const order = words.length === 4 ? [2, 0, 3, 1] : words.map((_, i) => (i + 2) % words.length).reverse();
+    const bank = order.map(wordIndex => {
+      const word = words[wordIndex];
+      return `<button type="button" class="chip" draggable="true"
+        aria-pressed="${selected?.word === word && selected.group === groupIndex}"
+        ondragstart="event.dataTransfer.setData('text/plain',JSON.stringify({group:${groupIndex},word:'${word}'}))"
+        onclick="selected={group:${groupIndex},word:'${word}'};render()">${word}</button>`;
+    }).join('');
+    const rows = group.map(([question], rowIndex) => {
+      const sentence = question.replace(/____/g, () => {
+        const slot = index++;
+        return `<button type="button" class="slot ${answers[slot] ? 'filled' : ''}" data-answer="${slot}"
+          aria-label="रिक्त स्थान ${slot + 1}${answers[slot] ? ': ' + answers[slot] : ''}"
+          ondragover="event.preventDefault()" ondrop="dropWord(event,${slot},${groupIndex})"
+          onclick="if(selected?.group===${groupIndex})pick(${slot},selected.word);else if(!selected)pick(${slot},null)">
+          ${answers[slot] || '&nbsp;'}</button>`;
+      });
+      return `<div class="q">(${labels[rowIndex]}) ${sentence}</div>`;
+    }).join('');
+    return `<section class="group"><div class="bank">${bank}</div>${rows}</section>`;
+  }).join('');
+}
+function dropWord(event, index, group) {
+  event.preventDefault();
+  try {
+    const item = JSON.parse(event.dataTransfer.getData('text/plain'));
+    if (item.group === group && data[group].some(row => row[1].includes(item.word))) {
+      pick(index, item.word);
+    }
+  } catch {}
+}
+
+
+const key = 'gyan-7-ch18-fill-v1';
+const labels = ['क', 'ख', 'ग', 'घ'];
+const root = document.getElementById('questions');
+const empty = () => expected.map(() => null);
+let answers = empty();
+let selected = null;
+try {
+  const saved = JSON.parse(localStorage.getItem(key));
+  if (Array.isArray(saved) && saved.length === answers.length) answers = saved;
+} catch {}
+function persist() {
+  try { localStorage.setItem(key, JSON.stringify(answers)); } catch {}
+}
+function check() {
+  root.querySelectorAll('[data-answer]').forEach(button => {
+    const index = Number(button.dataset.answer);
+    const active = answers[index] !== null &&
+      (mode === 'fill' || answers[index] === Number(button.dataset.value));
+    button.classList.toggle('correct', active && answers[index] === expected[index]);
+    button.classList.toggle('wrong', active && answers[index] !== expected[index]);
+  });
+}
+function showAnswers() {
+  answers = [...expected];
+  selected = null;
+  persist();
+  render();
+  check();
+}
+function resetAll() {
+  answers = empty();
+  selected = null;
+  persist();
+  render();
+}
+function pick(index, value) {
+  answers[index] = value;
+  selected = null;
+  persist();
+  render();
+}
+render();
+
+</script>
+</body>
+</html>
