@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>अभ्यास</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#d0faff;font-family:Georgia,"Noto Serif Devanagari",serif;color:#202020}.wrap{max-width:990px;margin:22px auto;background:white;border:3px solid #00aee8;border-radius:20px;padding:24px}h2{color:#00a9e9;margin:0 0 16px;font-size:25px}.q{background:#ebfaff;border:1px solid #00b9ed;border-radius:11px;padding:13px;margin:9px 0;font-size:18px;line-height:1.9}.bank{display:flex;gap:9px;flex-wrap:wrap;justify-content:center;background:#dff7ff;padding:13px;border-radius:10px;margin:12px 0}.chip{color:#202020;font-family:inherit;font-weight:normal;border:1px solid #00aeec;background:white;border-radius:7px;padding:9px 14px;cursor:grab;font-size:18px}.chip.active{outline:3px solid orange}.slot{display:inline-flex;min-width:125px;min-height:37px;border:2px dashed #ff724d;border-radius:7px;vertical-align:middle;align-items:center;justify-content:center;padding:4px 10px;cursor:pointer;background:white;font:inherit;color:inherit;margin:3px}.slot.filled{border-style:solid}.correct{background:#d6ffe5!important;border-color:#0baf54!important}.wrong{background:#ffe0e0!important;border-color:#e33!important;animation:blink .6s 2}@keyframes blink{50%{opacity:.5}}.buttons{text-align:center;margin-top:24px}.action{background:#ff8000;color:white;border:0;border-radius:22px;padding:11px 19px;margin:3px;cursor:pointer;font-weight:bold}@media(max-width:650px){.wrap{margin:7px;padding:14px}.q{font-size:16px}}
+</style></head>
+<body><main class="wrap">
+<h2>कोष्ठक में दिए गए शब्दों के शुद्ध रूप भरकर वाक्य पूरे कीजिए–</h2>
+<div class="bank" id="bank"></div>
+<div id="questions"></div>
+<div class="buttons"><button class="action" onclick="check()">Submit</button><button class="action" onclick="showAnswers()">Show Answer</button><button class="action" onclick="resetAll()">Reset</button></div>
+</main>
+<script>
+const data=[
+["कश्मीर में कई ____ स्थल हैं।","दर्शनीय","दरशनीय"],
+["कक्षा में प्रत्येक छात्र की ____ आवश्यक है।","उपस्थिति","उपस्थिती"],
+["____ पढ़कर अच्छा लगा।","कामायनी","कामायनी"],
+["मोहन विद्यालय में ____ हो गया।","प्रविष्ट","परविष्ट"],
+["आपकी बात सुनकर मैं ____ हूँ।","हैरान","हेरान"]
+];
+const words=['हैरान','दर्शनीय','प्रविष्ट','कामायनी','उपस्थिति'];
+const labels=['क','ख','ग','घ','ङ'];
+const key='gyan-8-ch27-fill-v1';
+let answers=Array(data.length).fill(null),selected=null;
+try{const saved=JSON.parse(localStorage.getItem(key));if(Array.isArray(saved)&&saved.length===data.length)answers=saved}catch{}
+function save(){try{localStorage.setItem(key,JSON.stringify(answers))}catch{}}
+function render(){
+ const bank=document.getElementById('bank');bank.innerHTML=words.map(w=>`<button type="button" class="chip ${selected===w?'active':''}" draggable="true" ondragstart="event.dataTransfer.setData('text/plain','${w}')" onclick="selectWord('${w}')">${w}</button>`).join('');
+ document.getElementById('questions').innerHTML=data.map(([q],i)=>`<div class="q">(${labels[i]}) ${q.replace('____',`<button type="button" class="slot ${answers[i]?'filled':''}" data-i="${i}" ondragover="event.preventDefault()" ondrop="event.preventDefault();pick(${i},event.dataTransfer.getData('text/plain'))" onclick="if(selected)pick(${i},selected);else pick(${i},null)">${answers[i]||'&nbsp;'}</button>`)}</div>`).join('');
+}
+function selectWord(w){selected=selected===w?null:w;render()}
+function pick(i,w){if(w!==null&&!words.includes(w))return;answers[i]=w;selected=null;save();render()}
+function check(){document.querySelectorAll('.slot').forEach(s=>s.classList.remove('correct','wrong'));data.forEach((r,i)=>{if(answers[i]===null)return;document.querySelector(`[data-i="${i}"]`).classList.add(answers[i]===r[1]?'correct':'wrong')})}
+function showAnswers(){answers=data.map(r=>r[1]);selected=null;save();render();check()}
+function resetAll(){answers=Array(data.length).fill(null);selected=null;try{localStorage.removeItem(key)}catch{}render()}
+render();
+</script></body></html>

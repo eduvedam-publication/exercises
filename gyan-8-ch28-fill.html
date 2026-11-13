@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>अभ्यास</title><style>
+*{box-sizing:border-box}
+body{margin:0;background:#d0faff;font-family:Georgia,"Noto Serif Devanagari",serif;color:#202020}
+.wrap{max-width:990px;margin:22px auto;background:white;border:3px solid #00aee8;border-radius:20px;padding:24px}
+h2{color:#00a9e9;margin:0 0 16px;font-size:25px}
+.q{background:#ebfaff;border:1px solid #00b9ed;border-radius:11px;padding:13px;margin:9px 0;line-height:1.8}
+.options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:9px}
+.opt{background:white;border:1px solid #9bdfff;border-radius:7px;padding:10px;cursor:pointer;display:flex;justify-content:space-between;gap:8px;align-items:center}
+.opt.selected{border:2px solid #008ad1;background:#d7f4ff}
+.correct{background:#d6ffe5!important;border-color:#0baf54!important}
+.wrong{background:#ffe0e0!important;border-color:#e33!important;animation:blink .6s 2}
+@keyframes blink{50%{opacity:.5}}
+.buttons{text-align:center;margin-top:24px}
+button{background:#ff8000;color:white;border:0;border-radius:22px;padding:11px 19px;margin:3px;cursor:pointer;font-weight:bold}
+.bank{display:flex;gap:9px;flex-wrap:wrap;justify-content:center;background:#dff7ff;padding:13px;border-radius:10px;margin:12px 0}
+.chip{color:#202020;font-family:inherit;font-weight:normal;line-height:1.5;appearance:none;border:1px solid #00aeec;background:white;border-radius:7px;padding:9px 14px;cursor:grab;font-size:18px}
+.chip.active{outline:3px solid orange}
+.slot{display:inline-flex;min-width:160px;min-height:37px;border:2px dashed #ff724d;border-radius:7px;vertical-align:middle;align-items:center;justify-content:center;padding:4px 10px;cursor:pointer;background:white;color:#202020;font:inherit}
+.slot.filled{border-style:solid}
+.statement{display:flex;gap:10px;justify-content:space-between;align-items:center}
+.choices{display:flex;gap:6px;flex-shrink:0}
+.choice{color:#202020;font-family:Arial,sans-serif;font-size:21px;font-weight:bold;min-width:40px;min-height:37px;line-height:1;appearance:none;border:1px solid #00aeec;background:white;border-radius:7px;padding:7px 13px;cursor:pointer}
+.choice.selected{background:#ccefff;border-width:2px}
+.choice[aria-pressed=true]{background:#ccefff}
+@media(max-width:650px){
+ .wrap{margin:7px;padding:14px}
+ .options{grid-template-columns:1fr}
+ .q{font-size:16px}
+ .statement{align-items:flex-start;flex-direction:column}
+}
+</style></head>
+<body><main class="wrap">
+<h2>दिए गए मुहावरे वाक्यों में भरिए–</h2>
+<div class="bank" id="bank"></div>
+<div id="questions"></div>
+<div class="buttons">
+<button type="button" onclick="check()">Submit</button>
+<button type="button" onclick="showAnswers()">Show Answer</button>
+<button type="button" onclick="resetAll()">Reset</button>
+</div></main>
+<script>
+const data=[
+["तुम तो बेमतलब में ____ बना रहे हो।","राई का पहाड़"],
+["तुम्हारा भी कुछ दोष ज़रूर होगा ____।","एक हाथ से ताली नहीं बजती"],
+["भारतीय क्रिकेट टीम का सब ____ रहे हैं।","लोहा मानना"],
+["तुम खामख्वाह उसके ____ रहे हो।","जले पर नमक छिड़कना"],
+["यहाँ तुम्हारी ____ वाली नहीं है।","दाल गलना"]
+];
+const words=["लोहा मानना","एक हाथ से ताली नहीं बजती","जले पर नमक छिड़कना","दाल गलना","राई का पहाड़"];
+const labels=['क','ख','ग','घ','ङ'];
+const key='gyan-8-ch28-fill-v1';
+let answers=Array(data.length).fill(null),selected=null;
+try{const s=JSON.parse(localStorage.getItem(key));if(Array.isArray(s)&&s.length===answers.length)answers=s;}catch{}
+const qroot=document.getElementById('questions'),bank=document.getElementById('bank');
+function save(){try{localStorage.setItem(key,JSON.stringify(answers));}catch{}}
+function put(i,w){if(w!==null&&!words.includes(w))return;answers[i]=w;selected=null;save();render();}
+function render(){
+ bank.innerHTML=words.map(w=>`<button type="button" class="chip ${selected===w?'active':''}" draggable="true"
+ ondragstart="event.dataTransfer.setData('text/plain',this.dataset.word)" data-word="${w}" onclick="selected=(selected===this.dataset.word?null:this.dataset.word);render()">${w}</button>`).join('');
+ qroot.innerHTML=data.map((row,i)=>{
+   const slot=`<button type="button" class="slot ${answers[i]?'filled':''}" data-i="${i}" ondragover="event.preventDefault()" ondrop="event.preventDefault();put(${i},event.dataTransfer.getData('text/plain'))" onclick="if(selected)put(${i},selected);else put(${i},null)">${answers[i]||'______'}</button>`;
+   return `<div class="q">(${labels[i]}) ${row[0].replace('____',slot)}</div>`;
+ }).join('');
+}
+function check(){
+ qroot.querySelectorAll('.slot').forEach(b=>b.classList.remove('correct','wrong'));
+ data.forEach((row,i)=>{if(answers[i]!==null){
+   const b=qroot.querySelector(`[data-i="${i}"]`);
+   b.classList.add(answers[i]===row[1]?'correct':'wrong');
+ }});
+}
+function showAnswers(){answers=data.map(r=>r[1]);selected=null;save();render();check();}
+function resetAll(){answers=Array(data.length).fill(null);selected=null;save();render();}
+render();
+</script></body></html>

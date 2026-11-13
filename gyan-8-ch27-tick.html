@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>अभ्यास</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#d0faff;font-family:Georgia,"Noto Serif Devanagari",serif;color:#202020}.wrap{max-width:990px;margin:22px auto;background:white;border:3px solid #00aee8;border-radius:20px;padding:24px}h2{color:#00a9e9;margin:0 0 16px;font-size:25px}.q{background:#ebfaff;border:1px solid #00b9ed;border-radius:11px;padding:13px;margin:9px 0}.statement{display:flex;gap:10px;justify-content:space-between;align-items:center}.choices{display:flex;gap:6px;flex-shrink:0}.choice{color:#202020;font-family:Arial,sans-serif;font-size:21px;font-weight:bold;min-width:40px;min-height:37px;line-height:1;border:1px solid #00aeec;background:white;border-radius:7px;padding:7px 13px;cursor:pointer}.choice.selected{background:#ccefff;border-width:2px}.correct{background:#d6ffe5!important;border-color:#0baf54!important}.wrong{background:#ffe0e0!important;border-color:#e33!important;animation:blink .6s 2}@keyframes blink{50%{opacity:.5}}.buttons{text-align:center;margin-top:24px}.action{background:#ff8000;color:white;border:0;border-radius:22px;padding:11px 19px;margin:3px;cursor:pointer;font-weight:bold}@media(max-width:650px){.wrap{margin:7px;padding:14px}.statement{align-items:flex-start;flex-direction:column}}
+</style></head>
+<body><main class="wrap">
+<h2>सही (✓) या गलत (✗) का चिह्न लगाइए–</h2>
+<div id="questions"></div>
+<div class="buttons"><button class="action" onclick="check()">Submit</button><button class="action" onclick="showAnswers()">Show Answer</button><button class="action" onclick="resetAll()">Reset</button></div>
+</main>
+<script>
+const data=[
+["मैंने घर जाना है।",1],
+["सुभद्राकुमारी चौहान महान कवयित्री थीं।",0],
+["कृपया, मुझे दो दिन का अवकाश देने की कृपा करें।",1],
+["लड़का ने पत्र लिखा।",1]
+];
+const labels=['क','ख','ग','घ'];
+const key='gyan-8-ch27-tick-v1';
+let answers=Array(data.length).fill(null);
+try{const saved=JSON.parse(localStorage.getItem(key));if(Array.isArray(saved)&&saved.length===data.length)answers=saved}catch{}
+function save(){try{localStorage.setItem(key,JSON.stringify(answers))}catch{}}
+function render(){document.getElementById('questions').innerHTML=data.map(([q],i)=>`<div class="q statement"><span>(${labels[i]}) ${q}</span><span class="choices"><button type="button" class="choice ${answers[i]===0?'selected':''}" data-i="${i}" data-v="0" onclick="pick(${i},0)">✓</button><button type="button" class="choice ${answers[i]===1?'selected':''}" data-i="${i}" data-v="1" onclick="pick(${i},1)">✗</button></span></div>`).join('')}
+function pick(i,v){answers[i]=v;save();render()}
+function check(){document.querySelectorAll('.choice').forEach(b=>b.classList.remove('correct','wrong'));data.forEach((r,i)=>{if(answers[i]===null)return;const b=document.querySelector(`[data-i="${i}"][data-v="${answers[i]}"]`);b.classList.add(answers[i]===r[1]?'correct':'wrong')})}
+function showAnswers(){answers=data.map(r=>r[1]);save();render();check()}
+function resetAll(){answers=Array(data.length).fill(null);try{localStorage.removeItem(key)}catch{}render()}
+render();
+</script></body></html>
